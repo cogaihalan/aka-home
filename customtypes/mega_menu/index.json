@@ -1,0 +1,89 @@
+{
+  "format": "custom",
+  "id": "mega_menu",
+  "label": "Mega Menu",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {
+      "menu_title": {
+        "type": "Text",
+        "config": {
+          "label": "Menu Title",
+          "placeholder": "Enter the main menu title"
+        }
+      },
+      "menu_items": {
+        "type": "Group",
+        "config": {
+          "label": "Menu Items",
+          "fields": {
+            "label": {
+              "type": "Text",
+              "config": {
+                "label": "Menu Item Label",
+                "placeholder": "Enter menu item label"
+              }
+            },
+            "link": {
+              "type": "Link",
+              "config": {
+                "label": "Menu Item Link",
+                "placeholder": "Select or enter a link",
+                "select": null
+              }
+            },
+            "has_mega_menu": {
+              "type": "Boolean",
+              "config": {
+                "label": "Has Mega Menu",
+                "default_value": false,
+                "placeholder_false": "Simple link",
+                "placeholder_true": "Has mega menu dropdown"
+              }
+            },
+            "child_links": {
+              "type": "Group",
+              "config": {
+                "label": "Child Links",
+                "fields": {
+                  "child_label": {
+                    "type": "Text",
+                    "config": {
+                      "label": "Child Link Label",
+                      "placeholder": "Enter child link label"
+                    }
+                  },
+                  "child_link": {
+                    "type": "Link",
+                    "config": {
+                      "label": "Child Link",
+                      "placeholder": "Select or enter a child link",
+                      "select": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "SEO & Metadata": {
+      "meta_title": {
+        "type": "Text",
+        "config": {
+          "label": "Meta Title",
+          "placeholder": "A title for the mega menu used for SEO"
+        }
+      },
+      "meta_description": {
+        "type": "Text",
+        "config": {
+          "label": "Meta Description",
+          "placeholder": "A brief description of the mega menu"
+        }
+      }
+    }
+  }
+}

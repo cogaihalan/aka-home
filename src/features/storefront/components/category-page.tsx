@@ -1,0 +1,465 @@
+"use client";
+
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { storefrontCatalogService } from "@/lib/api/services/storefront/catalog";
+import type { Product } from "@/types";
+import { ProductCard } from "@/components/product/product-card";
+import { ProductCardSkeleton } from "@/components/product/product-card-skeleton";
+import {
+  NavigationSidebar,
+  SortControls,
+  MobileNavigation,
+} from "@/components/navigation";
+import { useNavigation } from "@/hooks/use-navigation";
+import { useProductFilters } from "@/hooks/use-product-filters";
+import {
+  AnimatedGrid,
+  LoadingOverlay,
+} from "@/components/ui/animated-container";
+import { generateSlug, slugToReadable } from "@/lib/utils/slug";
+import {
+  useCategories,
+  useAppLoading,
+} from "@/components/providers/app-provider";
+
+interface CategoryPageProps {
+  categorySlug: string;
+}
+
+export default function CategoryPage({ categorySlug }: CategoryPageProps) {
+  const router = useRouter();
+
+  // Use navigation hook for URL state management
+  const {
+    state,
+    updateFilters,
+    updatePage,
+    resetFilters,
+    getActiveFiltersCount,
+  } = useNavigation();
+
+  // Get categories from app store
+  const { categories } = useCategories();
+  const { isLoading: appLoading, error: appError } = useAppLoading();
+
+  // View mode is handled separately from navigation state
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
+
+  // Ref to track if we're currently fetching to prevent duplicate requests
+  const fetchingRef = useRef<boolean>(false);
+
+  const getCategoryIdFromSlug = useCallback(
+    (slug: string): string | null => {
+      const category = categories.find(
+        (cat) => generateSlug(cat.name) === slug.toLowerCase()
+      );
+      return category ? category.id.toString() : null;
+    },
+    [categories]
+  );
+
+  const getCategoryNameFromSlug = useCallback(
+    (slug: string): string => {
+      const category = categories.find(
+        (cat) => generateSlug(cat.name) === slug.toLowerCase()
+      );
+      return category ? category.name : slugToReadable(slug);
+    },
+    [categories]
+  );
+
+  const getCategoryDescriptionFromSlug = useCallback(
+    (slug: string): string | undefined => {
+      const category = categories.find(
+        (cat) => generateSlug(cat.name) === slug.toLowerCase()
+      );
+      return category ? category.description : undefined;
+    },
+    [categories]
+  );
+
+  // Memoize the query parameters to prevent unnecessary re-fetches
+  const queryParams = useMemo(() => {
+    const categoryId = getCategoryIdFromSlug(categorySlug);
+    return {
+      page: state.page,
+      size: state.limit,
+      name: state.filters.search || undefined,
+      sort:
+        state.filters.sort && state.filters.sort !== "featured"
+          ? [state.filters.sort]
+          : [],
+      categoryIds: categoryId ? [categoryId] : [],
+      minPrice: state.filters.priceRange?.[0],
+      maxPrice: state.filters.priceRange?.[1],
+    };
+  }, [
+    categorySlug,
+    state.page,
+    state.limit,
+    state.filters.search,
+    state.filters.sort,
+    state.filters.priceRange,
+    getCategoryIdFromSlug,
+  ]);
+
+  // Fetch products with proper loading state management
+  const fetchProducts = useCallback(
+    async (showLoading = true) => {
+      // Prevent duplicate requests
+      if (fetchingRef.current) return;
+
+      try {
+        fetchingRef.current = true;
+        if (showLoading) {
+          setIsLoading(true);
+        }
+        setError(null);
+
+        const response =
+          await storefrontCatalogService.getProducts(queryParams);
+        setProducts(response.items || []);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch products"
+        );
+      } finally {
+        setIsLoading(false);
+        fetchingRef.current = false;
+        setIsInitialLoad(false);
+      }
+    },
+    [queryParams]
+  );
+
+  // Use product filters hook for client-side filtering (only for search and additional client-side filters)
+  const { filterCounts } = useProductFilters({
+    products: products,
+    filters: state.filters,
+  });
+
+  // Check if category is valid and redirect to 404 if not
+  useEffect(() => {
+    if (!appLoading && categories.length > 0) {
+      const categoryId = getCategoryIdFromSlug(categorySlug);
+      if (!categoryId) {
+        router.replace("/not-found");
+        return;
+      }
+    }
+  }, [categorySlug, router, getCategoryIdFromSlug, appLoading, categories]);
+
+  // Single effect to handle data fetching
+  useEffect(() => {
+    if (!appLoading && categories.length > 0) {
+      const categoryId = getCategoryIdFromSlug(categorySlug);
+      if (categoryId) {
+        fetchProducts();
+      }
+    }
+  }, [
+    fetchProducts,
+    categorySlug,
+    getCategoryIdFromSlug,
+    appLoading,
+    categories,
+  ]);
+
+  // Determine which products to display - use server-filtered products directly
+  const displayProducts = products;
+  const displayCount = products.length;
+  const displayTotal = products.length;
+
+  // Since we're using server-side pagination, we don't need client-side pagination
+  const paginatedProducts = displayProducts;
+  // For now, we'll use a reasonable total pages estimate
+  // In a real implementation, you'd get this from the API response
+  const totalPages = Math.max(1, Math.ceil(displayTotal / state.limit));
+
+  const handlePageChange = (page: number) => {
+    updatePage(page);
+  };
+
+  // Don't render anything if category is invalid (will redirect)
+  const categoryId = getCategoryIdFromSlug(categorySlug);
+  if (!appLoading && categories.length > 0 && !categoryId) {
+    return null;
+  }
+
+  // Show loading skeleton while app is loading or on initial load
+  if (appLoading || (isInitialLoad && isLoading)) {
+    return (
+      <div className="space-y-6">
+        {/* Header */}
+        <div>
+          <h1 className="text-3xl font-bold mb-2 capitalize">
+            {getCategoryNameFromSlug(categorySlug)}
+          </h1>
+          <p className="text-muted-foreground">
+            {getCategoryDescriptionFromSlug(categorySlug)}
+          </p>
+        </div>
+
+        {/* Loading skeleton grid */}
+        <div className="flex gap-6">
+          <div className="hidden lg:block w-80">
+            <div className="space-y-4">
+              <div className="h-10 bg-muted animate-pulse rounded" />
+              <div className="h-32 bg-muted animate-pulse rounded" />
+              <div className="h-24 bg-muted animate-pulse rounded" />
+            </div>
+          </div>
+
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-6">
+              <div className="h-6 bg-muted animate-pulse rounded w-32" />
+              <div className="h-10 bg-muted animate-pulse rounded w-24" />
+            </div>
+
+            <AnimatedGrid
+              className={`grid gap-6 items-stretch ${
+                viewMode === "grid"
+                  ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                  : "grid-cols-1 lg:grid-cols-2"
+              }`}
+            >
+              {Array.from({ length: 6 }).map((_, index) => (
+                <ProductCardSkeleton
+                  key={index}
+                  variant={viewMode === "list" ? "compact" : "default"}
+                />
+              ))}
+            </AnimatedGrid>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <Button onClick={() => fetchProducts()}>Thử lại</Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold mb-2 capitalize">
+          {getCategoryNameFromSlug(categorySlug)}
+        </h1>
+        <p className="text-muted-foreground">
+          {getCategoryDescriptionFromSlug(categorySlug)}
+        </p>
+      </div>
+
+      {/* Sort Controls */}
+      <div className="flex items-end lg:items-center justify-between gap-2">
+        <SortControls
+          sortBy={state.filters.sort || "featured"}
+          viewMode={viewMode}
+          onSortChange={(sort) => updateFilters({ sort })}
+          onViewModeChange={setViewMode}
+          totalProducts={displayTotal}
+          filteredCount={displayCount}
+          currentPageCount={paginatedProducts.length}
+          currentPage={state.page}
+        />
+        {/* Mobile Navigation */}
+        <MobileNavigation
+          filters={state.filters}
+          onFiltersChange={updateFilters}
+          onResetFilters={resetFilters}
+          filterCounts={filterCounts}
+          activeFiltersCount={getActiveFiltersCount()}
+          hideCategoryFilter={true}
+        />
+      </div>
+
+      {/* Main Content Layout */}
+      <div className="flex gap-6 pb-8 lg:pb-16">
+        {/* Navigation Sidebar */}
+        <NavigationSidebar
+          filters={state.filters}
+          onFiltersChange={updateFilters}
+          onResetFilters={resetFilters}
+          filterCounts={filterCounts}
+          activeFiltersCount={getActiveFiltersCount()}
+          isMobile={false}
+          hideCategoryFilter={true}
+        />
+
+        {/* Products Grid - 3 columns */}
+        <div className="flex-1">
+          <LoadingOverlay isLoading={isLoading && !isInitialLoad}>
+            <AnimatedGrid
+              className={`grid gap-6 layout-transition items-stretch ${
+                viewMode === "grid"
+                  ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                  : "grid-cols-1 lg:grid-cols-2"
+              }`}
+            >
+              {paginatedProducts.map((product, index) => (
+                <div
+                  key={product.id}
+                  className="animate-fade-in"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <ProductCard
+                    product={product}
+                    variant={viewMode === "list" ? "compact" : "default"}
+                  />
+                </div>
+              ))}
+            </AnimatedGrid>
+          </LoadingOverlay>
+          {/* Loading indicator for filter changes */}
+          {isLoading && !isInitialLoad && (
+            <div className="flex justify-center mt-6 animate-fade-in">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span className="text-sm">Cập nhật sản phẩm...</span>
+              </div>
+            </div>
+          )}
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-8">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => handlePageChange(state.page - 1)}
+                      className={
+                        state.page <= 1
+                          ? "pointer-events-none opacity-50"
+                          : "cursor-pointer"
+                      }
+                    />
+                  </PaginationItem>
+
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNumber;
+                    if (totalPages <= 5) {
+                      pageNumber = i + 1;
+                    } else if (state.page <= 3) {
+                      pageNumber = i + 1;
+                    } else if (state.page >= totalPages - 2) {
+                      pageNumber = totalPages - 4 + i;
+                    } else {
+                      pageNumber = state.page - 2 + i;
+                    }
+
+                    return (
+                      <PaginationItem key={pageNumber}>
+                        <PaginationLink
+                          onClick={() => handlePageChange(pageNumber)}
+                          isActive={state.page === pageNumber}
+                          className="cursor-pointer"
+                        >
+                          {pageNumber}
+                        </PaginationLink>
+                      </PaginationItem>
+                    );
+                  })}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => handlePageChange(state.page + 1)}
+                      className={
+                        state.page >= totalPages
+                          ? "pointer-events-none opacity-50"
+                          : "cursor-pointer"
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
+          {/* Show skeleton cards when no products and no filters applied */}
+          {isLoading &&
+            displayProducts.length === 0 &&
+            !(state.filters.search || getActiveFiltersCount() > 0) && (
+              <AnimatedGrid
+                className={`grid gap-6 items-stretch ${
+                  viewMode === "grid"
+                    ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                    : "grid-cols-1 lg:grid-cols-2"
+                }`}
+              >
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <ProductCardSkeleton
+                    key={index}
+                    className="pt-0"
+                    variant={viewMode === "list" ? "compact" : "default"}
+                  />
+                ))}
+              </AnimatedGrid>
+            )}
+
+          {/* No products found message */}
+          {displayProducts.length === 0 && !isInitialLoad && (
+            <div className="flex justify-center mt-6 animate-fade-in items-center">
+              <div className="flex flex-col items-center gap-2">
+                <Image
+                  src="/assets/404.png"
+                  alt="Không tìm thấy sản phẩm"
+                  width={200}
+                  height={200}
+                />
+                <h3 className="text-xl font-medium">Không tìm thấy sản phẩm</h3>
+              </div>
+            </div>
+          )}
+
+          {/* No products message - only show when filters/search are applied */}
+          {!isLoading &&
+            displayProducts.length === 0 &&
+            (state.filters.search || getActiveFiltersCount() > 0) && (
+              <div className="text-center py-12">
+                <div className="flex flex-col sm:flex-row gap-2 justify-center mt-4">
+                  {state.filters.search && (
+                    <Button
+                      variant="outline"
+                      onClick={() => updateFilters({ search: "" })}
+                    >
+                      Xóa tìm kiếm
+                    </Button>
+                  )}
+                  {getActiveFiltersCount() > 0 && (
+                    <Button variant="outline" onClick={resetFilters}>
+                      Xóa tất cả bộ lọc
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
+        </div>
+      </div>
+    </div>
+  );
+}

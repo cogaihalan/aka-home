@@ -1,0 +1,93 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"title": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "heading1",
+						"content": {
+							"text": "Program"
+						}
+					}
+				]
+			},
+			"subtitle": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Qui ad sunt cillum mollit adipisicing excepteur. Sint exercitation nostrud magna sint tempor exercitation cupidatat ipsum tempor. Ullamco ullamco aute deserunt mollit nisi proident ullamco cupidatat sunt nostrud."
+						}
+					}
+				]
+			},
+			"showThumbnails": {
+				"__TYPE__": "BooleanContent",
+				"value": false
+			},
+			"showNavigation": {
+				"__TYPE__": "BooleanContent",
+				"value": false
+			},
+			"autoPlay": {
+				"__TYPE__": "BooleanContent",
+				"value": false
+			},
+			"autoPlayInterval": {
+				"__TYPE__": "FieldContent",
+				"value": "61",
+				"type": "Number"
+			},
+			"layout": {
+				"__TYPE__": "FieldContent",
+				"value": "carousel",
+				"type": "Select"
+			}
+		},
+		"items": [
+			{
+				"__TYPE__": "GroupItemContent",
+				"value": [
+					[
+						"image",
+						{
+							"origin": {
+								"id": "main",
+								"url": "https://images.unsplash.com/photo-1589321599763-d66926c29613",
+								"width": 3168,
+								"height": 4752
+							},
+							"url": "https://images.unsplash.com/photo-1589321599763-d66926c29613?rect=0%2C1320%2C3168%2C2112&w=1200&h=800",
+							"width": 1200,
+							"height": 800,
+							"edit": {
+								"zoom": 1,
+								"crop": {
+									"x": 0,
+									"y": 1320
+								},
+								"background": "transparent"
+							},
+							"alt": "cry",
+							"credits": null,
+							"__TYPE__": "ImageContent",
+							"thumbnails": {}
+						}
+					],
+					[
+						"caption",
+						{
+							"__TYPE__": "FieldContent",
+							"value": "main",
+							"type": "Text"
+						}
+					]
+				]
+			}
+		]
+	}
+]
