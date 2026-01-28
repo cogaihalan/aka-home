@@ -193,7 +193,7 @@ export function SearchSuggestions({
                               clearSuggestions();
                               onClose?.();
                             }}
-                            className="block hover:text-primary transition-colors"
+                            className="block hover:text-fg-primary transition-colors"
                           >
                             <h4 className="font-medium text-sm truncate">
                               {product.name}
@@ -202,7 +202,7 @@ export function SearchSuggestions({
                           <div className="flex items-center gap-2 mt-1">
                             <span className="text-sm font-semibold">
                               {formatPrice(
-                                product.discountPrice || product.price
+                                product.discountPrice || product.price,
                               )}
                             </span>
                             {!!product.discountPrice &&
@@ -210,7 +210,7 @@ export function SearchSuggestions({
                                 <Badge variant="secondary" className="text-xs">
                                   Save{" "}
                                   {formatPrice(
-                                    product.price - product.discountPrice
+                                    product.price - product.discountPrice,
                                   )}
                                 </Badge>
                               )}

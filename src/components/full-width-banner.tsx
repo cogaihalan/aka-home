@@ -6,56 +6,15 @@ import Glider from "react-glider";
 import { cn } from "@/lib/utils";
 import {
   SlideComponent,
+  SlideVideoComponent,
   LoadingSkeleton,
-  BannerSlide,
   FullWidthBannerProps,
 } from "./banner";
 
-const slides: BannerSlide[] = [
-  {
-    id: 1,
-    title: "Transform Your Business",
-    subtitle: "with AI-Powered Solutions",
-    description:
-      "Discover cutting-edge technology that revolutionizes how you work, collaborate, and grow your business in the digital age.",
-    image:
-      "/assets/placeholder-banner.png",
-    ctaText: "Get Started Free",
-    ctaLink: "#",
-    ctaSecondaryText: "Watch Demo",
-    ctaSecondaryLink: "#",
-  },
-  {
-    id: 2,
-    title: "Boost Productivity",
-    subtitle: "by 300% or More",
-    description:
-      "Join thousands of teams who have streamlined their workflow and achieved unprecedented levels of efficiency with our platform.",
-    image:
-      "/assets/placeholder-banner.png",
-    ctaText: "View Demo",
-    ctaLink: "#",
-    ctaSecondaryText: "Learn More",
-    ctaSecondaryLink: "#",
-  },
-  {
-    id: 3,
-    title: "Scale Without Limits",
-    subtitle: "Enterprise-Ready Platform",
-    description:
-      "Built for growth with enterprise-grade security, unlimited scalability, and seamless integrations with your existing tools.",
-    image: "/assets/placeholder-banner.png",
-    ctaText: "Contact Sales",
-    ctaLink: "#",
-    ctaSecondaryText: "Schedule Demo",
-    ctaSecondaryLink: "#",
-  },
-];
-
 const FullWidthBanner = memo(function FullWidthBanner({
-  slides: customSlides,
+  slides,
   className,
-}: FullWidthBannerProps = {}) {
+}: FullWidthBannerProps) {
   const gliderRef = useRef<any>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -63,9 +22,12 @@ const FullWidthBanner = memo(function FullWidthBanner({
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
-  const bannerSlides = useMemo(() => customSlides || slides, [customSlides]);
+  const bannerSlides = useMemo(() => slides || [], [slides]);
 
-  // Preload images to prevent layout shift - prioritize first image for LCP
+  if (!bannerSlides || bannerSlides.length === 0) {
+    return null;
+  }
+
   useEffect(() => {
     let idleCallbackId: number | undefined;
     let timeoutId: NodeJS.Timeout | undefined;
@@ -77,17 +39,20 @@ const FullWidthBanner = memo(function FullWidthBanner({
       firstImg.fetchPriority = "high";
       firstImg.loading = "eager";
       firstImg.onload = () => {
-        setLoadedImages((prev) => new Set([...Array.from(prev), firstSlide.image]));
+        setLoadedImages(
+          (prev) => new Set([...Array.from(prev), firstSlide.imageUrl]),
+        );
         setIsLoaded(true);
       };
       firstImg.onerror = () => {
-        setImageErrors((prev) => new Set([...Array.from(prev), firstSlide.image]));
+        setImageErrors(
+          (prev) => new Set([...Array.from(prev), firstSlide.imageUrl]),
+        );
         setIsLoaded(true);
       };
-      firstImg.src = firstSlide.image;
+      firstImg.src = firstSlide.imageUrl;
     }
 
-    // Defer loading remaining images to avoid blocking TBT
     const loadRemainingImages = () => {
       const remainingSlides = bannerSlides.slice(1);
       remainingSlides.forEach((slide) => {
@@ -95,24 +60,30 @@ const FullWidthBanner = memo(function FullWidthBanner({
         img.fetchPriority = "low";
         img.loading = "lazy";
         img.onload = () => {
-          setLoadedImages((prev) => new Set([...Array.from(prev), slide.image]));
+          setLoadedImages(
+            (prev) => new Set([...Array.from(prev), slide.imageUrl]),
+          );
         };
         img.onerror = () => {
-          setImageErrors((prev) => new Set([...Array.from(prev), slide.image]));
+          setImageErrors(
+            (prev) => new Set([...Array.from(prev), slide.imageUrl]),
+          );
         };
-        img.src = slide.image;
+        img.src = slide.imageUrl;
       });
     };
 
-    // Use requestIdleCallback to defer non-LCP images
-    if ('requestIdleCallback' in window) {
-      idleCallbackId = (window as any).requestIdleCallback(loadRemainingImages, { timeout: 3000 });
+    if ("requestIdleCallback" in window) {
+      idleCallbackId = (window as any).requestIdleCallback(
+        loadRemainingImages,
+        { timeout: 3000 },
+      );
     } else {
       timeoutId = setTimeout(loadRemainingImages, 1000);
     }
 
     return () => {
-      if (idleCallbackId !== undefined && 'cancelIdleCallback' in window) {
+      if (idleCallbackId !== undefined && "cancelIdleCallback" in window) {
         (window as any).cancelIdleCallback(idleCallbackId);
       }
       if (timeoutId !== undefined) {
@@ -132,7 +103,7 @@ const FullWidthBanner = memo(function FullWidthBanner({
         }, 100);
       }
     },
-    [isAnimating]
+    [isAnimating],
   );
 
   const nextSlide = useCallback(() => {
@@ -149,7 +120,7 @@ const FullWidthBanner = memo(function FullWidthBanner({
     <section
       className={cn(
         "relative w-full h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden",
-        className
+        className,
       )}
     >
       {/* Loading skeleton */}
@@ -158,28 +129,46 @@ const FullWidthBanner = memo(function FullWidthBanner({
       <div className={cn("absolute inset-0", !isLoaded && "opacity-0")}>
         <Glider
           ref={gliderRef}
+          draggable={true}
+          dragVelocity={1.5}
           hasArrows={false}
           hasDots={false}
           slidesToShow={1}
           slidesToScroll={1}
           duration={1.2}
+          scrollLock={true}
+          scrollLockDelay={250}
+          rewind={false}
           className="h-full"
           onSlideVisible={(event: any) => {
             setCurrentSlide(event.detail.slide);
           }}
         >
-          {bannerSlides.map((slide, slideIndex) => (
-            <SlideComponent
-              key={slide.id}
-              slide={slide}
-              slideIndex={slideIndex}
-              currentSlide={currentSlide}
-              isAnimating={isAnimating}
-              isLoaded={isLoaded}
-              loadedImages={loadedImages}
-              imageErrors={imageErrors}
-            />
-          ))}
+          {bannerSlides.map((slide, slideIndex) =>
+            slide.type === "video" ? (
+              <SlideVideoComponent
+                key={slide.id}
+                slide={slide}
+                slideIndex={slideIndex}
+                currentSlide={currentSlide}
+                isAnimating={isAnimating}
+                isLoaded={isLoaded}
+                loadedImages={loadedImages}
+                imageErrors={imageErrors}
+              />
+            ) : (
+              <SlideComponent
+                key={slide.id}
+                slide={slide}
+                slideIndex={slideIndex}
+                currentSlide={currentSlide}
+                isAnimating={isAnimating}
+                isLoaded={isLoaded}
+                loadedImages={loadedImages}
+                imageErrors={imageErrors}
+              />
+            ),
+          )}
         </Glider>
       </div>
 
@@ -213,8 +202,8 @@ const FullWidthBanner = memo(function FullWidthBanner({
               className={cn(
                 "w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 hover:scale-125 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed",
                 index === currentSlide
-                  ? "bg-primary scale-125 shadow-lg shadow-primary/50"
-                  : "bg-white/40 hover:bg-white/60"
+                  ? "bg-btn-primary scale-125 shadow-lg shadow-primary/50"
+                  : "bg-white/40 hover:bg-white/60",
               )}
               aria-label={`Go to slide ${index + 1}`}
             />

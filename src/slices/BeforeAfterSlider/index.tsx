@@ -44,7 +44,7 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
 
       return Math.max(0, Math.min(100, position));
     },
-    [orientation]
+    [orientation],
   );
 
   // Handle mouse/touch drag with relative movement
@@ -74,24 +74,24 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
       newPosition = Math.max(0, Math.min(100, newPosition));
       setSliderPosition(newPosition);
     },
-    [orientation]
+    [orientation],
   );
 
   const handleStart = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
       e.preventDefault();
       setIsDragging(true);
-      
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      
+
+      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+      const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
       startPositionRef.current = {
         x: clientX,
         y: clientY,
         position: sliderPosition,
       };
     },
-    [sliderPosition]
+    [sliderPosition],
   );
 
   const handleMouseMove = useCallback(
@@ -100,7 +100,7 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
       e.preventDefault();
       handleMove(e.clientX, e.clientY);
     },
-    [isDragging, handleMove]
+    [isDragging, handleMove],
   );
 
   const handleMouseUp = useCallback(() => {
@@ -116,7 +116,7 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
         handleMove(touch.clientX, touch.clientY);
       }
     },
-    [isDragging, handleMove]
+    [isDragging, handleMove],
   );
 
   // Mouse and touch events
@@ -125,12 +125,19 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
       const abortController = new AbortController();
       const { signal } = abortController;
 
-      document.addEventListener("mousemove", handleMouseMove, { passive: false, signal });
+      document.addEventListener("mousemove", handleMouseMove, {
+        passive: false,
+        signal,
+      });
       document.addEventListener("mouseup", handleMouseUp, { signal });
-      document.addEventListener("touchmove", handleTouchMove, { passive: false, signal });
+      document.addEventListener("touchmove", handleTouchMove, {
+        passive: false,
+        signal,
+      });
       document.addEventListener("touchend", handleMouseUp, { signal });
       document.body.style.userSelect = "none";
-      document.body.style.cursor = orientation === "vertical" ? "row-resize" : "col-resize";
+      document.body.style.cursor =
+        orientation === "vertical" ? "row-resize" : "col-resize";
 
       return () => {
         abortController.abort();
@@ -138,23 +145,33 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
         document.body.style.cursor = "";
       };
     }
-  }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove, orientation]);
+  }, [
+    isDragging,
+    handleMouseMove,
+    handleMouseUp,
+    handleTouchMove,
+    orientation,
+  ]);
 
   // Handle click on container
   const handleContainerClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!containerRef.current || sliderRef.current?.contains(e.target as Node)) return;
+      if (
+        !containerRef.current ||
+        sliderRef.current?.contains(e.target as Node)
+      )
+        return;
       const position = calculatePosition(e.clientX, e.clientY);
       setSliderPosition(position);
     },
-    [calculatePosition]
+    [calculatePosition],
   );
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!containerRef.current) return;
-      
+
       const step = 2; // 2% per keypress
       let newPosition = sliderPosition;
 
@@ -203,7 +220,9 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
       className={cn(
         "relative min-w-0 bg-background text-foreground py-8 md:py-16",
         "transition-all duration-700 ease-out",
-        hasIntersected ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+        hasIntersected
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 translate-y-6",
       )}
     >
       <div className="max-w-480 mx-auto px-4">
@@ -214,7 +233,9 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
             className={cn(
               "text-center mb-8 md:mb-12",
               "transition-all duration-500 ease-out",
-              hasIntersected ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+              hasIntersected
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-3",
             )}
           >
             {isFilled.richText(slice.primary.title) && (
@@ -236,9 +257,11 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
         <div
           className={cn(
             "relative w-full overflow-hidden rounded-xl shadow-lg",
-            isVertical ? "h-[500px] md:h-[600px]" : "h-[360px] md:h-[500px] lg:h-[600px]",
+            isVertical
+              ? "h-[500px] md:h-[600px]"
+              : "h-[360px] md:h-[500px] lg:h-[600px]",
             "transition-all duration-500 ease-out",
-            hasIntersected ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            hasIntersected ? "opacity-100 scale-100" : "opacity-0 scale-95",
           )}
           style={{ transitionDelay: hasIntersected ? "200ms" : "0ms" }}
         >
@@ -247,9 +270,13 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
             onClick={handleContainerClick}
             className={cn(
               "relative w-full h-full select-none",
-              isDragging 
-                ? (isVertical ? "cursor-row-resize" : "cursor-col-resize")
-                : (isVertical ? "cursor-ns-resize" : "cursor-ew-resize")
+              isDragging
+                ? isVertical
+                  ? "cursor-row-resize"
+                  : "cursor-col-resize"
+                : isVertical
+                  ? "cursor-ns-resize"
+                  : "cursor-ew-resize",
             )}
           >
             {/* Before Image - Same layer */}
@@ -264,7 +291,7 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
                 <div
                   className={cn(
                     "absolute top-4 left-4 px-4 py-2 rounded-lg bg-black/70 text-white text-sm md:text-base font-semibold backdrop-blur-sm",
-                    "transition-all duration-300 z-20"
+                    "transition-all duration-300 z-20",
                   )}
                 >
                   {beforeLabel}
@@ -292,7 +319,7 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
                   className={cn(
                     "absolute right-4 px-4 py-2 rounded-lg bg-black/70 text-white text-sm md:text-base font-semibold backdrop-blur-sm",
                     `${isVertical ? "bottom-4" : "top-4"}`,
-                    "transition-all duration-300 z-20"
+                    "transition-all duration-300 z-20",
                   )}
                 >
                   {afterLabel}
@@ -311,13 +338,11 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
                 isDragging && "scale-110",
                 isVertical
                   ? "left-0 right-0 w-full h-1"
-                  : "top-0 bottom-0 h-full w-1"
+                  : "top-0 bottom-0 h-full w-1",
               )}
               style={{
                 [isVertical ? "top" : "left"]: `${sliderPosition}%`,
-                transform: isVertical
-                  ? "translateY(-50%)"
-                  : "translateX(-50%)",
+                transform: isVertical ? "translateY(-50%)" : "translateX(-50%)",
               }}
             >
               {/* Slider Line */}
@@ -326,7 +351,7 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
                   "absolute bg-white/95 shadow-2xl backdrop-blur-md",
                   "transition-all duration-200",
                   isDragging && "bg-white shadow-2xl",
-                  isVertical ? "w-full h-1" : "h-full w-1"
+                  isVertical ? "w-full h-1" : "h-full w-1",
                 )}
               />
 
@@ -334,12 +359,12 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
               <div
                 className={cn(
                   "relative flex items-center justify-center",
-                  "bg-primary text-primary-foreground",
+                  "bg-primary text-fg-primary-foreground",
                   "rounded-full shadow-xl border-2 border-white",
                   "transition-all duration-200 ease-out",
                   "hover:scale-110 active:scale-105",
                   isDragging && "shadow-2xl scale-125 ring-4 ring-white/50",
-                  "w-12 h-12"
+                  "w-12 h-12",
                 )}
                 role="slider"
                 aria-valuemin={0}
@@ -353,7 +378,7 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
                     "text-white drop-shadow-sm",
                     isVertical && "rotate-90",
                     "w-6 h-6 transition-transform duration-200",
-                    isDragging && "scale-110"
+                    isDragging && "scale-110",
                   )}
                 />
                 {/* Arrow indicators */}
@@ -379,4 +404,3 @@ const BeforeAfterSlider: FC<BeforeAfterSliderProps> = ({ slice }) => {
 };
 
 export default BeforeAfterSlider;
-

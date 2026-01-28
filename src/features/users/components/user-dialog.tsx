@@ -66,7 +66,7 @@ export function UserDialog({ user, trigger, onDialogClose }: UserDialogProps) {
     } catch (error) {
       console.error("Error updating user status:", error);
       toast.error(
-        user.enabled ? "Khóa tài khoản thất bại" : "Mở khóa tài khoản thất bại"
+        user.enabled ? "Khóa tài khoản thất bại" : "Mở khóa tài khoản thất bại",
       );
     } finally {
       setIsLoading(false);
@@ -156,7 +156,7 @@ export function UserDialog({ user, trigger, onDialogClose }: UserDialogProps) {
                 <div>
                   <p className="text-sm font-medium">Ngày tạo</p>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(user.createdAt).toLocaleDateString('vi-VN')}
+                    {new Date(user.createdAt).toLocaleDateString("vi-VN")}
                   </p>
                 </div>
               </div>
@@ -166,7 +166,7 @@ export function UserDialog({ user, trigger, onDialogClose }: UserDialogProps) {
                 <div>
                   <p className="text-sm font-medium">Cập nhật lần cuối</p>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(user.updatedAt).toLocaleDateString('vi-VN')}
+                    {new Date(user.updatedAt).toLocaleDateString("vi-VN")}
                   </p>
                 </div>
               </div>
@@ -199,7 +199,7 @@ export function UserDialog({ user, trigger, onDialogClose }: UserDialogProps) {
                 >
                   <div className="flex items-center space-x-2">
                     {role.name === "ADMIN" ? (
-                      <ShieldCheck className="h-4 w-4 text-primary" />
+                      <ShieldCheck className="h-4 w-4 text-fg-primary" />
                     ) : (
                       <Shield className="h-4 w-4 text-muted-foreground" />
                     )}

@@ -47,7 +47,9 @@ export const columns: ColumnDef<AffiliateLink>[] = [
         <div className="space-y-1">
           <div className="font-medium">{link.name}</div>
           {link.campaignName && (
-            <div className="text-sm text-muted-foreground">{link.campaignName}</div>
+            <div className="text-sm text-muted-foreground">
+              {link.campaignName}
+            </div>
           )}
         </div>
       );
@@ -91,7 +93,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
           <Link
             href={url}
             target="_blank"
-            className="text-sm text-primary hover:underline truncate"
+            className="text-sm text-fg-primary hover:underline truncate"
           >
             {url}
           </Link>
@@ -106,7 +108,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     cell: ({ row }) => {
       const link = row.original;
       const isActive = link.activeByAdmin && link.activeByAffiliate;
-      
+
       if (isActive) {
         return (
           <Badge variant="live" className="flex items-center gap-1 w-fit">
@@ -116,7 +118,10 @@ export const columns: ColumnDef<AffiliateLink>[] = [
         );
       } else {
         return (
-          <Badge variant="destructive" className="flex items-center gap-1 w-fit">
+          <Badge
+            variant="destructive"
+            className="flex items-center gap-1 w-fit"
+          >
             <ToggleLeft className="h-3 w-3" />
             Tắt
           </Badge>
@@ -133,9 +138,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     cell: ({ row }) => {
       const date = row.getValue("createdAt") as Date;
       return (
-        <div className="text-sm">
-          {format(new Date(date), "dd/MM/yyyy")}
-        </div>
+        <div className="text-sm">{format(new Date(date), "dd/MM/yyyy")}</div>
       );
     },
     size: 120,
@@ -165,7 +168,11 @@ export const columns: ColumnDef<AffiliateLink>[] = [
       return (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0" disabled={isLoading}>
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0"
+              disabled={isLoading}
+            >
               <span className="sr-only">Mở menu</span>
               <MoreVertical className="h-4 w-4" />
             </Button>
@@ -197,4 +204,3 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     maxSize: 32,
   },
 ];
-

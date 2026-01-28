@@ -27,10 +27,22 @@ export const ProductImageGallery = memo(function ProductImageGallery({
   const [currentSlide, setCurrentSlide] = useState(0);
   const mainGliderRef = useRef<any>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
+  const [isLgScreen, setIsLgScreen] = useState(false);
 
-  // Initialize Fancybox when component mounts
+  // Check screen size and initialize Fancybox only on lg screens (>= 1024px)
   useEffect(() => {
-    if (galleryRef.current) {
+    const checkScreenSize = () => {
+      setIsLgScreen(window.innerWidth >= 1024);
+    };
+
+    // Check on mount
+    checkScreenSize();
+
+    // Listen for resize events
+    window.addEventListener("resize", checkScreenSize);
+
+    // Initialize Fancybox only on lg screens and above
+    if (galleryRef.current && window.innerWidth >= 1024) {
       Fancybox.bind(galleryRef.current, "[data-fancybox]", {
         // Enable keyboard navigation
         keyboard: {
@@ -51,9 +63,12 @@ export const ProductImageGallery = memo(function ProductImageGallery({
       });
     }
 
-    // Cleanup Fancybox when component unmounts
+    // Cleanup
     return () => {
-      Fancybox.destroy();
+      window.removeEventListener("resize", checkScreenSize);
+      if (window.innerWidth >= 1024) {
+        Fancybox.destroy();
+      }
     };
   }, [images]);
 
@@ -94,7 +109,7 @@ export const ProductImageGallery = memo(function ProductImageGallery({
       <div
         className={cn(
           "bg-muted rounded-lg min-h-[300px] max-h-[500px] flex items-center justify-center",
-          className
+          className,
         )}
       >
         <div className="flex items-center justify-center h-full text-muted-foreground">
@@ -120,7 +135,7 @@ export const ProductImageGallery = memo(function ProductImageGallery({
           duration={0.5}
           draggable={true}
           dragVelocity={1.5}
-          scrollLockDelay={100}
+          scrollLockDelay={250}
           rewind={false}
           onSlideVisible={(glider: any) => {
             if (glider && typeof glider.slide === "number") {
@@ -134,26 +149,42 @@ export const ProductImageGallery = memo(function ProductImageGallery({
               <div className="bg-muted rounded-lg overflow-hidden transform transition-all duration-300 ease-out relative group min-h-[300px] max-h-[500px] flex items-center justify-center">
                 <a
                   href={image.url}
-                  data-fancybox="product-gallery"
+                  data-fancybox={isLgScreen ? "product-gallery" : undefined}
                   data-caption={image.alt}
                   data-thumb={image.url}
                   className="w-full h-full flex items-center justify-center"
+                  draggable={false}
+                  onClick={(e) => {
+                    // Disable Fancybox on screens smaller than 1024px
+                    if (window.innerWidth < 1024) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      return;
+                    }
+                    // Allow touch events to propagate to glider for swiping
+                    // Only prevent default if it's a click (not a drag)
+                    if (e.detail === 0) {
+                      // This is likely a programmatic click, allow it
+                      return;
+                    }
+                  }}
                 >
                   <Image
                     src={image.url}
                     alt={image.alt}
                     width={600}
                     height={600}
-                    className="max-w-full max-h-full object-contain transition-transform duration-500 hover:scale-105"
+                    className="max-w-full max-h-full object-contain transition-transform duration-500 hover:scale-105 select-none"
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 40vw"
                     priority={index === 0}
+                    draggable={false}
                   />
                 </a>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20">
+                <div className="hidden absolute inset-0 lg:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20 pointer-events-none">
                   <Button
                     variant="secondary"
                     size="icon"
-                    className="h-10 w-10 rounded-full bg-white/90 hover:bg-white shadow-lg"
+                    className="h-10 w-10 rounded-full bg-white shadow-lg pointer-events-auto"
                     aria-label="Open image in lightbox"
                     onClick={(e) => {
                       e.preventDefault();
@@ -162,7 +193,7 @@ export const ProductImageGallery = memo(function ProductImageGallery({
                       const anchorElement = e.currentTarget
                         .closest(".glider-slide")
                         ?.querySelector(
-                          "a[data-fancybox]"
+                          "a[data-fancybox]",
                         ) as HTMLAnchorElement;
                       if (anchorElement) {
                         anchorElement.click();
@@ -183,7 +214,7 @@ export const ProductImageGallery = memo(function ProductImageGallery({
             <Button
               variant="outline"
               size="icon"
-              className="absolute left-2 top-1/2 -translate-y-1/2 h-8 rounded-full w-8 bg-white/90 hover:bg-white shadow-lg product-gallery-nav z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 h-8 rounded-full w-8 bg-white/90 shadow-lg product-gallery-nav z-10"
               onClick={handlePrevious}
               disabled={currentSlide === 0}
               aria-label="Previous image"
@@ -193,7 +224,7 @@ export const ProductImageGallery = memo(function ProductImageGallery({
             <Button
               variant="outline"
               size="icon"
-              className="absolute right-2 top-1/2 -translate-y-1/2 h-8 rounded-full w-8 bg-white/90 hover:bg-white shadow-lg product-gallery-nav z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 h-8 rounded-full w-8 bg-white/90 shadow-lg product-gallery-nav z-10"
               onClick={handleNext}
               disabled={currentSlide >= sortedImages.length - 1}
               aria-label="Next image"
@@ -219,7 +250,7 @@ export const ProductImageGallery = memo(function ProductImageGallery({
                 "w-3 h-3 rounded-full",
                 currentSlide === index
                   ? "bg-primary active md:border-primary"
-                  : "bg-muted-foreground/30 hover:bg-muted-foreground/50 md:border-border md:bg-transparent"
+                  : "bg-muted-foreground/30 hover:bg-muted-foreground/50 md:border-border md:bg-transparent",
               )}
               aria-label={`View image ${index + 1} of ${sortedImages.length}`}
               aria-pressed={currentSlide === index}

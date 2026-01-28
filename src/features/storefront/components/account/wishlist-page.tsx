@@ -39,7 +39,7 @@ export default function WishlistPage() {
 
   // Filter items by current user
   const wishlistItems = allWishlistItems.filter(
-    (item) => !currentUserId || item.userId === currentUserId
+    (item) => !currentUserId || item.userId === currentUserId,
   );
 
   const { addToCart, isProductLoading, isInCart, getItemQuantity } = useCart();
@@ -108,7 +108,9 @@ export default function WishlistPage() {
                 key={item.id}
                 className="group h-full flex flex-col"
               >
-                <Link href={generateProductUrl(item.product.name, item.product.id)}>
+                <Link
+                  href={generateProductUrl(item.product.name, item.product.id)}
+                >
                   <div className="aspect-square bg-muted rounded-t-lg relative overflow-hidden">
                     <Image
                       src={
@@ -147,8 +149,13 @@ export default function WishlistPage() {
                     </Badge>
 
                     {/* Product name */}
-                    <Link href={generateProductUrl(item.product.name, item.product.id)}>
-                      <h3 className="font-semibold line-clamp-2 group-hover:text-primary transition-colors cursor-pointer">
+                    <Link
+                      href={generateProductUrl(
+                        item.product.name,
+                        item.product.id,
+                      )}
+                    >
+                      <h3 className="font-semibold line-clamp-2 group-hover:text-fg-primary transition-colors cursor-pointer">
                         {item.product.name}
                       </h3>
                     </Link>
@@ -162,7 +169,7 @@ export default function WishlistPage() {
                     <div className="flex items-center gap-2">
                       <span className="text-lg font-bold">
                         {formatPrice(
-                          item.product.discountPrice || item.product.price
+                          item.product.discountPrice || item.product.price,
                         )}
                       </span>
                       {item.product.discountPrice &&

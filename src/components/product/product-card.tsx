@@ -59,6 +59,9 @@ export function ProductCard({
   const productInCart = isInCart(product.id);
   const cartQuantity = getItemQuantity(product.id);
 
+  const primaryImage =
+    product.images?.find((img) => img.primary) || product.images?.[0];
+
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -107,9 +110,7 @@ export function ProductCard({
             {/* Image on the left - smaller */}
             <div className="w-20 h-20 bg-muted rounded-lg overflow-hidden">
               <Image
-                src={
-                  product.images?.[0]?.url || "/assets/placeholder-image.jpeg"
-                }
+                src={primaryImage?.url || "/assets/placeholder-image.jpeg"}
                 alt={product.name}
                 width={80}
                 height={80}
@@ -125,21 +126,21 @@ export function ProductCard({
                     {product.categories?.[0]?.name || "Uncategorized"}
                   </Badge>
                 </div>
-            <Link href={generateProductUrl(product.name, product.id)}>
-              <h3 className="font-medium text-xs md:text-sm line-clamp-1 group-hover:text-primary transition-colors cursor-pointer">
-                {product.name}
-              </h3>
-            </Link>
-            {(product.averageRating > 0 || product.reviewCount > 0) && (
-              <ProductRating
-                rating={product.averageRating || 0}
-                reviewCount={product.reviewCount || 0}
-                size="sm"
-              />
-            )}
-            <p className="hidden text-xs text-muted-foreground md:line-clamp-2">
-              {product.description}
-            </p>
+                <Link href={generateProductUrl(product.name, product.id)}>
+                  <h3 className="font-medium text-xs md:text-sm line-clamp-1 group-hover:text-fg-primary transition-colors cursor-pointer">
+                    {product.name}
+                  </h3>
+                </Link>
+                {(product.averageRating > 0 || product.reviewCount > 0) && (
+                  <ProductRating
+                    rating={product.averageRating || 0}
+                    reviewCount={product.reviewCount || 0}
+                    size="sm"
+                  />
+                )}
+                <p className="hidden text-xs text-muted-foreground md:line-clamp-2">
+                  {product.description}
+                </p>
               </div>
 
               <div className="flex flex-col gap-2 items-start justify-between mt-2 md:flex-row md:items-center">
@@ -161,13 +162,13 @@ export function ProductCard({
                         "h-7 w-7 transition-colors",
                         isInWishlistState
                           ? "bg-red-50 text-red-500 hover:bg-red-100"
-                          : "hover:bg-red-50 hover:text-red-500"
+                          : "hover:bg-red-50 hover:text-red-500",
                       )}
                     >
                       <Heart
                         className={cn(
                           "h-3 w-3",
-                          isInWishlistState && "fill-current"
+                          isInWishlistState && "fill-current",
                         )}
                       />
                     </Button>
@@ -197,7 +198,7 @@ export function ProductCard({
                       disabled={isProductLoading(product.id) || isOutOfStock}
                       className={cn(
                         "h-7 px-2 text-xs",
-                        isOutOfStock && "opacity-50 cursor-not-allowed"
+                        isOutOfStock && "opacity-50 cursor-not-allowed",
                       )}
                       title={stockStatusText}
                     >
@@ -222,7 +223,7 @@ export function ProductCard({
       <Card
         className={cn(
           "group cursor-pointer relative overflow-hidden h-full flex flex-col",
-          className
+          className,
         )}
         disableBlockPadding={true}
         onMouseEnter={() => setIsHovered(true)}
@@ -230,7 +231,7 @@ export function ProductCard({
       >
         <div className="aspect-square bg-muted rounded-t-lg overflow-hidden relative">
           <Image
-            src={product.images?.[0]?.url || "/assets/placeholder-image.jpeg"}
+            src={primaryImage?.url || "/assets/placeholder-image.jpeg"}
             alt={product.name}
             width={300}
             height={300}
@@ -241,7 +242,7 @@ export function ProductCard({
           <div
             className={cn(
               "absolute inset-0 flex items-center justify-center transition-opacity duration-200",
-              isHovered ? "opacity-100" : "opacity-0"
+              isHovered ? "opacity-100" : "opacity-0",
             )}
           >
             {/* Dark overlay background */}
@@ -256,7 +257,7 @@ export function ProductCard({
                   onClick={handleWishlist}
                   className={cn(
                     "h-10 w-10 rounded-full bg-white/90 hover:bg-white shadow-lg transition-colors",
-                    isInWishlistState && "bg-red-50 hover:bg-red-100"
+                    isInWishlistState && "bg-red-50 hover:bg-red-100",
                   )}
                 >
                   <Heart
@@ -264,7 +265,7 @@ export function ProductCard({
                       "h-4 w-4",
                       isInWishlistState
                         ? "text-red-500 fill-red-500"
-                        : "text-red-500"
+                        : "text-red-500",
                     )}
                   />
                 </Button>
@@ -289,7 +290,7 @@ export function ProductCard({
                   disabled={isProductLoading(product.id) || isOutOfStock}
                   className={cn(
                     "h-10 w-10 rounded-full bg-white/90 hover:bg-white shadow-lg",
-                    isOutOfStock && "opacity-50 cursor-not-allowed"
+                    isOutOfStock && "opacity-50 cursor-not-allowed",
                   )}
                   title={stockStatusText}
                 >
@@ -321,7 +322,7 @@ export function ProductCard({
             </div>
 
             <Link href={generateProductUrl(product.name, product.id)}>
-              <h3 className="font-medium text-sm md:text-base line-clamp-2 group-hover:text-primary transition-colors cursor-pointer">
+              <h3 className="font-medium text-sm md:text-base line-clamp-2 group-hover:text-fg-primary transition-colors cursor-pointer">
                 {product.name}
               </h3>
             </Link>
@@ -372,7 +373,7 @@ export function ProductCard({
                   disabled={isProductLoading(product.id) || isOutOfStock}
                   className={cn(
                     "flex-1",
-                    isOutOfStock && "opacity-50 cursor-not-allowed"
+                    isOutOfStock && "opacity-50 cursor-not-allowed",
                   )}
                 >
                   {isProductLoading(product.id) ? (
@@ -402,18 +403,18 @@ export function ProductCard({
     >
       <div className="flex-shrink-0 bg-muted rounded-t-lg overflow-hidden relative">
         <Image
-          src={product.images?.[0]?.url || "/assets/placeholder-image.jpeg"}
+          src={primaryImage?.url || "/assets/placeholder-image.jpeg"}
           alt={product.name}
           width={300}
           height={300}
           className="block w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
         />
 
-        {/* Overlay Actions */}
+        {/* Overlay Actions - Desktop only (hover) */}
         <div
           className={cn(
-            "absolute inset-0 flex items-center justify-center transition-opacity duration-200",
-            isHovered ? "opacity-100" : "opacity-0"
+            "absolute inset-0 hidden md:flex items-center justify-center transition-opacity duration-200",
+            isHovered ? "opacity-100" : "opacity-0",
           )}
         >
           {/* Dark overlay background */}
@@ -428,7 +429,7 @@ export function ProductCard({
                 onClick={handleWishlist}
                 className={cn(
                   "h-10 w-10 rounded-full bg-white/90 hover:bg-white shadow-lg transition-colors",
-                  isInWishlistState && "bg-red-50 hover:bg-red-100"
+                  isInWishlistState && "bg-red-50 hover:bg-red-100",
                 )}
               >
                 <Heart
@@ -436,7 +437,7 @@ export function ProductCard({
                     "h-4 w-4",
                     isInWishlistState
                       ? "text-red-500 fill-red-500"
-                      : "text-red-500"
+                      : "text-red-500",
                   )}
                 />
               </Button>
@@ -448,7 +449,7 @@ export function ProductCard({
               disabled={isProductLoading(product.id) || isOutOfStock}
               className={cn(
                 "h-10 w-10 rounded-full bg-white/90 hover:bg-white shadow-lg",
-                isOutOfStock && "opacity-50 cursor-not-allowed"
+                isOutOfStock && "opacity-50 cursor-not-allowed",
               )}
               title={stockStatusText}
             >
@@ -472,12 +473,46 @@ export function ProductCard({
 
       <CardContent className="px-4 pb-4 flex flex-col gap-2 h-full">
         <div className="flex-1 space-y-3">
-          <Badge variant="secondary" className="text-xs">
-            {product.categories?.[0]?.name || "Uncategorized"}
-          </Badge>
+          <div className="flex items-center justify-between">
+            <Badge variant="secondary" className="text-xs">
+              {product.categories?.[0]?.name || "Uncategorized"}
+            </Badge>
+
+            {/* Mobile Action Buttons - Always visible on mobile */}
+            <div className="flex items-center gap-2 lg:hidden">
+              {showWishlist && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleWishlist}
+                  className={cn(
+                    "h-8 w-8 transition-colors",
+                    isInWishlistState
+                      ? "bg-red-50 text-red-500 hover:bg-red-100"
+                      : "hover:bg-red-50 hover:text-red-500",
+                  )}
+                >
+                  <Heart
+                    className={cn(
+                      "h-4 w-4",
+                      isInWishlistState && "fill-current",
+                    )}
+                  />
+                </Button>
+              )}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleQuickView}
+                className="h-8 w-8 hover:bg-blue-50 hover:text-blue-500 transition-colors"
+              >
+                <Eye className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
 
           <Link href={generateProductUrl(product.name, product.id)}>
-            <h3 className="font-medium text-sm md:text-base line-clamp-2 group-hover:text-primary transition-colors cursor-pointer">
+            <h3 className="font-medium text-sm md:text-base line-clamp-2 group-hover:text-fg-primary transition-colors cursor-pointer">
               {product.name}
             </h3>
           </Link>
@@ -526,7 +561,7 @@ export function ProductCard({
                 disabled={isProductLoading(product.id) || isOutOfStock}
                 className={cn(
                   "flex-1",
-                  isOutOfStock && "opacity-50 cursor-not-allowed"
+                  isOutOfStock && "opacity-50 cursor-not-allowed",
                 )}
               >
                 {isProductLoading(product.id) ? (

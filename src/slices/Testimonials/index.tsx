@@ -26,7 +26,7 @@ const Testimonials: FC<TestimonialsProps> = ({ slice }) => {
 
   const prevSlide = () => {
     setCurrentIndex(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length
+      (prev) => (prev - 1 + testimonials.length) % testimonials.length,
     );
   };
 
@@ -58,7 +58,7 @@ const Testimonials: FC<TestimonialsProps> = ({ slice }) => {
           className="es-testimonials__star es-testimonials__star--filled"
         >
           <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-        </svg>
+        </svg>,
       );
     }
 
@@ -82,7 +82,7 @@ const Testimonials: FC<TestimonialsProps> = ({ slice }) => {
             d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
             fill="url(#half-star)"
           />
-        </svg>
+        </svg>,
       );
     }
 
@@ -99,7 +99,7 @@ const Testimonials: FC<TestimonialsProps> = ({ slice }) => {
           className="es-testimonials__star es-testimonials__star--empty"
         >
           <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-        </svg>
+        </svg>,
       );
     }
 
@@ -120,10 +120,16 @@ const Testimonials: FC<TestimonialsProps> = ({ slice }) => {
           isFilled.richText(slice.primary.subtitle)) && (
           <div className="text-center mb-12">
             {isFilled.richText(slice.primary.title) && (
-              <HeadingField field={slice.primary.title} className="text-4xl font-bold mb-4 text-foreground" />
+              <HeadingField
+                field={slice.primary.title}
+                className="text-4xl font-bold mb-4 text-foreground"
+              />
             )}
             {isFilled.richText(slice.primary.subtitle) && (
-              <RichTextField field={slice.primary.subtitle} className="text-lg text-muted-foreground max-w-2xl mx-auto" />
+              <RichTextField
+                field={slice.primary.subtitle}
+                className="text-lg text-muted-foreground max-w-2xl mx-auto"
+              />
             )}
           </div>
         )}
@@ -147,7 +153,7 @@ const Testimonials: FC<TestimonialsProps> = ({ slice }) => {
                           {/* Quote */}
                           {isFilled.richText(testimonial.quote) && (
                             <div className="text-xl leading-relaxed text-muted-foreground mb-8 italic relative">
-                              <span className="absolute -top-4 -left-2 text-6xl text-primary font-serif">
+                              <span className="absolute -top-4 -left-2 text-6xl text-fg-primary font-serif">
                                 "
                               </span>
                               <PrismicRichText
@@ -188,7 +194,7 @@ const Testimonials: FC<TestimonialsProps> = ({ slice }) => {
                               )}
 
                               {isFilled.keyText(testimonial.title) && (
-                                <div className="text-sm text-primary font-medium mb-1">
+                                <div className="text-sm text-fg-primary font-medium mb-1">
                                   {testimonial.title}
                                 </div>
                               )}
@@ -267,7 +273,7 @@ const Testimonials: FC<TestimonialsProps> = ({ slice }) => {
                         "w-3 h-3 rounded-full border-none cursor-pointer transition-colors duration-300",
                         index === currentIndex
                           ? "bg-primary hover:bg-primary/80"
-                          : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                          : "bg-muted-foreground/30 hover:bg-muted-foreground/50",
                       )}
                       onClick={() => goToSlide(index)}
                       aria-label={`Go to testimonial ${index + 1}`}
@@ -288,7 +294,7 @@ const Testimonials: FC<TestimonialsProps> = ({ slice }) => {
                     {/* Quote */}
                     {isFilled.richText(testimonial.quote) && (
                       <div className="text-lg leading-relaxed text-muted-foreground mb-6 italic relative">
-                        <span className="absolute -top-4 -left-2 text-5xl text-primary font-serif">
+                        <span className="absolute -top-4 -left-2 text-5xl text-fg-primary font-serif">
                           "
                         </span>
                         <PrismicRichText
@@ -329,7 +335,7 @@ const Testimonials: FC<TestimonialsProps> = ({ slice }) => {
                         )}
 
                         {isFilled.keyText(testimonial.title) && (
-                          <div className="text-sm text-primary font-medium mb-1">
+                          <div className="text-sm text-fg-primary font-medium mb-1">
                             {testimonial.title}
                           </div>
                         )}

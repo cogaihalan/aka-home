@@ -18,7 +18,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
 
-export function createColumns(onEdit?: (link: AffiliateLink) => void): ColumnDef<AffiliateLink>[] {
+export function createColumns(
+  onEdit?: (link: AffiliateLink) => void,
+): ColumnDef<AffiliateLink>[] {
   return [
     {
       id: "id",
@@ -45,7 +47,9 @@ export function createColumns(onEdit?: (link: AffiliateLink) => void): ColumnDef
           <div className="space-y-1">
             <div className="font-medium">{link.name}</div>
             {link.campaignName && (
-              <div className="text-sm text-muted-foreground">{link.campaignName}</div>
+              <div className="text-sm text-muted-foreground">
+                {link.campaignName}
+              </div>
             )}
           </div>
         );
@@ -77,7 +81,7 @@ export function createColumns(onEdit?: (link: AffiliateLink) => void): ColumnDef
             <Link
               href={url}
               target="_blank"
-              className="text-sm text-primary hover:underline truncate"
+              className="text-sm text-fg-primary hover:underline truncate"
             >
               {url}
             </Link>
@@ -93,7 +97,7 @@ export function createColumns(onEdit?: (link: AffiliateLink) => void): ColumnDef
         const link = row.original;
         const isActive = link.activeByAffiliate && link.activeByAdmin;
         const isPending = link.activeByAffiliate && !link.activeByAdmin;
-        
+
         if (isActive) {
           return (
             <Badge variant="live" className="flex items-center gap-1 w-fit">
@@ -103,14 +107,20 @@ export function createColumns(onEdit?: (link: AffiliateLink) => void): ColumnDef
           );
         } else if (isPending) {
           return (
-            <Badge variant="secondary" className="flex items-center gap-1 w-fit">
+            <Badge
+              variant="secondary"
+              className="flex items-center gap-1 w-fit"
+            >
               <ToggleLeft className="h-3 w-3" />
               Chờ duyệt
             </Badge>
           );
         } else {
           return (
-            <Badge variant="destructive" className="flex items-center gap-1 w-fit">
+            <Badge
+              variant="destructive"
+              className="flex items-center gap-1 w-fit"
+            >
               <ToggleLeft className="h-3 w-3" />
               Tắt
             </Badge>
@@ -127,9 +137,7 @@ export function createColumns(onEdit?: (link: AffiliateLink) => void): ColumnDef
       cell: ({ row }) => {
         const date = row.getValue("createdAt") as Date;
         return (
-          <div className="text-sm">
-            {format(new Date(date), "dd/MM/yyyy")}
-          </div>
+          <div className="text-sm">{format(new Date(date), "dd/MM/yyyy")}</div>
         );
       },
       size: 120,

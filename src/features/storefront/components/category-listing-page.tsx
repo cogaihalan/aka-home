@@ -61,7 +61,7 @@ export default function CategoryListingPage() {
                 />
               </div>
               <CardContent className="p-4">
-                <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">
+                <h3 className="font-semibold mb-2 group-hover:text-fg-accent transition-colors">
                   {category.name}
                 </h3>
                 {category.description && (

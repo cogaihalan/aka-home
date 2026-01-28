@@ -19,7 +19,11 @@ export const columns: ColumnDef<PrismicContent>[] = [
       const uid = row.original.uid as string;
       const data = row.original.data as any;
       const title = data?.meta_title || convertUIDToPageTitle(uid);
-      return <div className="font-medium max-w-[200px] truncate capitalize">{title}</div>;
+      return (
+        <div className="font-medium max-w-[200px] truncate capitalize">
+          {title}
+        </div>
+      );
     },
   },
   {
@@ -27,9 +31,7 @@ export const columns: ColumnDef<PrismicContent>[] = [
     header: "UID (Unique Identifier)",
     cell: ({ row }) => {
       const uid = row.original.uid;
-      return (
-        <div className="text-primary text-sm">/{uid}</div>
-      );
+      return <div className="text-fg-primary text-sm">/{uid}</div>;
     },
   },
   {
@@ -38,9 +40,7 @@ export const columns: ColumnDef<PrismicContent>[] = [
     header: "URL (Uniform Resource Locator)",
     cell: ({ row }) => {
       const url = row.original.url;
-      return (
-        <div className="text-primary font-medium text-sm">{url}</div>
-      );
+      return <div className="text-fg-primary font-medium text-sm">{url}</div>;
     },
   },
   {
@@ -56,7 +56,7 @@ export const columns: ColumnDef<PrismicContent>[] = [
           {formatDistanceToNow(new Date(date), { addSuffix: true })}
         </div>
       );
-    }
+    },
   },
   {
     id: "actions",
@@ -82,7 +82,7 @@ export const columns: ColumnDef<PrismicContent>[] = [
             onClick={() =>
               window.open(
                 `${process.env.NEXT_PUBLIC_PRISMIC_URL}/builder/pages/${page.id}`,
-                "_blank"
+                "_blank",
               )
             }
             className="h-8 w-8 p-0"

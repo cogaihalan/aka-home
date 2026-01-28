@@ -43,14 +43,17 @@ const accountNav: AccountNavItem[] = [
   { label: "Địa chỉ", href: "/account/addresses", icon: MapPin },
   { label: "Hồ sơ", href: "/account/profile", icon: Settings },
   { label: "Bài dự thi", href: "/account/submissions", icon: Award },
-  { label: "Affiliate", href: "/account/affiliate", icon: LinkIcon,
+  {
+    label: "Affiliate",
+    href: "/account/affiliate",
+    icon: LinkIcon,
     children: [
       { label: "Liên kết", href: "/account/affiliate/links" },
       { label: "Thanh toán", href: "/account/affiliate/payouts" },
       { label: "Rút tiền", href: "/account/affiliate/withdrawals" },
       { label: "Giao dịch", href: "/account/affiliate/transactions" },
     ],
-   },
+  },
   { label: "Yêu thích", href: "/account/wishlist", icon: Heart },
   { label: "Đăng xuất", href: "/auth/sign-out", icon: LogOut },
 ];
@@ -61,7 +64,7 @@ export default function AccountLayout({ children }: AccountLayoutProps) {
 
   const defaultExpandedParent = useMemo(() => {
     const parentWithActiveChild = accountNav.find((item) =>
-      item.children?.some((child) => child.href === pathname)
+      item.children?.some((child) => child.href === pathname),
     );
 
     return parentWithActiveChild?.label;
@@ -90,7 +93,7 @@ export default function AccountLayout({ children }: AccountLayoutProps) {
                   redirectUrl="/auth/sign-in"
                   className={cn(
                     "flex items-center justify-start gap-3 px-3 py-2 rounded-md font-normal text-sm transition-colors cursor-pointer w-full text-left",
-                    "hover:bg-muted"
+                    "hover:bg-muted",
                   )}
                   onClick={() => setIsOpen(false)}
                 >
@@ -111,12 +114,17 @@ export default function AccountLayout({ children }: AccountLayoutProps) {
                 <AccordionTrigger
                   className={cn(
                     "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
-                    isActive ? "bg-primary text-white [&>svg]:text-white" : "hover:bg-muted",
-                    "hover:no-underline"
+                    isActive
+                      ? "bg-primary text-white [&>svg]:text-white"
+                      : "hover:bg-muted",
+                    "hover:no-underline",
                   )}
                 >
                   <Icon className="h-4 w-4 shrink-0" />
-                  <Link href={item.href as string} className={"flex-1 text-left font-normal"}>
+                  <Link
+                    href={item.href as string}
+                    className={"flex-1 text-left font-normal"}
+                  >
                     {item.label}
                   </Link>
                 </AccordionTrigger>
@@ -130,8 +138,8 @@ export default function AccountLayout({ children }: AccountLayoutProps) {
                         className={cn(
                           "block rounded-md px-3 py-2 text-sm transition-colors",
                           pathname === child.href
-                            ? "text-primary"
-                            : "hover:text-primary"
+                            ? "text-fg-primary"
+                            : "hover:text-fg-primary",
                         )}
                       >
                         {child.label}
@@ -150,7 +158,9 @@ export default function AccountLayout({ children }: AccountLayoutProps) {
                 onClick={() => setIsOpen(false)}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
-                  isActive ? "bg-primary text-white pointer-events-none" : "hover:bg-muted"
+                  isActive
+                    ? "bg-primary text-white pointer-events-none"
+                    : "hover:bg-muted",
                 )}
               >
                 <Icon className="h-4 w-4" />

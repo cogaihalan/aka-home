@@ -16,12 +16,13 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
   "/admin/categories": [{ title: "Danh mục", link: "/admin/categories" }],
   "/admin/users": [{ title: "Người dùng", link: "/admin/users" }],
   "/admin/orders": [{ title: "Đơn hàng", link: "/admin/orders" }],
-  "/admin/courses": [{ title: "Khóa học", link: "/admin/courses" }],
   "/admin/pages": [{ title: "Trang", link: "/admin/pages" }],
   "/admin/settings": [{ title: "Cài đặt", link: "/admin/settings" }],
-  "/admin/analytics": [{ title: "Phân tích", link: "/admin/analytics" }],
   "/admin/affiliate-approvals": [
-    { title: "Quản lý yêu cầu đăng ký đại lý/CTV", link: "/admin/affiliate-approvals" },
+    {
+      title: "Quản lý yêu cầu đăng ký đại lý/CTV",
+      link: "/admin/affiliate-approvals",
+    },
   ],
   "/admin/affiliate-links": [
     { title: "Quản lý liên kết affiliate", link: "/admin/affiliate-links" },
@@ -30,13 +31,17 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
     { title: "Quản lý yêu cầu rút tiền", link: "/admin/affiliate-withdrawals" },
   ],
   "/admin/affiliate-transactions": [
-    { title: "Quản lý giao dịch affiliate", link: "/admin/affiliate-transactions" },
+    {
+      title: "Quản lý giao dịch affiliate",
+      link: "/admin/affiliate-transactions",
+    },
   ],
   "/account/wishlist": [
     { title: "Tài khoản", link: "/account" },
     { title: "Yêu thích", link: "/account/wishlist" },
   ],
   "/checkout": [{ title: "Thanh toán", link: "/checkout" }],
+  "/cart": [{ title: "Giỏ hàng", link: "/cart" }],
   "/checkout/success": [
     { title: "Thanh toán", link: "/checkout" },
     { title: "Thanh toán thành công", link: "/checkout/success" },
@@ -58,7 +63,10 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
 
   "/account/affiliate/approvals": [
     { title: "Tài khoản", link: "/account" },
-    { title: "Quản lý yêu cầu đăng ký đại lý/CTV", link: "/account/affiliate/approvals" },
+    {
+      title: "Quản lý yêu cầu đăng ký đại lý/CTV",
+      link: "/account/affiliate/approvals",
+    },
   ],
   "/account/affiliate/links": [
     { title: "Tài khoản", link: "/account" },
@@ -66,16 +74,25 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
   ],
   "/account/affiliate/withdrawals": [
     { title: "Tài khoản", link: "/account" },
-    { title: "Quản lý yêu cầu rút tiền", link: "/account/affiliate/withdrawals" },
+    {
+      title: "Quản lý yêu cầu rút tiền",
+      link: "/account/affiliate/withdrawals",
+    },
   ],
   "/account/affiliate/transactions": [
     { title: "Tài khoản", link: "/account" },
-    { title: "Quản lý giao dịch affiliate", link: "/account/affiliate/transactions" },
+    {
+      title: "Quản lý giao dịch affiliate",
+      link: "/account/affiliate/transactions",
+    },
   ],
 
   "/account/affiliate/payouts": [
     { title: "Tài khoản", link: "/account" },
-    { title: "Quản lý tài khoản nhận tiền", link: "/account/affiliate/payouts" },
+    {
+      title: "Quản lý tài khoản nhận tiền",
+      link: "/account/affiliate/payouts",
+    },
   ],
 
   "/auth/sign-in": [{ title: "Đăng nhập", link: "/auth/sign-in" }],

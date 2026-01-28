@@ -4,7 +4,12 @@ import { SliceComponentProps, PrismicRichText } from "@prismicio/react";
 import { PrismicNextLink, PrismicNextImage } from "@prismicio/next";
 import { cn } from "@/lib/utils";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 interface FeatureItem {
@@ -54,7 +59,10 @@ const FeatureGridAnimated: FC<FeatureGridAnimatedProps> = ({ slice }) => {
       3: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
       4: "grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
     };
-    return gridMap[columns as keyof typeof gridMap] || "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+    return (
+      gridMap[columns as keyof typeof gridMap] ||
+      "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+    );
   };
 
   const getAlignmentClasses = () => {
@@ -63,7 +71,9 @@ const FeatureGridAnimated: FC<FeatureGridAnimatedProps> = ({ slice }) => {
       right: "text-right",
       center: "text-center",
     };
-    return alignmentMap[alignment as keyof typeof alignmentMap] || "text-center";
+    return (
+      alignmentMap[alignment as keyof typeof alignmentMap] || "text-center"
+    );
   };
 
   return (
@@ -83,7 +93,7 @@ const FeatureGridAnimated: FC<FeatureGridAnimatedProps> = ({ slice }) => {
               getAlignmentClasses(),
               hasIntersected
                 ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
+                : "opacity-0 translate-y-8",
             )}
           >
             {isFilled.richText(slice.primary.title) && (
@@ -129,7 +139,7 @@ const FeatureGridAnimated: FC<FeatureGridAnimatedProps> = ({ slice }) => {
               <div
                 className={cn(
                   "text-lg text-gray-600 max-w-3xl transition-all duration-500 ease-out",
-                  alignment === "center" && "mx-auto"
+                  alignment === "center" && "mx-auto",
                 )}
               >
                 <PrismicRichText
@@ -147,7 +157,12 @@ const FeatureGridAnimated: FC<FeatureGridAnimatedProps> = ({ slice }) => {
 
         {/* Features Grid */}
         {features.length > 0 && (
-          <div className={cn("grid gap-3 md:gap-4 lg:gap-6 mb-8", getGridColumns())}>
+          <div
+            className={cn(
+              "grid gap-3 md:gap-4 lg:gap-6 mb-8",
+              getGridColumns(),
+            )}
+          >
             {features.map((feature: FeatureItem, index: number) => (
               <Card
                 key={index}
@@ -157,7 +172,7 @@ const FeatureGridAnimated: FC<FeatureGridAnimatedProps> = ({ slice }) => {
                   getAlignmentClasses(),
                   hasIntersected
                     ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
+                    : "opacity-0 translate-y-8",
                 )}
                 style={{
                   transitionDelay: hasIntersected ? `${index * 100}ms` : "0ms",
@@ -193,7 +208,7 @@ const FeatureGridAnimated: FC<FeatureGridAnimatedProps> = ({ slice }) => {
                     <h3 className="text-xl font-semibold leading-tight text-gray-900">
                       <PrismicNextLink
                         field={feature.link}
-                        className="text-primary no-underline transition-colors duration-200 hover:text-primary/70"
+                        className="text-fg-primary no-underline transition-colors duration-200 hover:text-fg-primary/70"
                       >
                         {feature.title}
                       </PrismicNextLink>
@@ -252,11 +267,7 @@ const FeatureGridAnimated: FC<FeatureGridAnimatedProps> = ({ slice }) => {
                 {/* Button */}
                 {isFilled.link(feature.link) && (
                   <CardFooter className="pt-0 pb-4">
-                    <Button
-                      asChild
-                      className="w-full"
-                      variant="default"
-                    >
+                    <Button asChild className="w-full" variant="default">
                       <PrismicNextLink field={feature.link}>
                         {feature.buttonText || "Learn More"}
                       </PrismicNextLink>
@@ -276,14 +287,10 @@ const FeatureGridAnimated: FC<FeatureGridAnimatedProps> = ({ slice }) => {
               getAlignmentClasses(),
               hasIntersected
                 ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
+                : "opacity-0 translate-y-8",
             )}
           >
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-            >
+            <Button asChild variant="outline" size="lg">
               <PrismicNextLink field={slice.primary.footerLink}>
                 {slice.primary.footerButtonText || "View All Features"}
               </PrismicNextLink>

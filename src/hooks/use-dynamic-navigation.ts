@@ -60,7 +60,7 @@ export function useDynamicNavigation() {
       return [
         {
           id: "price",
-          label: "Price Range",
+          label: "Khoảng giá",
           type: "range",
           options: [],
           min: 0,
@@ -69,7 +69,7 @@ export function useDynamicNavigation() {
         },
         {
           id: "categoryIds",
-          label: "Category",
+          label: "Danh mục",
           type: "checkbox",
           options: [],
         },
@@ -86,7 +86,7 @@ export function useDynamicNavigation() {
     return [
       {
         id: "price",
-        label: "Price Range",
+        label: "Khoảng giá",
         type: "range",
         options: [],
         min: 0,
@@ -95,7 +95,7 @@ export function useDynamicNavigation() {
       },
       {
         id: "categoryIds",
-        label: "Category",
+        label: "Danh mục",
         type: "checkbox",
         options: categoryOptions,
       },

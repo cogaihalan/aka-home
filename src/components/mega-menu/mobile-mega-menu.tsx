@@ -1,7 +1,6 @@
 "use client";
 
 import { FC, useState } from "react";
-import { isFilled } from "@prismicio/client";
 import { PrismicNextLink } from "@prismicio/next";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
@@ -76,8 +75,12 @@ export const MobileMegaMenu: FC<MobileMegaMenuProps> = ({
               >
                 {item.has_mega_menu ? (
                   <>
-                    <AccordionTrigger className="flex items-center justify-between w-full py-3 px-4 text-base font-medium text-gray-900 dark:text-gray-100 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200 [&[data-state=open]]:text-primary [&[data-state=open]]:bg-gray-50 dark:[&[data-state=open]]:bg-gray-800">
-                      <Link href={item.link} className="flex items-center gap-3">
+                    <AccordionTrigger className="flex items-center justify-between w-full py-3 px-4 text-base font-medium text-gray-900 dark:text-gray-100 hover:text-fg-accent hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200 [&[data-state=open]]:text-fg-accent [&[data-state=open]]:bg-gray-50 dark:[&[data-state=open]]:bg-gray-800">
+                      <Link
+                        href={item.link.url}
+                        onClick={handleLinkClick}
+                        className="flex items-center gap-3"
+                      >
                         {item.label}
                       </Link>
                     </AccordionTrigger>
@@ -89,7 +92,7 @@ export const MobileMegaMenu: FC<MobileMegaMenuProps> = ({
                             <PrismicNextLink
                               key={childIndex}
                               field={childLink.child_link}
-                              className="flex items-center gap-3 py-3 px-4 text-sm text-gray-600 dark:text-gray-400 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200"
+                              className="flex items-center gap-3 py-3 px-4 text-sm text-gray-600 dark:text-gray-400 hover:text-fg-accent hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200"
                               onClick={handleLinkClick}
                             >
                               {childLink.child_label}
@@ -103,7 +106,7 @@ export const MobileMegaMenu: FC<MobileMegaMenuProps> = ({
                   <div className="py-3 px-4">
                     <PrismicNextLink
                       field={item.link}
-                      className="flex items-center justify-between w-full text-base font-medium text-gray-900 dark:text-gray-100 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200"
+                      className="flex items-center justify-between w-full text-base font-medium text-gray-900 dark:text-gray-100 hover:text-fg-accent hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200"
                       onClick={handleLinkClick}
                     >
                       {item.label}

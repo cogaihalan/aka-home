@@ -59,7 +59,7 @@ const GliderContainer = forwardRef<any, GliderContainerProps>(
       duration: 0.5,
       draggable: true,
       dragVelocity: 1.5,
-      scrollLockDelay: 100,
+      scrollLockDelay: 250,
       rewind: false,
       autoPlay: false,
       autoPlayDelay: 4000,

@@ -28,7 +28,12 @@ const baseConfig: NextConfig = {
         protocol: "https",
         hostname: "goose55.run.place",
         port: "",
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "images.prismic.io",
+        port: "",
+      },
     ],
     // Optimize images for better performance
     formats: ["image/avif", "image/webp"],
@@ -37,20 +42,23 @@ const baseConfig: NextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   transpilePackages: ["inter"],
-  
+
   // Compiler optimizations
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production" ? {
-      exclude: ["error", "warn"],
-    } : false,
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? {
+            exclude: ["error", "warn"],
+          }
+        : false,
   },
-  
+
   // Compression
   compress: true,
 
   // Performance optimizations for development
   experimental: {
-    webVitalsAttribution: ['CLS', 'LCP', 'FCP', 'TTFB', 'INP'], // Enable Core Web Vitals attribution
+    webVitalsAttribution: ["CLS", "LCP", "FCP", "TTFB", "INP"], // Enable Core Web Vitals attribution
     optimizePackageImports: [
       "lucide-react",
       "@radix-ui/react-icons",

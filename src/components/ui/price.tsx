@@ -22,7 +22,7 @@ const priceVariants = cva("", {
     color: {
       default: "text-foreground",
       muted: "text-muted-foreground",
-      primary: "text-primary",
+      primary: "text-fg-primary",
       destructive: "text-destructive",
       success: "text-green-600",
       discount: "text-red-600",
@@ -83,7 +83,7 @@ export function Price({
             weight,
             color: hasDiscount ? "discount" : color,
           }),
-          className
+          className,
         )}
         {...props}
       >

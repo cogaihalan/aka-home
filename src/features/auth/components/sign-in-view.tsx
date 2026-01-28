@@ -13,7 +13,9 @@ export default function SignInViewPage() {
       <div className="w-full max-w-md space-y-6 p-6">
         <div className="text-center">
           <h1 className="text-2xl font-semibold tracking-tight">Đăng nhập</h1>
-          <p className="text-muted-foreground">Nhập thông tin để truy cập tài khoản</p>
+          <p className="text-muted-foreground">
+            Nhập thông tin để truy cập tài khoản
+          </p>
         </div>
 
         <ClerkSignInForm />
@@ -22,14 +24,14 @@ export default function SignInViewPage() {
           Khi tiếp tục, bạn đồng ý với{" "}
           <Link
             href="/"
-            className="hover:text-primary underline underline-offset-4"
+            className="hover:text-fg-primary underline underline-offset-4"
           >
             Điều khoản dịch vụ
           </Link>{" "}
           and{" "}
           <Link
             href="/"
-            className="hover:text-primary underline underline-offset-4"
+            className="hover:text-fg-primary underline underline-offset-4"
           >
             Chính sách bảo mật
           </Link>

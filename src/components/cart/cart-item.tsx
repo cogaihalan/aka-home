@@ -46,11 +46,19 @@ export function CartItem({
     if (item.product.discountPrice && item.product.discountPrice > 0) {
       return (
         <div className="flex flex-col items-end">
-          <Price price={item.product.discountPrice * item.quantity} size="sm" className="text-primary font-semibold" />
-          <Price price={item.price * item.quantity} size="xs" className="text-muted-foreground line-through" />
+          <Price
+            price={item.product.discountPrice * item.quantity}
+            size="sm"
+            className="text-fg-primary font-semibold"
+          />
+          <Price
+            price={item.price * item.quantity}
+            size="xs"
+            className="text-muted-foreground line-through"
+          />
         </div>
       );
-    } 
+    }
     return <Price price={item.price * item.quantity} size="sm" />;
   }, [item]);
 
@@ -67,7 +75,7 @@ export function CartItem({
           />
         </div>
         <div className="flex-1 min-w-0 space-y-1">
-          <p className="text-sm font-medium group-hover:text-primary transition-colors line-clamp-2 leading-tight">
+          <p className="text-sm font-medium group-hover:text-fg-primary transition-colors line-clamp-2 leading-tight">
             {item.product.name}
           </p>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -75,9 +83,7 @@ export function CartItem({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <div className="text-right">
-            {displayPrice}
-          </div>
+          <div className="text-right">{displayPrice}</div>
           {showRemoveButton && (
             <Button
               variant="ghost"
@@ -103,7 +109,7 @@ export function CartItem({
       <div
         className={cn(
           "flex items-center gap-3 p-3 border rounded-lg",
-          className
+          className,
         )}
       >
         <div className="w-16 h-16 bg-muted rounded-md overflow-hidden flex-shrink-0">
@@ -132,9 +138,7 @@ export function CartItem({
             />
           )}
 
-          <div className="text-right min-w-[80px]">
-            {displayPrice}
-          </div>
+          <div className="text-right min-w-[80px]">{displayPrice}</div>
 
           {showRemoveButton && (
             <Button
@@ -191,9 +195,7 @@ export function CartItem({
               />
             )}
 
-            <div className="text-right">
-              {displayPrice}
-            </div>
+            <div className="text-right">{displayPrice}</div>
 
             {showRemoveButton && (
               <Button

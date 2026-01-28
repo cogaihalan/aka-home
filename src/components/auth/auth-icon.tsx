@@ -29,7 +29,7 @@ export function AuthIcon({ className }: AuthIconProps) {
           "relative transition-all duration-200 hover:bg-muted/50 size-9",
           isDropdownOpen && "bg-muted/50",
           isDropdownOpen && "pointer-events-none",
-          className
+          className,
         )}
         aria-label="Tài khoản"
       >
@@ -37,7 +37,7 @@ export function AuthIcon({ className }: AuthIconProps) {
           className={cn(
             "transition-all duration-200 size-5",
             (isHovered || isDropdownOpen) && "scale-110",
-            isSignedIn && "text-primary"
+            isSignedIn && "text-fg-primary",
           )}
         />
       </Button>

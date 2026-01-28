@@ -30,11 +30,11 @@ const StatsCounter: FC<StatsCounterProps> = ({ slice }) => {
           setIsVisible(true);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     const element = document.querySelector(
-      `[data-slice-type="${slice.slice_type}"]`
+      `[data-slice-type="${slice.slice_type}"]`,
     );
     if (element) {
       observer.observe(element);
@@ -58,7 +58,7 @@ const StatsCounter: FC<StatsCounterProps> = ({ slice }) => {
         // Easing function for smooth animation
         const easeOutCubic = 1 - Math.pow(1 - progress, 3);
         const currentValue = Math.floor(
-          startValue + (target - startValue) * easeOutCubic
+          startValue + (target - startValue) * easeOutCubic,
         );
 
         setCounters((prev) => {
@@ -84,7 +84,7 @@ const StatsCounter: FC<StatsCounterProps> = ({ slice }) => {
   const formatNumber = (
     value: number,
     suffix: string = "",
-    prefix: string = ""
+    prefix: string = "",
   ) => {
     return `${prefix}${value.toLocaleString()}${suffix}`;
   };
@@ -124,28 +124,44 @@ const StatsCounter: FC<StatsCounterProps> = ({ slice }) => {
           <div className={cn("mb-12", getAlignmentClasses())}>
             {isFilled.richText(slice.primary.title) && (
               <div className="text-4xl font-bold mb-4 text-foreground">
-                <PrismicRichText 
+                <PrismicRichText
                   field={slice.primary.title}
                   components={{
-                    heading1: ({ children }) => <h1 className="m-0">{children}</h1>,
-                    heading2: ({ children }) => <h2 className="m-0">{children}</h2>,
-                    heading3: ({ children }) => <h3 className="m-0">{children}</h3>,
-                    heading4: ({ children }) => <h4 className="m-0">{children}</h4>,
-                    heading5: ({ children }) => <h5 className="m-0">{children}</h5>,
-                    heading6: ({ children }) => <h6 className="m-0">{children}</h6>,
+                    heading1: ({ children }) => (
+                      <h1 className="m-0">{children}</h1>
+                    ),
+                    heading2: ({ children }) => (
+                      <h2 className="m-0">{children}</h2>
+                    ),
+                    heading3: ({ children }) => (
+                      <h3 className="m-0">{children}</h3>
+                    ),
+                    heading4: ({ children }) => (
+                      <h4 className="m-0">{children}</h4>
+                    ),
+                    heading5: ({ children }) => (
+                      <h5 className="m-0">{children}</h5>
+                    ),
+                    heading6: ({ children }) => (
+                      <h6 className="m-0">{children}</h6>
+                    ),
                   }}
                 />
               </div>
             )}
             {isFilled.richText(slice.primary.subtitle) && (
-              <div className={cn(
-                "text-lg text-muted-foreground max-w-2xl",
-                alignment === "center" && "mx-auto"
-              )}>
-                <PrismicRichText 
+              <div
+                className={cn(
+                  "text-lg text-muted-foreground max-w-2xl",
+                  alignment === "center" && "mx-auto",
+                )}
+              >
+                <PrismicRichText
                   field={slice.primary.subtitle}
                   components={{
-                    paragraph: ({ children }) => <p className="m-0">{children}</p>,
+                    paragraph: ({ children }) => (
+                      <p className="m-0">{children}</p>
+                    ),
                   }}
                 />
               </div>
@@ -157,10 +173,13 @@ const StatsCounter: FC<StatsCounterProps> = ({ slice }) => {
         {stats.length > 0 && (
           <div className={cn("grid gap-8 mb-12", getLayoutClasses())}>
             {stats.map((stat: any, index: number) => (
-              <Card key={index} className="relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+              <Card
+                key={index}
+                className="relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+              >
                 {/* Top accent bar */}
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-primary/60" />
-                
+
                 <CardContent className="text-center p-8">
                   {/* Icon */}
                   {showIcons && isFilled.image(stat.icon) && (
@@ -175,11 +194,11 @@ const StatsCounter: FC<StatsCounterProps> = ({ slice }) => {
 
                   {/* Counter */}
                   <div className="mb-4">
-                    <div className="text-4xl font-bold text-primary mb-2">
+                    <div className="text-4xl font-bold text-fg-primary mb-2">
                       {formatNumber(
                         counters[index] || 0,
                         stat.suffix || "",
-                        stat.prefix || ""
+                        stat.prefix || "",
                       )}
                     </div>
 
@@ -191,10 +210,12 @@ const StatsCounter: FC<StatsCounterProps> = ({ slice }) => {
 
                     {isFilled.richText(stat.description) && (
                       <div className="text-sm text-muted-foreground max-w-xs mx-auto">
-                        <PrismicRichText 
+                        <PrismicRichText
                           field={stat.description}
                           components={{
-                            paragraph: ({ children }) => <p className="m-0">{children}</p>,
+                            paragraph: ({ children }) => (
+                              <p className="m-0">{children}</p>
+                            ),
                           }}
                         />
                       </div>
@@ -210,10 +231,12 @@ const StatsCounter: FC<StatsCounterProps> = ({ slice }) => {
         {isFilled.richText(slice.primary.footerText) && (
           <div className={cn("mt-8", getAlignmentClasses())}>
             <div className="text-sm text-muted-foreground">
-              <PrismicRichText 
+              <PrismicRichText
                 field={slice.primary.footerText}
                 components={{
-                  paragraph: ({ children }) => <p className="m-0">{children}</p>,
+                  paragraph: ({ children }) => (
+                    <p className="m-0">{children}</p>
+                  ),
                 }}
               />
             </div>

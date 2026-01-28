@@ -18,7 +18,6 @@ import { useUserAddresses } from "@/hooks/use-user-addresses";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { useRouter } from "next/navigation";
 import type { Order, OrderStatus } from "@/types";
-import { ModeToggle } from "@/components/layout/ThemeToggle/theme-toggle";
 
 export default function AccountDashboard({ orders }: { orders: Order[] }) {
   const { user } = useUser();
@@ -26,9 +25,7 @@ export default function AccountDashboard({ orders }: { orders: Order[] }) {
   const router = useRouter();
 
   // Get default billing address
-  const defaultAddress = addresses.find(
-    (addr) => addr.isDefault
-  );
+  const defaultAddress = addresses.find((addr) => addr.isDefault);
 
   // Helper function to get status color
   const getStatusColor = (status: OrderStatus): string => {
@@ -52,10 +49,10 @@ export default function AccountDashboard({ orders }: { orders: Order[] }) {
           <h1 className="text-3xl font-bold">
             Chào mừng, {user?.firstName || "Người dùng"}
           </h1>
-          <ModeToggle />
         </div>
         <p className="text-muted-foreground text-lg">
-          Từ bảng điều khiển tài khoản của bạn, bạn có thể dễ dàng kiểm tra & xem đơn hàng{" "}
+          Từ bảng điều khiển tài khoản của bạn, bạn có thể dễ dàng kiểm tra &
+          xem đơn hàng{" "}
           <Link href="/account/orders" className="text-red-600 hover:underline">
             Gần đây
           </Link>
@@ -96,7 +93,10 @@ export default function AccountDashboard({ orders }: { orders: Order[] }) {
           <CardContent className="space-y-4">
             <div className="flex flex-col items-center space-y-4">
               <Avatar className="h-20 w-20">
-                <AvatarImage src={user?.imageUrl || ""} alt={user?.firstName || ""} />
+                <AvatarImage
+                  src={user?.imageUrl || ""}
+                  alt={user?.firstName || ""}
+                />
                 <AvatarFallback className="text-lg">
                   {user?.firstName?.[0]}
                   {user?.lastName?.[0]}
@@ -109,7 +109,11 @@ export default function AccountDashboard({ orders }: { orders: Order[] }) {
                 <div className="space-y-1 text-sm">
                   <div className="flex items-center justify-center space-x-2">
                     <Mail className="h-4 w-4" />
-                    <span>{user?.primaryEmailAddress?.emailAddress || user?.emailAddresses[0]?.emailAddress || "Không có email"}</span>
+                    <span>
+                      {user?.primaryEmailAddress?.emailAddress ||
+                        user?.emailAddresses[0]?.emailAddress ||
+                        "Không có email"}
+                    </span>
                   </div>
                   {defaultAddress?.recipientPhone && (
                     <div className="flex items-center justify-center space-x-2">
@@ -187,7 +191,9 @@ export default function AccountDashboard({ orders }: { orders: Order[] }) {
       {/* Recent Orders Table */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg font-semibold">ĐƠN HÀNG GẦN ĐÂY</CardTitle>
+          <CardTitle className="text-lg font-semibold">
+            ĐƠN HÀNG GẦN ĐÂY
+          </CardTitle>
           <button
             onClick={() => router.push("/account/orders")}
             className="text-red-600 hover:underline flex items-center"
@@ -212,13 +218,16 @@ export default function AccountDashboard({ orders }: { orders: Order[] }) {
                   <TableRow key={`${order.code}-${index}`}>
                     <TableCell className="font-medium">{order.code}</TableCell>
                     <TableCell>
-                      <span className={`font-medium ${getStatusColor(order.status)}`}>
+                      <span
+                        className={`font-medium ${getStatusColor(order.status)}`}
+                      >
                         {order.status}
                       </span>
                     </TableCell>
                     <TableCell>{formatDate(order.createdAt)}</TableCell>
                     <TableCell>
-                      {formatCurrency(order.finalAmount)} ({order.items.length} Items)
+                      {formatCurrency(order.finalAmount)} ({order.items.length}{" "}
+                      Items)
                     </TableCell>
                     <TableCell>
                       <button

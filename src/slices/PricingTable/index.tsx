@@ -18,9 +18,12 @@ const PricingTable: FC<PricingTableProps> = ({ slice }) => {
 
   const getLayoutClasses = () => {
     switch (layout) {
-      case "table": return "flex flex-col gap-0";
-      case "cards": return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6";
-      default: return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8";
+      case "table":
+        return "flex flex-col gap-0";
+      case "cards":
+        return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6";
+      default:
+        return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8";
     }
   };
 
@@ -30,9 +33,24 @@ const PricingTable: FC<PricingTableProps> = ({ slice }) => {
     return (
       <ul className="list-none p-0 space-y-3">
         {features.map((feature, index) => (
-          <li key={index} className="flex items-center gap-3 text-sm text-muted-foreground">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-primary flex-shrink-0">
-              <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <li
+            key={index}
+            className="flex items-center gap-3 text-sm text-muted-foreground"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="text-fg-primary flex-shrink-0"
+            >
+              <path
+                d="M20 6L9 17L4 12"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
             {feature}
           </li>
@@ -49,13 +67,20 @@ const PricingTable: FC<PricingTableProps> = ({ slice }) => {
     >
       <div className="mx-auto max-w-4xl sm:max-w-5xl lg:max-w-6xl xl:max-w-7xl">
         {/* Header */}
-        {(isFilled.richText(slice.primary.title) || isFilled.richText(slice.primary.subtitle)) && (
+        {(isFilled.richText(slice.primary.title) ||
+          isFilled.richText(slice.primary.subtitle)) && (
           <div className="text-center mb-12">
             {isFilled.richText(slice.primary.title) && (
-              <HeadingField field={slice.primary.title} className="text-4xl font-bold mb-4 text-foreground" />
+              <HeadingField
+                field={slice.primary.title}
+                className="text-4xl font-bold mb-4 text-foreground"
+              />
             )}
             {isFilled.richText(slice.primary.subtitle) && (
-              <RichTextField field={slice.primary.subtitle} className="text-lg text-muted-foreground max-w-2xl mx-auto" />
+              <RichTextField
+                field={slice.primary.subtitle}
+                className="text-lg text-muted-foreground max-w-2xl mx-auto"
+              />
             )}
           </div>
         )}
@@ -64,11 +89,12 @@ const PricingTable: FC<PricingTableProps> = ({ slice }) => {
         {plans.length > 0 && (
           <div className={cn("mb-12", getLayoutClasses())}>
             {plans.map((plan: any, index: number) => (
-              <Card 
-                key={index} 
+              <Card
+                key={index}
                 className={cn(
                   "relative transition-all duration-300 hover:-translate-y-1 h-full flex flex-col",
-                  index === highlightPlan - 1 && "border-primary shadow-lg scale-105"
+                  index === highlightPlan - 1 &&
+                    "border-primary shadow-lg scale-105",
                 )}
               >
                 {/* Badge */}
@@ -84,7 +110,7 @@ const PricingTable: FC<PricingTableProps> = ({ slice }) => {
                       {plan.name}
                     </CardTitle>
                   )}
-                  
+
                   {isFilled.keyText(plan.description) && (
                     <p className="text-muted-foreground mt-2">
                       {plan.description}
@@ -94,7 +120,7 @@ const PricingTable: FC<PricingTableProps> = ({ slice }) => {
                   {/* Price */}
                   <div className="flex items-baseline justify-center gap-2 mt-4">
                     {isFilled.keyText(plan.price) && (
-                      <span className="text-4xl font-bold text-primary">
+                      <span className="text-4xl font-bold text-fg-primary">
                         {plan.price}
                       </span>
                     )}
@@ -108,20 +134,18 @@ const PricingTable: FC<PricingTableProps> = ({ slice }) => {
 
                 <CardContent className="flex-1 flex flex-col">
                   {/* Plan Features */}
-                  {showFeatures && plan.features && plan.features.length > 0 && (
-                    <div className="mb-8">
-                      {renderFeatures(plan.features)}
-                    </div>
-                  )}
+                  {showFeatures &&
+                    plan.features &&
+                    plan.features.length > 0 && (
+                      <div className="mb-8">
+                        {renderFeatures(plan.features)}
+                      </div>
+                    )}
 
                   {/* Plan Button */}
                   {showButtons && isFilled.link(plan.link) && (
                     <div className="mt-auto">
-                      <Button 
-                        asChild 
-                        className="w-full"
-                        variant="default"
-                      >
+                      <Button asChild className="w-full" variant="default">
                         <PrismicNextLink field={plan.link}>
                           {plan.buttonText || "Choose Plan"}
                         </PrismicNextLink>
@@ -138,10 +162,12 @@ const PricingTable: FC<PricingTableProps> = ({ slice }) => {
         {isFilled.richText(slice.primary.footerText) && (
           <div className="text-center pt-8 border-t">
             <div className="text-sm text-muted-foreground">
-              <PrismicRichText 
+              <PrismicRichText
                 field={slice.primary.footerText}
                 components={{
-                  paragraph: ({ children }) => <p className="m-0">{children}</p>,
+                  paragraph: ({ children }) => (
+                    <p className="m-0">{children}</p>
+                  ),
                 }}
               />
             </div>

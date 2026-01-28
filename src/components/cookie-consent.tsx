@@ -14,10 +14,10 @@ export function CookieConsentBanner() {
     let idleCallbackId: number | undefined;
     let timeoutId: NodeJS.Timeout | undefined;
 
-    if ('requestIdleCallback' in window) {
+    if ("requestIdleCallback" in window) {
       idleCallbackId = (window as any).requestIdleCallback(
         () => setIsReady(true),
-        { timeout: 2500 }
+        { timeout: 2500 },
       );
     } else {
       // Fallback: wait for page to be interactive
@@ -25,7 +25,7 @@ export function CookieConsentBanner() {
     }
 
     return () => {
-      if (idleCallbackId !== undefined && 'cancelIdleCallback' in window) {
+      if (idleCallbackId !== undefined && "cancelIdleCallback" in window) {
         (window as any).cancelIdleCallback(idleCallbackId);
       }
       if (timeoutId !== undefined) {
@@ -91,11 +91,13 @@ export function CookieConsentBanner() {
         {/* Header */}
         <div className="flex items-center gap-3 border-b border-border/50 px-5 py-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 dark:bg-primary/20">
-            <Cookie className="h-5 w-5 text-primary" />
+            <Cookie className="h-5 w-5 text-fg-primary" />
           </div>
           <div>
             <h3 className="font-semibold text-foreground">Cookie Settings</h3>
-            <p className="text-xs text-muted-foreground">Manage your preferences</p>
+            <p className="text-xs text-muted-foreground">
+              Manage your preferences
+            </p>
           </div>
         </div>
 
@@ -106,7 +108,7 @@ export function CookieConsentBanner() {
             tiếp tục sử dụng trang web, bạn đồng ý với{" "}
             <Link
               href="/"
-              className="font-medium text-primary underline-offset-4 transition-colors hover:underline"
+              className="font-medium text-fg-primary underline-offset-4 transition-colors hover:underline"
             >
               Chính sách cookie
             </Link>{" "}
@@ -141,9 +143,9 @@ function CustomAcceptButton() {
   };
 
   return (
-    <Button 
-      variant="default" 
-      size="default" 
+    <Button
+      variant="default"
+      size="default"
       onClick={handleClick}
       className="flex-1 shadow-sm"
     >
@@ -161,9 +163,9 @@ function CustomDeclineButton() {
   };
 
   return (
-    <Button 
-      variant="outline" 
-      size="default" 
+    <Button
+      variant="outline"
+      size="default"
       onClick={handleClick}
       className="flex-1"
     >

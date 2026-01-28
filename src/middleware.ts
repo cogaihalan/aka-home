@@ -3,10 +3,7 @@ import { log } from "console";
 import { NextRequest, NextResponse } from "next/server";
 
 // Define protected routes
-const isProtectedRoute = createRouteMatcher([
-  "/admin(.*)", 
-  "/account(.*)",
-]);
+const isProtectedRoute = createRouteMatcher(["/admin(.*)", "/account(.*)"]);
 
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 
@@ -18,12 +15,15 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
   }
 
   if (isAdminRoute(req)) {
-    if (!['admin', 'manager'].includes((sessionClaims as any)?.publicMetadata?.role.toLowerCase())) {
-        return NextResponse.redirect(new URL("/", req.url));
-      }
+    if (
+      !["admin", "manager"].includes(
+        (sessionClaims as any)?.publicMetadata?.role.toLowerCase(),
+      )
+    ) {
+      return NextResponse.redirect(new URL("/", req.url));
     }
   }
-);
+});
 
 export const config = {
   matcher: [

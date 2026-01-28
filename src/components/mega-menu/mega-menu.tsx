@@ -35,7 +35,7 @@ export const MegaMenu: FC<MegaMenuProps> = ({ menuItems, className }) => {
 
   const renderMegaMenuContent = (item: MenuItem) => {
     return (
-      <div className="absolute top-[calc(100%+8px)] left-0 min-w-40 max-w-2xl bg-white dark:bg-gray-900 shadow-2xl border border-gray-100 dark:border-gray-800 rounded-md z-50 overflow-hidden">
+      <div className="absolute top-[calc(100%+4px)] left-0 min-w-40 max-w-2xl bg-white dark:bg-gray-900 shadow-2xl border border-gray-100 dark:border-gray-800 rounded-md z-50 overflow-hidden">
         <div className="px-3 py-3">
           {/* Content Grid */}
           {item.child_links && item.child_links.length > 0 && (
@@ -44,9 +44,9 @@ export const MegaMenu: FC<MegaMenuProps> = ({ menuItems, className }) => {
                 <PrismicNextLink
                   key={childIndex}
                   field={childLink.child_link}
-                  className="group block px-4 py-2 rounded-lg hover:bg-gradient-to-br hover:from-primary/5 hover:to-primary/10 transition-all duration-200 hover:shadow-md border border-transparent hover:border-primary/20"
+                  className="group block px-4 py-2 rounded-lg hover:bg-gradient-to-br hover:from-primary/50 hover:to-primary/70 transition-all duration-200 hover:shadow-md border border-transparent hover:border-primary/50"
                 >
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-primary transition-colors duration-200">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-fg-primary transition-colors duration-200">
                     {childLink.child_label}
                   </span>
                 </PrismicNextLink>
@@ -70,7 +70,12 @@ export const MegaMenu: FC<MegaMenuProps> = ({ menuItems, className }) => {
           >
             <PrismicNextLink
               field={item.link}
-              className={cn("group flex items-center gap-2 py-2 px-3 text-sm xl:text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200", activeMenu === index.toString() ? "text-primary bg-gray-50 dark:bg-gray-800" : "")}
+              className={cn(
+                "group flex items-center gap-2 py-2 px-3 text-sm xl:text-base font-medium text-gray-700 dark:text-gray-300 hover:text-fg-primary hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200",
+                activeMenu === index.toString()
+                  ? "text-fg-primary bg-gray-50 dark:bg-gray-800"
+                  : "",
+              )}
               tabIndex={0}
               aria-expanded={
                 item.has_mega_menu ? activeMenu === index.toString() : undefined
@@ -90,7 +95,7 @@ export const MegaMenu: FC<MegaMenuProps> = ({ menuItems, className }) => {
                   "transition-all duration-300 ease-out transform",
                   activeMenu === index.toString()
                     ? "opacity-100 visible translate-y-0 scale-100"
-                    : "opacity-0 invisible -translate-y-2 scale-95"
+                    : "opacity-0 invisible -translate-y-2 scale-95",
                 )}
                 role="menu"
                 aria-labelledby={`menu-${index}`}

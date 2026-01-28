@@ -38,7 +38,7 @@ export function MobileNavigation({
         <Button variant="outline" size="icon" className="lg:hidden">
           <Filter className="h-4 w-4" />
           {activeFiltersCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 bg-primary text-fg-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
               {activeFiltersCount}
             </span>
           )}
@@ -48,16 +48,6 @@ export function MobileNavigation({
         <SheetHeader>
           <SheetTitle className="flex items-center justify-between">
             Các bộ lọc
-            {activeFiltersCount > 0 && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onResetFilters}
-                className="text-xs"
-              >
-                Xóa tất cả
-              </Button>
-            )}
           </SheetTitle>
         </SheetHeader>
         <div className="mt-6">

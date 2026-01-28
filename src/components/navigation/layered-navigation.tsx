@@ -37,7 +37,7 @@ export function LayeredNavigation({
 }: LayeredNavigationProps) {
   const { filterGroups } = useDynamicNavigation();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
-    new Set(hideCategoryFilter ? ["price"] : ["price", "categoryIds"])
+    new Set(hideCategoryFilter ? ["price"] : ["price", "categoryIds"]),
   );
 
   const toggleGroup = useCallback((groupId: string) => {
@@ -70,7 +70,7 @@ export function LayeredNavigation({
         onFiltersChange({ search: value });
       }, 300);
     },
-    [onFiltersChange]
+    [onFiltersChange],
   );
 
   // Update search value when filters change externally
@@ -91,7 +91,7 @@ export function LayeredNavigation({
     (value: number[]) => {
       onFiltersChange({ priceRange: value as [number, number] });
     },
-    [onFiltersChange]
+    [onFiltersChange],
   );
 
   const handleArrayFilterChange = useCallback(
@@ -103,14 +103,14 @@ export function LayeredNavigation({
 
       onFiltersChange({ [filterKey]: newValues });
     },
-    [filters, onFiltersChange]
+    [filters, onFiltersChange],
   );
 
   const getFilterCount = useCallback(
     (groupId: string, optionId: string) => {
       return filterCounts[groupId]?.[optionId] || 0;
     },
-    [filterCounts]
+    [filterCounts],
   );
 
   // Memoized active filters to prevent unnecessary re-renders
@@ -140,10 +140,10 @@ export function LayeredNavigation({
     if (filters.categoryIds && filters.categoryIds.length > 0) {
       filters.categoryIds.forEach((categoryId: string) => {
         const categoryGroup = filterGroups.find(
-          (group) => group.id === "categoryIds"
+          (group) => group.id === "categoryIds",
         );
         const categoryOption = categoryGroup?.options.find(
-          (option) => option.value === categoryId
+          (option) => option.value === categoryId,
         );
         const categoryLabel = categoryOption?.label || categoryId; // Fallback to ID if name not found
 
@@ -173,7 +173,7 @@ export function LayeredNavigation({
             <Button
               variant="ghost"
               className={cn(
-                "w-full justify-between p-2 h-auto font-medium text-sm"
+                "w-full justify-between p-2 h-auto font-medium text-sm",
               )}
             >
               <span>{group.label}</span>
@@ -187,7 +187,7 @@ export function LayeredNavigation({
 
           <CollapsibleContent
             className={cn(
-              "space-y-3 mt-3 transition-all duration-300 ease-out"
+              "space-y-3 mt-3 transition-all duration-300 ease-out",
             )}
           >
             {group.type === "range" && (
@@ -209,7 +209,7 @@ export function LayeredNavigation({
                 </div>
                 <div
                   className={cn(
-                    "flex justify-between text-sm text-muted-foreground"
+                    "flex justify-between text-sm text-muted-foreground",
                   )}
                 >
                   <span>
@@ -217,7 +217,7 @@ export function LayeredNavigation({
                       Array.isArray(filters.priceRange) &&
                         filters.priceRange.length === 2
                         ? filters.priceRange[0]
-                        : group.min || 0
+                        : group.min || 0,
                     )}
                   </span>
                   <span>
@@ -225,7 +225,7 @@ export function LayeredNavigation({
                       Array.isArray(filters.priceRange) &&
                         filters.priceRange.length === 2
                         ? filters.priceRange[1]
-                        : group.max || 100000000
+                        : group.max || 100000000,
                     )}
                   </span>
                 </div>
@@ -244,7 +244,7 @@ export function LayeredNavigation({
                     <div
                       key={option.id}
                       className={cn(
-                        "flex items-center space-x-2 transition-all duration-200 hover:bg-muted/50 rounded-md p-1 -m-1"
+                        "flex items-center space-x-2 transition-all duration-200 hover:bg-muted/50 rounded-md p-1 -m-1",
                       )}
                     >
                       <Checkbox
@@ -254,7 +254,7 @@ export function LayeredNavigation({
                           handleArrayFilterChange(
                             group.id,
                             option.value,
-                            checked as boolean
+                            checked as boolean,
                           )
                         }
                         className="transition-all duration-200"
@@ -262,7 +262,7 @@ export function LayeredNavigation({
                       <Label
                         htmlFor={`${group.id}-${option.id}`}
                         className={cn(
-                          "flex-1 text-sm cursor-pointer flex items-center justify-between transition-colors duration-200"
+                          "flex-1 text-sm cursor-pointer flex items-center justify-between transition-colors duration-200",
                         )}
                       >
                         <span>{option.label}</span>
@@ -270,7 +270,7 @@ export function LayeredNavigation({
                           <Badge
                             variant="secondary"
                             className={cn(
-                              "text-xs transition-all duration-200"
+                              "text-xs transition-all duration-200",
                             )}
                           >
                             {count}
@@ -293,7 +293,7 @@ export function LayeredNavigation({
       handleArrayFilterChange,
       getFilterCount,
       toggleGroup,
-    ]
+    ],
   );
 
   return (
@@ -306,7 +306,7 @@ export function LayeredNavigation({
         <div className={cn("relative")}>
           <Search
             className={cn(
-              "absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors duration-200"
+              "absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors duration-200",
             )}
           />
           <Input
@@ -315,7 +315,7 @@ export function LayeredNavigation({
             value={searchValue}
             onChange={(e) => handleSearchChange(e.target.value)}
             className={cn(
-              "pl-10 transition-all duration-200 focus:ring-2 focus:ring-primary/20"
+              "pl-10 transition-all duration-200 focus:ring-2 focus:ring-primary/20",
             )}
           />
         </div>
@@ -325,13 +325,15 @@ export function LayeredNavigation({
       {activeFiltersCount > 0 && (
         <div className={cn("space-y-2")}>
           <div className={cn("flex items-center justify-between")}>
-            <Label className={cn("text-sm font-medium")}>Các bộ lọc đang hoạt động</Label>
+            <Label className={cn("text-sm font-medium")}>
+              Các bộ lọc đang hoạt động
+            </Label>
             <Button
               variant="ghost"
               size="sm"
               onClick={onResetFilters}
               className={cn(
-                "text-xs text-muted-foreground hover:text-foreground"
+                "text-xs text-muted-foreground hover:text-foreground",
               )}
             >
               Xóa tất cả
@@ -362,7 +364,7 @@ export function LayeredNavigation({
       <Separator />
 
       {/* Filter Groups */}
-      <div className={cn("space-y-2 max-h-100 overflow-y-auto")}>
+      <div className={cn("space-y-2 lg:max-h-100 lg:overflow-x-hidden lg:overflow-y-auto")}>
         {filterGroups
           .filter((group) => !hideCategoryFilter || group.id !== "categoryIds")
           .map(renderFilterGroup)}

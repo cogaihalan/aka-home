@@ -24,17 +24,15 @@ export default function AffiliatePage() {
       {/* Hero Section */}
       <section className="text-center space-y-6">
         <div className="space-y-2">
-          <h1 className="text-4xl md:text-5xl font-bold">
-            Chào mừng đến với
-          </h1>
-          <h2 className="text-5xl md:text-6xl font-bold text-primary">
+          <h1 className="text-4xl md:text-5xl font-bold">Chào mừng đến với</h1>
+          <h2 className="text-5xl md:text-6xl font-bold text-fg-primary">
             AKA Affiliate
           </h2>
         </div>
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Bắt đầu kiếm tiền bằng việc giới thiệu chúng tôi đến với mạng lưới
-          của bạn. Một sự hợp tác tuyệt vời chỉ một cú nhấp chuột. Hãy tham gia
-          AKA Affiliate ngay bây giờ.
+          Bắt đầu kiếm tiền bằng việc giới thiệu chúng tôi đến với mạng lưới của
+          bạn. Một sự hợp tác tuyệt vời chỉ một cú nhấp chuột. Hãy tham gia AKA
+          Affiliate ngay bây giờ.
         </p>
         <Button asChild size="lg" className="mt-4">
           <Link href="/account/affiliate">Tham gia ngay</Link>
@@ -47,7 +45,7 @@ export default function AffiliatePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
-              <Gift className="h-8 w-8 text-primary mb-2" />
+              <Gift className="h-8 w-8 text-fg-primary mb-2" />
               <CardTitle>Sản Phẩm Độc Quyền</CardTitle>
             </CardHeader>
             <CardContent>
@@ -61,7 +59,7 @@ export default function AffiliatePage() {
 
           <Card>
             <CardHeader>
-              <TrendingUp className="h-8 w-8 text-primary mb-2" />
+              <TrendingUp className="h-8 w-8 text-fg-primary mb-2" />
               <CardTitle>Hoa Hồng Hấp Dẫn</CardTitle>
             </CardHeader>
             <CardContent>
@@ -75,7 +73,7 @@ export default function AffiliatePage() {
 
           <Card>
             <CardHeader>
-              <Headphones className="h-8 w-8 text-primary mb-2" />
+              <Headphones className="h-8 w-8 text-fg-primary mb-2" />
               <CardTitle>Hỗ Trợ Tận Tâm</CardTitle>
             </CardHeader>
             <CardContent>
@@ -114,15 +112,15 @@ export default function AffiliatePage() {
           <p className="text-muted-foreground max-w-3xl mx-auto">
             Chương trình Affiliate của chúng tôi không chỉ là một cơ hội kiếm
             lợi nhuận, mà còn là một hành trình đưa bạn đến sự thành công. Hãy
-            tham gia ngay để trải nghiệm những lợi ích này và xây dựng tương
-            lai tài chính của bạn ngày hôm nay!
+            tham gia ngay để trải nghiệm những lợi ích này và xây dựng tương lai
+            tài chính của bạn ngày hôm nay!
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <DollarSign className="h-8 w-8 text-primary mb-2" />
+              <DollarSign className="h-8 w-8 text-fg-primary mb-2" />
               <CardTitle>Kiếm Lợi Nhuận Không Giới Hạn</CardTitle>
             </CardHeader>
             <CardContent>
@@ -135,7 +133,7 @@ export default function AffiliatePage() {
 
           <Card>
             <CardHeader>
-              <BarChart3 className="h-8 w-8 text-primary mb-2" />
+              <BarChart3 className="h-8 w-8 text-fg-primary mb-2" />
               <CardTitle>Hệ thống theo dõi hiệu quả</CardTitle>
             </CardHeader>
             <CardContent>
@@ -149,7 +147,7 @@ export default function AffiliatePage() {
 
           <Card>
             <CardHeader>
-              <Star className="h-8 w-8 text-primary mb-2" />
+              <Star className="h-8 w-8 text-fg-primary mb-2" />
               <CardTitle>Sản phẩm/Dịch vụ chất lượng</CardTitle>
             </CardHeader>
             <CardContent>
@@ -162,7 +160,7 @@ export default function AffiliatePage() {
 
           <Card>
             <CardHeader>
-              <Megaphone className="h-8 w-8 text-primary mb-2" />
+              <Megaphone className="h-8 w-8 text-fg-primary mb-2" />
               <CardTitle>Quảng bá đặc quyền và khuyến mãi</CardTitle>
             </CardHeader>
             <CardContent>
@@ -179,7 +177,7 @@ export default function AffiliatePage() {
       {/* Revenue Sharing Section */}
       <section className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg p-8 space-y-6">
         <div className="text-center space-y-4">
-          <Sparkles className="h-12 w-12 text-primary mx-auto" />
+          <Sparkles className="h-12 w-12 text-fg-primary mx-auto" />
           <h2 className="text-3xl font-bold">
             Chia sẻ doanh thu - hoa hồng lên đến 30%
           </h2>
@@ -207,7 +205,7 @@ export default function AffiliatePage() {
           <Card className="text-center">
             <CardHeader>
               <div className="flex items-center justify-center mb-4">
-                <div className="rounded-full bg-primary text-white w-12 h-12 flex items-center justify-center text-xl font-bold">
+                <div className="rounded-full bg-btn-primary text-white w-12 h-12 flex items-center justify-center text-xl font-bold">
                   1
                 </div>
               </div>
@@ -223,7 +221,7 @@ export default function AffiliatePage() {
           <Card className="text-center">
             <CardHeader>
               <div className="flex items-center justify-center mb-4">
-                <div className="rounded-full bg-primary text-white w-12 h-12 flex items-center justify-center text-xl font-bold">
+                <div className="rounded-full bg-btn-primary text-white w-12 h-12 flex items-center justify-center text-xl font-bold">
                   2
                 </div>
               </div>
@@ -239,7 +237,7 @@ export default function AffiliatePage() {
           <Card className="text-center">
             <CardHeader>
               <div className="flex items-center justify-center mb-4">
-                <div className="rounded-full bg-primary text-white w-12 h-12 flex items-center justify-center text-xl font-bold">
+                <div className="rounded-full bg-btn-primary text-white w-12 h-12 flex items-center justify-center text-xl font-bold">
                   3
                 </div>
               </div>
@@ -255,7 +253,7 @@ export default function AffiliatePage() {
           <Card className="text-center">
             <CardHeader>
               <div className="flex items-center justify-center mb-4">
-                <div className="rounded-full bg-primary text-white w-12 h-12 flex items-center justify-center text-xl font-bold">
+                <div className="rounded-full bg-btn-primary text-white w-12 h-12 flex items-center justify-center text-xl font-bold">
                   4
                 </div>
               </div>
@@ -271,16 +269,14 @@ export default function AffiliatePage() {
           <Card className="text-center">
             <CardHeader>
               <div className="flex items-center justify-center mb-4">
-                <div className="rounded-full bg-primary text-white w-12 h-12 flex items-center justify-center text-xl font-bold">
+                <div className="rounded-full bg-btn-primary text-white w-12 h-12 flex items-center justify-center text-xl font-bold">
                   5
                 </div>
               </div>
               <CardTitle className="text-lg">Nhận hoa hồng</CardTitle>
             </CardHeader>
             <CardContent>
-              <CardDescription>
-                Nhận hoa hồng và ăn mừng thôi
-              </CardDescription>
+              <CardDescription>Nhận hoa hồng và ăn mừng thôi</CardDescription>
             </CardContent>
           </Card>
         </div>
@@ -374,9 +370,7 @@ export default function AffiliatePage() {
             </div>
 
             <div className="space-y-2">
-              <h3 className="font-semibold text-lg">
-                5. Nghiêm cấm reseller
-              </h3>
+              <h3 className="font-semibold text-lg">5. Nghiêm cấm reseller</h3>
               <p className="text-muted-foreground">
                 Là hoạt động đầu cơ tích trữ, mua đi bán lại các sản phẩm của
                 nhà cung cấp nhằm thu lợi bất chính.
@@ -458,4 +452,3 @@ export default function AffiliatePage() {
     </div>
   );
 }
-

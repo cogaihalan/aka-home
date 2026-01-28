@@ -52,7 +52,7 @@ export function NavigationSidebar({
           <Button variant="outline" size="icon" className="sm:hidden">
             <Filter className="h-4 w-4" />
             {activeFiltersCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-primary text-fg-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 {activeFiltersCount}
               </span>
             )}

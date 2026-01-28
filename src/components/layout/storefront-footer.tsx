@@ -14,18 +14,10 @@ const footerLinks = {
   shop: [
     { key: "Sản phẩm", href: "/products" },
     { key: "Danh mục", href: "/categories" },
-    { key: "Kiểu tóc", href: "/hairstyles" },
-    { key: "Khoá học", href: "/courses" },
-    { key: "Cuộc thi", href: "/contests" },
-    { key: "Bài dự thi", href: "/submissions" },
   ],
   support: [
     { key: "Về chúng tôi", href: "/pages/about-us" },
     { key: "Chương trình Affiliate", href: "/affiliate" },
-    { key: "Trung tâm trợ giúp", href: "/" },
-    { key: "Liên hệ", href: "/" },
-    { key: "Thông tin vận chuyển", href: "/" },
-    { key: "Đổi trả", href: "/" },
   ],
   legal: [
     { key: "Chính sách bảo mật", href: "/" },
@@ -39,7 +31,7 @@ export default function StorefrontFooter() {
   return (
     <>
       <Newsletter />
-      <footer className="bg-muted/50 border-t">
+      <footer className="bg-primary border-t">
         <div className="px-4 pt-8 space-y-8">
           <div className="flex flex-col md:flex-row gap-8">
             <div className="max-w-md">
@@ -80,7 +72,7 @@ export default function StorefrontFooter() {
                       <li key={link.key}>
                         <Link
                           href={link.href}
-                          className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                          className="text-sm text-muted-foreground hover:text-fg-primary transition-colors"
                         >
                           {link.key}
                         </Link>
@@ -100,7 +92,7 @@ export default function StorefrontFooter() {
                       <li key={link.key}>
                         <Link
                           href={link.href}
-                          className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                          className="text-sm text-muted-foreground hover:text-fg-primary transition-colors"
                         >
                           {link.key}
                         </Link>
@@ -120,7 +112,7 @@ export default function StorefrontFooter() {
                       <li key={link.key}>
                         <Link
                           href={link.href}
-                          className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                          className="text-sm text-muted-foreground hover:text-fg-primary transition-colors"
                         >
                           {link.key}
                         </Link>
@@ -131,7 +123,7 @@ export default function StorefrontFooter() {
               </AccordionItem>
             </Accordion>
           </div>
-     
+
           <div className="border-t py-4 text-center">
             <p className="text-sm text-muted-foreground">
               {`© ${new Date().getFullYear()} AKA Store. Copyrights reserved.`}

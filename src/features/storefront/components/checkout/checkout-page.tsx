@@ -80,8 +80,8 @@ export default function CheckoutPage() {
                       onValueChange={(value) =>
                         handlers.handleAddressChange(
                           addresses.all.find(
-                            (address) => address.id.toString() === value
-                          )
+                            (address) => address.id.toString() === value,
+                          ),
                         )
                       }
                       className="grid grid-cols-2 gap-2"
@@ -181,7 +181,7 @@ export default function CheckoutPage() {
                         className="flex items-center space-x-3 p-4 border rounded-lg bg-muted/30"
                       >
                         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10">
-                          <Truck className="h-4 w-4 text-primary" />
+                          <Truck className="h-4 w-4 text-fg-primary" />
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2">

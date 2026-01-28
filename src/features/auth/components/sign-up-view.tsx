@@ -22,14 +22,14 @@ export default function SignUpViewPage() {
           Khi tiếp tục, bạn đồng ý với{" "}
           <Link
             href="/"
-            className="hover:text-primary underline underline-offset-4"
+            className="hover:text-fg-primary underline underline-offset-4"
           >
             Điều khoản dịch vụ
           </Link>{" "}
           và{" "}
           <Link
             href="/"
-            className="hover:text-primary underline underline-offset-4"
+            className="hover:text-fg-primary underline underline-offset-4"
           >
             Chính sách bảo mật
           </Link>

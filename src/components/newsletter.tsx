@@ -11,7 +11,7 @@ export default function Newsletter() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email) {
       toast.error("Vui lòng nhập email của bạn");
       return;
@@ -58,14 +58,16 @@ export default function Newsletter() {
       }
 
       toast.success("Đăng ký thành công!", {
-        description: "Chúng tôi đã gửi email xác nhận đến bạn. Vui lòng kiểm tra hộp thư.",
+        description:
+          "Chúng tôi đã gửi email xác nhận đến bạn. Vui lòng kiểm tra hộp thư.",
       });
       setIsSubscribed(true);
       setEmail("");
     } catch (error) {
       console.error("Newsletter subscription error:", error);
       toast.error("Đăng ký thất bại", {
-        description: error instanceof Error ? error.message : "Vui lòng thử lại sau.",
+        description:
+          error instanceof Error ? error.message : "Vui lòng thử lại sau.",
       });
     } finally {
       setIsLoading(false);
@@ -74,7 +76,7 @@ export default function Newsletter() {
 
   if (isSubscribed) {
     return (
-      <section className="bg-muted/50 rounded-lg p-8 lg:p-16 text-center">
+      <section className="bg-muted rounded-lg p-8 lg:p-16 text-center">
         <div className="max-w-md mx-auto">
           <div className="w-16 h-16 mx-auto mb-4 text-green-500">
             <svg
@@ -93,12 +95,10 @@ export default function Newsletter() {
           </div>
           <h2 className="text-3xl font-bold mb-4">Cảm ơn bạn đã đăng ký!</h2>
           <p className="text-muted-foreground mb-6">
-            Chúng tôi đã gửi email xác nhận đến bạn. Vui lòng kiểm tra hộp thư để xác nhận đăng ký.
+            Chúng tôi đã gửi email xác nhận đến bạn. Vui lòng kiểm tra hộp thư
+            để xác nhận đăng ký.
           </p>
-          <Button
-            onClick={() => setIsSubscribed(false)}
-            variant="outline"
-          >
+          <Button onClick={() => setIsSubscribed(false)} variant="outline">
             Đăng ký email khác
           </Button>
         </div>
@@ -107,13 +107,16 @@ export default function Newsletter() {
   }
 
   return (
-    <section className="bg-muted/50 rounded-lg p-8 lg:p-16 text-center">
+    <section className="bg-muted rounded-lg p-8 lg:p-16 text-center">
       <h2 className="text-3xl font-bold mb-4">Cập nhật tin tức</h2>
       <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
         Đăng ký nhận bản tin để là người đầu tiên biết về sản phẩm mới, ưu đãi
         độc quyền và khuyến mãi đặc biệt.
       </p>
-      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col sm:items-center sm:flex-row gap-4 max-w-md mx-auto"
+      >
         <input
           type="email"
           placeholder="Nhập email của bạn"
