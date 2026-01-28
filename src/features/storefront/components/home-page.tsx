@@ -2,7 +2,6 @@ import dynamic from "next/dynamic";
 import { getHomepageData } from "@/lib/api/homepage";
 import BrandValueSection from "./homepage/brand/brand-value-section";
 
-// Lazy load banner to improve initial page load
 const FullWidthBanner = dynamic(
   () => import("@/components/full-width-banner"),
   {
@@ -14,7 +13,6 @@ const FullWidthBanner = dynamic(
 );
 
 export default async function StorefrontHomePage() {
-  // Fetch homepage data from Prismic CMS
   const homepageData = await getHomepageData();
 
   return (
