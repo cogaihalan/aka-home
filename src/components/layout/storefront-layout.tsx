@@ -73,14 +73,10 @@ export default function StorefrontLayout({ children }: StorefrontLayoutProps) {
 
       <Suspense fallback={null}>
         <PromotionModal
-          autoShow={true}
           promotionImage="/assets/placeholder-banner.png"
           promotionImageAlt="Khuyến mãi đặc biệt"
           startDate={new Date()}
           endDate={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)}
-          onSubmit={async (data) => {
-            console.log("Promotion form submitted:", data);
-          }}
         />
       </Suspense>
     </div>
