@@ -11,22 +11,7 @@ const baseConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "akapro.vn",
-        port: "",
-      },
-      {
-        protocol: "http",
-        hostname: "103.82.25.111",
-        port: "8080",
-      },
-      {
-        protocol: "https",
-        hostname: "picsum.photos",
-        port: "",
-      },
-      {
-        protocol: "https",
-        hostname: "goose55.run.place",
+        hostname: "akahome.vn",
         port: "",
       },
       {
