@@ -1,37 +1,22 @@
 import { createClient } from "@prismicio/client";
 import { enableAutoPreviews } from "@prismicio/next";
 
-// Prismic repository configuration
 export const repositoryName =
   process.env.PRISMIC_REPOSITORY_NAME || "aka-scissor";
 
-// Route configuration for Prismic content
 export const routes = [
-  // { type: "homepage", path: "/" },
   { type: "page", path: "/pages/:uid" },
-  // { type: "blog_post", path: "/blog/:uid" },
 ];
 
-// Performance-optimized Prismic client
 export function createPrismicClient(config = {}) {
   const client = createClient(repositoryName, {
     routes,
     fetchOptions: {
-      // Production optimizations
-      next:
-        process.env.NODE_ENV === "production"
-          ? {
-              tags: ["prismic"],
-              revalidate: 300, // 5 minutes cache in production
-            }
-          : {
-              revalidate: 0, // No cache in development for real-time sync
-            },
+      next: { revalidate: 0 },
     },
     ...config,
   });
 
-  // Enable auto-previews in development
   if (process.env.NODE_ENV === "development") {
     enableAutoPreviews({ client });
   }
@@ -39,14 +24,12 @@ export function createPrismicClient(config = {}) {
   return client;
 }
 
-// Default client instance
 export const prismicClient = createPrismicClient();
 
-// Performance monitoring wrapper
 export class PrismicPerformanceMonitor {
   private static cache = new Map<string, { data: any; timestamp: number }>();
   private static CACHE_TTL =
-    process.env.NODE_ENV === "development" ? 30 * 1000 : 2 * 60 * 1000; // 30 seconds in dev, 2 minutes in production
+    process.env.NODE_ENV === "development" ? 30 * 1000 : 2 * 60 * 1000;
 
   static async measureFetch<T>(
     operation: string,
@@ -90,7 +73,6 @@ export class PrismicPerformanceMonitor {
   }
 }
 
-// Enhanced client with performance monitoring
 export class OptimizedPrismicClient {
   private client = prismicClient;
 
@@ -142,11 +124,9 @@ export class OptimizedPrismicClient {
     );
   }
 
-  // Clear cache method
   clearCache() {
     PrismicPerformanceMonitor.clearCache();
   }
 }
 
-// Export optimized client instance
 export const optimizedPrismicClient = new OptimizedPrismicClient();
