@@ -36,7 +36,6 @@ interface ProductTabsProps {
 
 const TAB_OPTIONS = [
   { value: "description", label: "Mô tả" },
-  { value: "specifications", label: "Thông số kỹ thuật" },
   { value: "reviews", label: "Đánh giá" },
   { value: "shipping", label: "Vận chuyển & Trả hàng" },
 ] as const;
@@ -58,38 +57,6 @@ export const ProductTabs = memo(function ProductTabs({
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="wysiwyg" dangerouslySetInnerHTML={{ __html: product.description }} />
-            </CardContent>
-          </Card>
-        );
-
-      case "specifications":
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle>Thông số kỹ thuật</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {product.specifications ? (
-                <div className="space-y-3">
-                  {Object.entries(product.specifications).map(
-                    ([key, value]) => (
-                      <div
-                        key={key}
-                        className="flex justify-between py-2 border-b border-border/50 last:border-b-0"
-                      >
-                        <span className="font-medium text-sm">{key}</span>
-                        <span className="text-muted-foreground text-sm">
-                          {value}
-                        </span>
-                      </div>
-                    )
-                  )}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-muted-foreground">
-                  <p>Không có thông số kỹ thuật cho sản phẩm này.</p>
-                </div>
-              )}
             </CardContent>
           </Card>
         );

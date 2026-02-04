@@ -63,7 +63,6 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
         });
       } catch (error) {
         console.error("Error fetching reviews:", error);
-        toast.error("Không thể tải đánh giá");
       } finally {
         setLoading(false);
       }

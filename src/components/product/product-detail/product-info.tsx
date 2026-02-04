@@ -153,8 +153,6 @@ export const ProductInfo = memo(function ProductInfo({
         </div>
 
         {!!product.shortDescription && <p className="text-muted-foreground">{product.shortDescription}</p>}
-
-        <div className="wysiwyg" dangerouslySetInnerHTML={{ __html: product.description }} />
       </div>
 
       <Separator />
