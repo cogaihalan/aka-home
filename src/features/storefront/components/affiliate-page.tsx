@@ -17,27 +17,23 @@ import {
   Megaphone,
   Sparkles,
 } from "lucide-react";
+import HeroBanner from "@/components/ui/hero-banner";
 
 export default function AffiliatePage() {
   return (
-    <div className="space-y-12 py-8">
+    <div className="space-y-12 pb-8">
       {/* Hero Section */}
-      <section className="text-center space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-4xl md:text-5xl font-bold">Chào mừng đến với</h1>
-          <h2 className="text-5xl md:text-6xl font-bold text-fg-primary">
-            AKA Affiliate
-          </h2>
-        </div>
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Bắt đầu kiếm tiền bằng việc giới thiệu chúng tôi đến với mạng lưới của
-          bạn. Một sự hợp tác tuyệt vời chỉ một cú nhấp chuột. Hãy tham gia AKA
-          Affiliate ngay bây giờ.
-        </p>
-        <Button asChild size="lg" className="mt-4">
+      <HeroBanner
+        imageUrl="/assets/banner-ctv.jpg"
+        mobileImageUrl="/assets/banner-ctv-mobile.jpg"
+        verticalPos="bottom"
+        horizontalPos="left"
+        overlayOpacity={0}
+      >
+        <Button size="lg" className="ml-6" asChild>
           <Link href="/account/affiliate">Tham gia ngay</Link>
         </Button>
-      </section>
+      </HeroBanner>
 
       {/* Features Section */}
       <section className="space-y-6">

@@ -38,6 +38,7 @@ export async function getHomepageData(): Promise<HomepageData | null> {
         imageUrl: slide.image?.url || "/assets/placeholder-banner.png",
         imageMobileUrl: slide.image_mobile?.url || undefined,
         videoUrl: slide.video_url || undefined,
+        videoMobileUrl: slide.video_mobile_url || undefined,
         ctaText: slide.cta_text || undefined,
         ctaLink: slide.cta_link?.url || undefined,
       }),

@@ -58,8 +58,12 @@ export default async function RootLayout({
       <head>
         {/* Resource hints for external domains - improve connection time */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
-        
+        <link
+          rel="preconnect"
+          href="https://www.googletagmanager.com"
+          crossOrigin="anonymous"
+        />
+
         {/* Theme color script - inline and non-blocking */}
         <script
           dangerouslySetInnerHTML={{
@@ -87,7 +91,7 @@ export default async function RootLayout({
           "bg-background overflow-auto overscroll-none font-sans antialiased",
           activeThemeValue ? `theme-${activeThemeValue}` : "",
           isScaled ? "theme-scaled" : "",
-          fontVariables
+          fontVariables,
         )}
       >
         <NextTopLoader showSpinner={false} />

@@ -22,7 +22,10 @@ export const SlideVideoComponent = memo(
     const [isVideoLoaded, setIsVideoLoaded] = useState(false);
     const isMobile = useIsMobile();
 
-    const videoUrl = slide.videoUrl || "/assets/sample-video.mp4";
+    const videoUrl = isMobile
+      ? slide.videoMobileUrl || slide.videoUrl
+      : slide.videoUrl;
+
     const imageUrl = slide.imageUrl || "/assets/placeholder-banner.png";
     const imageMobileUrl = slide.imageMobileUrl || imageUrl;
     const posterUrl = isMobile ? imageMobileUrl : imageUrl;
@@ -158,7 +161,10 @@ export const SlideVideoComponent = memo(
             className={cn(
               "absolute inset-0 z-0 hidden md:block bg-cover bg-center bg-no-repeat transition-all duration-1000",
               isVideoLoaded && "opacity-0",
-              !isVideoLoaded && !isDesktopLoaded && !hasDesktopError && "opacity-0",
+              !isVideoLoaded &&
+                !isDesktopLoaded &&
+                !hasDesktopError &&
+                "opacity-0",
               !isVideoLoaded && isDesktopLoaded && "opacity-100",
             )}
             style={{
@@ -171,7 +177,10 @@ export const SlideVideoComponent = memo(
             className={cn(
               "absolute inset-0 z-0 md:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000",
               isVideoLoaded && "opacity-0",
-              !isVideoLoaded && !isMobileLoaded && !hasMobileError && "opacity-0",
+              !isVideoLoaded &&
+                !isMobileLoaded &&
+                !hasMobileError &&
+                "opacity-0",
               !isVideoLoaded && isMobileLoaded && "opacity-100",
             )}
             style={{

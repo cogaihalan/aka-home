@@ -99,6 +99,8 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
   "/auth/sign-up": [{ title: "Đăng ký", link: "/auth/sign-up" }],
   "/pages/about-us": [{ title: "Về chúng tôi", link: "/pages/about-us" }],
   "/affiliate": [{ title: "Chương trình Affiliate", link: "/affiliate" }],
+  "/pages/certificate": [{ title: "Chứng nhận", link: "/pages/certificate" }],
+  "/pages/guide": [{ title: "Hướng dẫn", link: "/pages/guide" }],
 };
 
 export function useBreadcrumbs() {

@@ -70,6 +70,242 @@ type ContentRelationshipFieldWithData<
 }[Exclude<TCustomType[number], string>["id"]];
 
 /**
+ * Item in *Homepage → Banner Slides*
+ */
+export interface HomepageDocumentDataBannerSlidesItem {
+  /**
+   * Slide Type field in *Homepage → Banner Slides*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: image
+   * - **API ID Path**: homepage.banner_slides[].slide_type
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  slide_type: prismic.SelectField<"image" | "video", "filled">;
+
+  /**
+   * Title field in *Homepage → Banner Slides*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Enter slide title
+   * - **API ID Path**: homepage.banner_slides[].title
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Subtitle field in *Homepage → Banner Slides*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Enter slide subtitle
+   * - **API ID Path**: homepage.banner_slides[].subtitle
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  subtitle: prismic.KeyTextField;
+
+  /**
+   * Description field in *Homepage → Banner Slides*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Enter slide description
+   * - **API ID Path**: homepage.banner_slides[].description
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  description: prismic.KeyTextField;
+
+  /**
+   * Background Image field in *Homepage → Banner Slides*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: homepage.banner_slides[].image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Mobile Background Image field in *Homepage → Banner Slides*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: homepage.banner_slides[].image_mobile
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  image_mobile: prismic.ImageField<never>;
+
+  /**
+   * Video URL field in *Homepage → Banner Slides*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Enter video URL (e.g., /assets/sample-video.mp4)
+   * - **API ID Path**: homepage.banner_slides[].video_url
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  video_url: prismic.KeyTextField;
+
+  /**
+   * CTA Button Text field in *Homepage → Banner Slides*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Enter button text
+   * - **API ID Path**: homepage.banner_slides[].cta_text
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  cta_text: prismic.KeyTextField;
+
+  /**
+   * CTA Button Link field in *Homepage → Banner Slides*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: Select or enter a link
+   * - **API ID Path**: homepage.banner_slides[].cta_link
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  cta_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+
+  /**
+   * Use Overlay field in *Homepage → Banner Slides*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: true
+   * - **API ID Path**: homepage.banner_slides[].use_overlay
+   * - **Documentation**: https://prismic.io/docs/fields/boolean
+   */
+  use_overlay: prismic.BooleanField;
+}
+
+/**
+ * Item in *Homepage → Brand Values*
+ */
+export interface HomepageDocumentDataBrandValuesItem {
+  /**
+   * Title field in *Homepage → Brand Values*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Enter brand value title
+   * - **API ID Path**: homepage.brand_values[].title
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Image field in *Homepage → Brand Values*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: homepage.brand_values[].image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Short Content field in *Homepage → Brand Values*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Brief description shown on card
+   * - **API ID Path**: homepage.brand_values[].short_content
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  short_content: prismic.KeyTextField;
+
+  /**
+   * Full Content field in *Homepage → Brand Values*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: Full description shown in modal
+   * - **API ID Path**: homepage.brand_values[].full_content
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  full_content: prismic.RichTextField;
+}
+
+/**
+ * Content for Homepage documents
+ */
+interface HomepageDocumentData {
+  /**
+   * Banner Slides field in *Homepage*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: homepage.banner_slides[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  banner_slides: prismic.GroupField<
+    Simplify<HomepageDocumentDataBannerSlidesItem>
+  >;
+
+  /**
+   * Brand Section Title field in *Homepage*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Giới thiệu về AKA
+   * - **API ID Path**: homepage.brand_section_title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  brand_section_title: prismic.KeyTextField;
+
+  /**
+   * Brand Values field in *Homepage*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: homepage.brand_values[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  brand_values: prismic.GroupField<
+    Simplify<HomepageDocumentDataBrandValuesItem>
+  > /**
+   * Meta Title field in *Homepage*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: SEO title for homepage
+   * - **API ID Path**: homepage.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */;
+  meta_title: prismic.KeyTextField;
+
+  /**
+   * Meta Description field in *Homepage*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: SEO description for homepage
+   * - **API ID Path**: homepage.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  meta_description: prismic.KeyTextField;
+}
+
+/**
+ * Homepage document from Prismic
+ *
+ * - **API ID**: `homepage`
+ * - **Repeatable**: `false`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type HomepageDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithoutUID<
+    Simplify<HomepageDocumentData>,
+    "homepage",
+    Lang
+  >;
+
+/**
  * Item in *Mega Menu → Menu Items → Child Links*
  */
 export interface MegaMenuDocumentDataMenuItemsChildLinksItem {
@@ -214,6 +450,7 @@ export type MegaMenuDocument<Lang extends string = string> =
   >;
 
 type PageDocumentDataSlicesSlice =
+  | BeforeAfterSliderSlice
   | StatsCounterSlice
   | PlainTextSlice
   | TextAndImageSlice
@@ -298,7 +535,127 @@ interface PageDocumentData {
 export type PageDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<PageDocumentData>, "page", Lang>;
 
-export type AllDocumentTypes = MegaMenuDocument | PageDocument;
+export type AllDocumentTypes =
+  | HomepageDocument
+  | MegaMenuDocument
+  | PageDocument;
+
+/**
+ * Primary content in *Before & After Image Slider → Default → Primary*
+ */
+export interface BeforeAfterSliderSliceDefaultPrimary {
+  /**
+   * Title field in *Before & After Image Slider → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: Enter the section title
+   * - **API ID Path**: before_after_slider.default.primary.title
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * Subtitle field in *Before & After Image Slider → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: Enter a subtitle or description
+   * - **API ID Path**: before_after_slider.default.primary.subtitle
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  subtitle: prismic.RichTextField;
+
+  /**
+   * Before Image field in *Before & After Image Slider → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: before_after_slider.default.primary.before_image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  before_image: prismic.ImageField<never>;
+
+  /**
+   * After Image field in *Before & After Image Slider → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: before_after_slider.default.primary.after_image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  after_image: prismic.ImageField<never>;
+
+  /**
+   * Orientation field in *Before & After Image Slider → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: Choose the slider orientation
+   * - **Default Value**: horizontal
+   * - **API ID Path**: before_after_slider.default.primary.orientation
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  orientation: prismic.SelectField<"horizontal" | "vertical", "filled">;
+
+  /**
+   * Show Labels field in *Before & After Image Slider → Default → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: true
+   * - **API ID Path**: before_after_slider.default.primary.show_labels
+   * - **Documentation**: https://prismic.io/docs/fields/boolean
+   */
+  show_labels: prismic.BooleanField;
+
+  /**
+   * Before Label field in *Before & After Image Slider → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Before
+   * - **API ID Path**: before_after_slider.default.primary.before_label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  before_label: prismic.KeyTextField;
+
+  /**
+   * After Label field in *Before & After Image Slider → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: After
+   * - **API ID Path**: before_after_slider.default.primary.after_label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  after_label: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for Before & After Image Slider Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default Before & After Slider
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BeforeAfterSliderSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BeforeAfterSliderSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Before & After Image Slider*
+ */
+type BeforeAfterSliderSliceVariation = BeforeAfterSliderSliceDefault;
+
+/**
+ * Before & After Image Slider Shared Slice
+ *
+ * - **API ID**: `before_after_slider`
+ * - **Description**: An interactive before and after image comparison slider with drag functionality
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BeforeAfterSliderSlice = prismic.SharedSlice<
+  "before_after_slider",
+  BeforeAfterSliderSliceVariation
+>;
 
 /**
  * Primary content in *FAQ Accordion → Default → Primary*
@@ -2130,6 +2487,10 @@ declare module "@prismicio/client" {
 
   namespace Content {
     export type {
+      HomepageDocument,
+      HomepageDocumentData,
+      HomepageDocumentDataBannerSlidesItem,
+      HomepageDocumentDataBrandValuesItem,
       MegaMenuDocument,
       MegaMenuDocumentData,
       MegaMenuDocumentDataMenuItemsChildLinksItem,
@@ -2139,6 +2500,10 @@ declare module "@prismicio/client" {
       PageDocumentDataSlicesSlice,
       PageDocumentDataSlices1Slice,
       AllDocumentTypes,
+      BeforeAfterSliderSlice,
+      BeforeAfterSliderSliceDefaultPrimary,
+      BeforeAfterSliderSliceVariation,
+      BeforeAfterSliderSliceDefault,
       FaqAccordionSlice,
       FaqAccordionSliceDefaultPrimary,
       FaqAccordionSliceDefaultItem,

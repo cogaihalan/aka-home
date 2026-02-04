@@ -18,7 +18,7 @@
             "label": "Desktop Background Image",
             "constraint": {
               "width": 1920,
-              "height": 800
+              "height": 850
             },
             "thumbnails": []
           }
@@ -28,7 +28,7 @@
           "config": {
             "label": "Mobile Background Image",
             "constraint": {
-              "width": 768,
+              "width": 600,
               "height": 600
             },
             "thumbnails": []
@@ -69,11 +69,7 @@
           "type": "Select",
           "config": {
             "label": "Horizontal Position",
-            "options": [
-              "left",
-              "center",
-              "right"
-            ],
+            "options": ["left", "center", "right"],
             "default_value": "center"
           }
         },
@@ -81,11 +77,7 @@
           "type": "Select",
           "config": {
             "label": "Vertical Position",
-            "options": [
-              "top",
-              "middle",
-              "bottom"
-            ],
+            "options": ["top", "middle", "bottom"],
             "default_value": "middle"
           }
         },
@@ -94,11 +86,7 @@
           "config": {
             "label": "Content Alignment",
             "placeholder": "Select the content alignment",
-            "options": [
-              "left",
-              "center",
-              "right"
-            ],
+            "options": ["left", "center", "right"],
             "default_value": "left"
           }
         }

@@ -54,12 +54,11 @@ export default function ProductsPage() {
   return (
     <>
       <HeroBanner
-        title="Tất cả sản phẩm"
-        description="Khám phá bộ sưu tập sản phẩm cao cấp"
-        imageUrl="/assets/placeholder-banner.png"
-        verticalPos="center"
-        horizontalPos="center"
-        overlayOpacity={30}
+        imageUrl="/assets/banner-products.jpg"
+        mobileImageUrl="/assets/banner-products-mobile.jpg"
+        verticalPos="bottom"
+        horizontalPos="left"
+        overlayOpacity={0}
       />
       <Suspense fallback={<ProductsPageSkeleton />}>
         <ProductListingPage />

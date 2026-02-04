@@ -1,15 +1,17 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type VerticalPosition = "top" | "center" | "bottom";
 type HorizontalPosition = "left" | "center" | "right";
 
 interface HeroBannerProps {
-  title: string;
+  title?: string;
   subtitle?: string;
   description?: string;
   imageUrl: string;
+  mobileImageUrl?: string;
   verticalPos?: VerticalPosition;
   horizontalPos?: HorizontalPosition;
   className?: string;
@@ -40,17 +42,19 @@ const HeroBanner = ({
   subtitle,
   description,
   imageUrl,
+  mobileImageUrl,
   verticalPos = "center",
   horizontalPos = "left",
   className,
   overlayOpacity = 50,
   children,
 }: HeroBannerProps) => {
+  const isMobile = useIsMobile();
   return (
     <section className="-mx-4 sm:-mx-6 lg:-mx-8">
       <div
         className={cn(
-          "relative w-full h-[400px] sm:h-[500px] md:h-[600px] overflow-hidden",
+          "relative w-full h-[450px] sm:h-[500px] md:h-[600px] overflow-hidden",
           className,
         )}
       >
@@ -58,7 +62,7 @@ const HeroBanner = ({
         <div
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 hover:scale-105"
           style={{
-            backgroundImage: `url(${imageUrl})`,
+            backgroundImage: `url(${isMobile ? (mobileImageUrl ? mobileImageUrl : imageUrl) : imageUrl})`,
           }}
         />
 

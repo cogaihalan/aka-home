@@ -15,9 +15,10 @@ export default function CategoriesPage() {
       <HeroBanner
         title="Danh mục"
         description="Khám phá các danh mục sản phẩm"
-        imageUrl="/assets/placeholder-banner.png"
-        verticalPos="center"
-        horizontalPos="center"
+        imageUrl="/assets/banner-products.jpg"
+        mobileImageUrl="/assets/banner-products-mobile.jpg"
+        verticalPos="bottom"
+        horizontalPos="left"
         overlayOpacity={30}
       />
       <Suspense fallback={null}>

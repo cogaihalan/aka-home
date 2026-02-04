@@ -143,7 +143,7 @@ export interface AffiliatePayoutMethodListResponse {
   items: AffiliatePayoutMethod[];
   pagination: PaginationResponse;
 }
-  
+
 export interface AffiliateWithdrawalListResponse {
   items: AffiliateWithdrawal[];
   pagination: PaginationResponse;
@@ -212,11 +212,11 @@ export interface UpdateProductReviewStatusRequest {
 export interface CreateCategoryRequest {
   name: string;
   description: string;
-  parentId?: number;
+  parentId?: number | null;
 }
 
 export interface UpdateCategoryRequest extends Partial<CreateCategoryRequest> {
-  id?: number;
+  id?: number | null;
 }
 
 export interface CategoryMediaUploadRequest {
@@ -347,7 +347,6 @@ export interface SubmissionMediaUploadRequest {
   files: File[];
 }
 
-
 // Affiliate API types
 export interface AdminUpdateAffiliateApprovalStatusRequest {
   id: number;
@@ -361,7 +360,8 @@ export interface CreateAffiliateLinkRequest {
   activeByAffiliate: boolean;
 }
 
-export interface AffiliateLinkUpdateRequest extends Partial<CreateAffiliateLinkRequest> {
+export interface AffiliateLinkUpdateRequest
+  extends Partial<CreateAffiliateLinkRequest> {
   id?: number;
 }
 
@@ -378,7 +378,8 @@ export interface CreateAffiliateWithdrawalRequest {
   status?: AffiliateApprovalStatus;
 }
 
-export interface UpdateAffiliateWithdrawalRequest extends Partial<CreateAffiliateWithdrawalRequest> {
+export interface UpdateAffiliateWithdrawalRequest
+  extends Partial<CreateAffiliateWithdrawalRequest> {
   id?: number;
 }
 

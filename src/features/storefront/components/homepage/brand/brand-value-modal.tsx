@@ -24,19 +24,20 @@ export default function BrandValueModal({
       isOpen={isOpen}
       onClose={onClose}
     >
-      <div className="space-y-4">
-        <div className="relative w-full aspect-video overflow-hidden rounded-lg">
-          <Image
-            src={item.image}
-            alt={item.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 600px"
-          />
+      <div className="space-y-4 max-h-[80vh] overflow-y-auto">
+        <div className="flex  gap-4">
+          <div className="relative w-1/2 aspect-square overflow-hidden rounded-lg">
+            <Image
+              src={item.image}
+              alt={item.title}
+              fill
+              className="object-cover w-full h-full"
+            />
+          </div>
+          <div className="text-sm wysiwyg text-muted-foreground leading-relaxed flex-1">
+            {item.fullContent}
+          </div>
         </div>
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          {item.fullContent}
-        </p>
       </div>
     </Modal>
   );

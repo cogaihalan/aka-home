@@ -33,6 +33,7 @@ import {
   useCategories,
   useAppLoading,
 } from "@/components/providers/app-provider";
+import { log } from "console";
 
 interface CategoryPageProps {
   categorySlug: string;
@@ -68,31 +69,31 @@ export default function CategoryPage({ categorySlug }: CategoryPageProps) {
   const getCategoryIdFromSlug = useCallback(
     (slug: string): string | null => {
       const category = categories.find(
-        (cat) => generateSlug(cat.name) === slug.toLowerCase()
+        (cat) => generateSlug(cat.name) === slug.toLowerCase(),
       );
       return category ? category.id.toString() : null;
     },
-    [categories]
+    [categories],
   );
 
   const getCategoryNameFromSlug = useCallback(
     (slug: string): string => {
       const category = categories.find(
-        (cat) => generateSlug(cat.name) === slug.toLowerCase()
+        (cat) => generateSlug(cat.name) === slug.toLowerCase(),
       );
       return category ? category.name : slugToReadable(slug);
     },
-    [categories]
+    [categories],
   );
 
   const getCategoryDescriptionFromSlug = useCallback(
     (slug: string): string | undefined => {
       const category = categories.find(
-        (cat) => generateSlug(cat.name) === slug.toLowerCase()
+        (cat) => generateSlug(cat.name) === slug.toLowerCase(),
       );
       return category ? category.description : undefined;
     },
-    [categories]
+    [categories],
   );
 
   // Memoize the query parameters to prevent unnecessary re-fetches
@@ -138,7 +139,7 @@ export default function CategoryPage({ categorySlug }: CategoryPageProps) {
         setProducts(response.items || []);
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : "Failed to fetch products"
+          err instanceof Error ? err.message : "Failed to fetch products",
         );
       } finally {
         setIsLoading(false);
@@ -146,7 +147,7 @@ export default function CategoryPage({ categorySlug }: CategoryPageProps) {
         setIsInitialLoad(false);
       }
     },
-    [queryParams]
+    [queryParams],
   );
 
   // Use product filters hook for client-side filtering (only for search and additional client-side filters)
@@ -196,6 +197,8 @@ export default function CategoryPage({ categorySlug }: CategoryPageProps) {
   const handlePageChange = (page: number) => {
     updatePage(page);
   };
+
+  console.log(categorySlug);
 
   // Don't render anything if category is invalid (will redirect)
   const categoryId = getCategoryIdFromSlug(categorySlug);

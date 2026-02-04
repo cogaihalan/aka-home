@@ -36,7 +36,10 @@ class UnifiedCategoryService {
       ? `${this.basePath}?${queryString}`
       : this.basePath;
 
+    console.log(endpoint);
+
     const response = await apiClient.get<CategoryListResponse>(endpoint);
+    console.log(response.data);
 
     return response.data!;
   }
@@ -53,11 +56,11 @@ class UnifiedCategoryService {
 
   async updateCategory(
     id: number,
-    data: UpdateCategoryRequest
+    data: UpdateCategoryRequest,
   ): Promise<Category> {
     const response = await apiClient.put<Category>(
       `${this.basePath}/${id}`,
-      data
+      data,
     );
     return response.data!;
   }
@@ -67,14 +70,14 @@ class UnifiedCategoryService {
   }
 
   async uploadCategoryImage(
-    data: CategoryMediaUploadRequest
+    data: CategoryMediaUploadRequest,
   ): Promise<Category> {
     const formData = new FormData();
     formData.append("id", data.id.toString());
     formData.append("file", data.file);
     const response = await apiClient.post<Category>(
       `${this.basePath}/${data.id}/thumbnail`,
-      formData
+      formData,
     );
     return response.data!;
   }

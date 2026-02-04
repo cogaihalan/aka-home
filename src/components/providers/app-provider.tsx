@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, ReactNode, useRef } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  ReactNode,
+  useRef,
+} from "react";
 import { useAppStore } from "@/stores/app-store";
 import { AppContextType } from "@/types/app-context";
 
@@ -14,7 +20,33 @@ export function AppProvider({ children }: AppProviderProps) {
   const store = useAppStore();
   const initRef = useRef(false);
 
-  // Defer app initialization to avoid blocking TBT
+  // When we have persisted state (isInitialized), refresh categories on mount so we don't show stale data.
+  // Skip when !isInitialized so the first init (below) fetches categories once.
+  useEffect(() => {
+    if (!store.isInitialized) return;
+
+    let idleCallbackId: number | undefined;
+    let timeoutId: NodeJS.Timeout | undefined;
+
+    const refresh = () => store.refreshCategories();
+
+    if ("requestIdleCallback" in window) {
+      idleCallbackId = (window as any).requestIdleCallback(refresh, {
+        timeout: 2000,
+      });
+    } else {
+      timeoutId = setTimeout(refresh, 500);
+    }
+
+    return () => {
+      if (idleCallbackId !== undefined && "cancelIdleCallback" in window) {
+        (window as any).cancelIdleCallback(idleCallbackId);
+      }
+      if (timeoutId !== undefined) clearTimeout(timeoutId);
+    };
+  }, [store.isInitialized, store.refreshCategories]);
+
+  // One-time full app init (contests, etc.); categories are refreshed above on every load
   useEffect(() => {
     if (initRef.current || store.isInitialized || store.isLoading) return;
     initRef.current = true;
@@ -22,24 +54,21 @@ export function AppProvider({ children }: AppProviderProps) {
     let idleCallbackId: number | undefined;
     let timeoutId: NodeJS.Timeout | undefined;
 
-    // Use requestIdleCallback to defer non-critical data fetching
-    if ('requestIdleCallback' in window) {
-      idleCallbackId = (window as any).requestIdleCallback(
-        () => store.initializeApp(),
-        { timeout: 2000 } // Start within 2 seconds max
-      );
+    const init = () => store.initializeApp();
+
+    if ("requestIdleCallback" in window) {
+      idleCallbackId = (window as any).requestIdleCallback(init, {
+        timeout: 2000,
+      });
     } else {
-      // Fallback: defer to next tick to not block initial render
-      timeoutId = setTimeout(() => store.initializeApp(), 500);
+      timeoutId = setTimeout(init, 500);
     }
 
     return () => {
-      if (idleCallbackId !== undefined && 'cancelIdleCallback' in window) {
+      if (idleCallbackId !== undefined && "cancelIdleCallback" in window) {
         (window as any).cancelIdleCallback(idleCallbackId);
       }
-      if (timeoutId !== undefined) {
-        clearTimeout(timeoutId);
-      }
+      if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
   }, [store.isInitialized, store.isLoading, store.initializeApp]);
 
@@ -73,6 +102,7 @@ export function useApp() {
 // Convenience hooks for specific data
 export function useCategories() {
   const { categories } = useApp();
+
   return { categories };
 }
 

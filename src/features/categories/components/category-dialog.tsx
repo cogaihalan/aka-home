@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -35,7 +35,7 @@ import { unifiedCategoryService } from "@/lib/api/services/unified";
 import { useAppStore } from "@/stores/app-store";
 import { toast } from "sonner";
 import { Category } from "@/types";
-import { useApp } from "@/components/providers/app-provider";
+import { useCategories } from "@/components/providers/app-provider";
 import { FileUploader } from "@/components/file-uploader";
 import { Progress } from "@/components/ui/progress";
 import { Image as ImageIcon, X } from "lucide-react";
@@ -44,7 +44,7 @@ import Image from "next/image";
 const formSchema = z.object({
   name: z.string().min(1, "Tên là bắt buộc"),
   description: z.string().min(1, "Mô tả là bắt buộc"),
-  parentId: z.number().default(0),
+  parentId: z.number().nullable(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -64,10 +64,10 @@ export function CategoryDialog({
 }: CategoryDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<Record<string, number>>(
-    {}
+    {},
   );
   const [isUploading, setIsUploading] = useState(false);
-  const { categories } = useApp();
+  const { categories } = useCategories();
   const { addCategory, updateCategory } = useAppStore();
 
   const form = useForm<FormData>({
@@ -75,7 +75,7 @@ export function CategoryDialog({
     defaultValues: {
       name: category?.name || "",
       description: category?.description || "",
-      parentId: category?.parentId || 0,
+      parentId: category?.parentId || null,
     },
   });
 
@@ -155,7 +155,7 @@ export function CategoryDialog({
         };
         const updatedCategory = await unifiedCategoryService.updateCategory(
           category.id,
-          updateData
+          updateData,
         );
         updateCategory(updatedCategory);
         toast.success("Cập nhật danh mục thành công");
@@ -164,8 +164,8 @@ export function CategoryDialog({
         const createData: CreateCategoryRequest = {
           name: data.name,
           description: data.description,
-          ...(data.parentId !== 0 && { parentId: data.parentId }),
-        };
+          ...(data.parentId !== null && { parentId: data.parentId }),
+        } as CreateCategoryRequest;
         const newCategory =
           await unifiedCategoryService.createCategory(createData);
         addCategory(newCategory);
@@ -219,10 +219,7 @@ export function CategoryDialog({
                 <FormItem>
                   <FormLabel>Mô tả</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Nhập mô tả danh mục"
-                      {...field}
-                    />
+                    <Textarea placeholder="Nhập mô tả danh mục" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -237,10 +234,10 @@ export function CategoryDialog({
                   <FormLabel>Danh mục cha (Không bắt buộc)</FormLabel>
                   <Select
                     onValueChange={(value) => {
-                      field.onChange(value === "none" ? 0 : parseInt(value));
+                      field.onChange(value === "none" ? null : parseInt(value));
                     }}
                     value={
-                      field.value === 0
+                      field.value === null
                         ? "none"
                         : field.value?.toString() || "none"
                     }
@@ -249,7 +246,9 @@ export function CategoryDialog({
                       <SelectValue placeholder="Chọn danh mục cha" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">Không có (Danh mục gốc)</SelectItem>
+                      <SelectItem value="none">
+                        Không có (Danh mục gốc)
+                      </SelectItem>
                       {categories
                         .filter((cat) => !category || cat.id !== category.id) // Don't allow self as parent
                         .map((cat) => (
@@ -292,7 +291,9 @@ export function CategoryDialog({
                         <X className="h-3 w-3" />
                       </Button>
                     </div>
-                    <p className="text-xs text-muted-foreground">Nhấn biểu tượng xóa để gỡ ảnh hiện tại</p>
+                    <p className="text-xs text-muted-foreground">
+                      Nhấn biểu tượng xóa để gỡ ảnh hiện tại
+                    </p>
                   </div>
                 ) : (
                   /* Upload new thumbnail - show only when no thumbnail exists */
@@ -312,7 +313,9 @@ export function CategoryDialog({
                       <div className="space-y-2">
                         <div className="flex items-center space-x-2">
                           <ImageIcon className="h-4 w-4" />
-                          <span className="text-sm text-muted-foreground">Đang tải ảnh thu nhỏ...</span>
+                          <span className="text-sm text-muted-foreground">
+                            Đang tải ảnh thu nhỏ...
+                          </span>
                         </div>
                         {Object.entries(uploadProgress).map(
                           ([fileName, progress]) => (
@@ -323,7 +326,7 @@ export function CategoryDialog({
                               </div>
                               <Progress value={progress} className="h-2" />
                             </div>
-                          )
+                          ),
                         )}
                       </div>
                     )}

@@ -58,11 +58,11 @@ function HeaderSkeleton() {
 
 export default function StorefrontLayout({ children }: StorefrontLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
       <Suspense fallback={<HeaderSkeleton />}>
         <StorefrontHeader />
       </Suspense>
-      <main className="flex-1 w-full max-w-480 mx-auto px-4 overflow-x-hidden">
+      <main className="flex-1 w-full max-w-480 mx-auto px-4 overflow-y-auto overflow-x-hidden">
         <Breadcrumbs />
         {children}
       </main>
@@ -79,6 +79,6 @@ export default function StorefrontLayout({ children }: StorefrontLayoutProps) {
           endDate={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)}
         />
       </Suspense>
-    </div>
+    </>
   );
 }

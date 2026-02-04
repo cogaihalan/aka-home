@@ -31,7 +31,7 @@ export default function BrandValueItem({
             src={item.image}
             alt={item.title}
             fill
-            className="object-cover transition-transform duration-300 hover:scale-105"
+            className="object-cover aspect-square transition-transform duration-300 hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
         </div>

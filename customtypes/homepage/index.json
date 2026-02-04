@@ -46,7 +46,7 @@
                 "label": "Background Image",
                 "constraint": {
                   "width": 1920,
-                  "height": 800
+                  "height": 850
                 },
                 "thumbnails": []
               }
@@ -56,7 +56,7 @@
               "config": {
                 "label": "Mobile Background Image",
                 "constraint": {
-                  "width": 768,
+                  "width": 600,
                   "height": 600
                 },
                 "thumbnails": []
@@ -66,7 +66,14 @@
               "type": "Text",
               "config": {
                 "label": "Video URL",
-                "placeholder": "Enter video URL (e.g., /assets/sample-video.mp4)"
+                "placeholder": "Enter video URL"
+              }
+            },
+            "video_mobile_url": {
+              "type": "Text",
+              "config": {
+                "label": "Mobile Video URL",
+                "placeholder": "Enter mobile video URL"
               }
             },
             "cta_text": {
@@ -80,7 +87,8 @@
               "type": "Link",
               "config": {
                 "label": "CTA Button Link",
-                "placeholder": "Select or enter a link"
+                "placeholder": "Select or enter a link",
+                "select": null
               }
             },
             "use_overlay": {
@@ -118,7 +126,7 @@
                 "label": "Image",
                 "constraint": {
                   "width": 400,
-                  "height": 300
+                  "height": 400
                 },
                 "thumbnails": []
               }

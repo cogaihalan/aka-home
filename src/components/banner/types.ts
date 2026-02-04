@@ -7,6 +7,7 @@ export interface BannerSlide {
   imageUrl: string;
   imageMobileUrl?: string;
   videoUrl?: string;
+  videoMobileUrl?: string;
   ctaText?: string;
   ctaLink?: string;
   ctaSecondaryText?: string;

@@ -56,7 +56,10 @@ export const ProductTabs = memo(function ProductTabs({
               <CardTitle>Mô tả sản phẩm</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="wysiwyg" dangerouslySetInnerHTML={{ __html: product.description }} />
+              <div
+                className="wysiwyg"
+                dangerouslySetInnerHTML={{ __html: product.description }}
+              />
             </CardContent>
           </Card>
         );
@@ -108,8 +111,7 @@ export const ProductTabs = memo(function ProductTabs({
                 <div className="flex items-center gap-2">
                   <RotateCcw className="h-4 w-4 text-blue-500" />
                   <span className="text-sm">
-                    {product.shippingInfo?.returnPolicy ||
-                      "30 ngày trả hàng"}
+                    {product.shippingInfo?.returnPolicy || "30 ngày trả hàng"}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -155,7 +157,7 @@ export const ProductTabs = memo(function ProductTabs({
         </div>
       ) : (
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 h-auto p-1 bg-muted/50">
+          <TabsList className="grid w-full grid-cols-3 h-auto p-1 bg-muted/50">
             {TAB_OPTIONS.map((option) => (
               <TabsTrigger
                 key={option.value}
@@ -169,10 +171,6 @@ export const ProductTabs = memo(function ProductTabs({
 
           <TabsContent value="description" className="mt-6">
             {renderTabContent("description")}
-          </TabsContent>
-
-          <TabsContent value="specifications" className="mt-6">
-            {renderTabContent("specifications")}
           </TabsContent>
 
           <TabsContent value="reviews" className="mt-6">
