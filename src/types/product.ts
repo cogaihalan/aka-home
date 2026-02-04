@@ -30,6 +30,7 @@ export type ProductStatus =
 export interface Product {
   id: number;
   name: string;
+  shortDescription: string;
   description: string;
   stock: number;
   price: number;

@@ -40,11 +40,11 @@
   }
 
   & ul {
-    @apply list-inside list-disc;
+    @apply list-inside list-disc pl-2;
   }
 
   & ol {
-    @apply list-inside list-decimal;
+    @apply list-inside list-decimal pl-2;
   }
 
   & iframe {

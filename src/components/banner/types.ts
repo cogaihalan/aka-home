@@ -5,11 +5,13 @@ export interface BannerSlide {
   subtitle: string;
   description: string;
   imageUrl: string;
+  imageMobileUrl?: string;
   videoUrl?: string;
   ctaText?: string;
   ctaLink?: string;
   ctaSecondaryText?: string;
   ctaSecondaryLink?: string;
+  useOverlay?: boolean;
 }
 
 export interface FullWidthBannerProps {

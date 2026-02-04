@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/richtext-editor";
 import {
   Select,
   SelectContent,
@@ -36,9 +36,11 @@ import { CreateProductRequest, UpdateProductRequest } from "@/lib/api/types";
 import { unifiedProductService } from "@/lib/api/services/unified";
 import { toast } from "sonner";
 import { useApp } from "@/components/providers/app-provider";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   name: z.string().min(1, "Tên là bắt buộc"),
+  shortDescription: z.string().min(1, "Mô tả ngắn là bắt buộc"),
   description: z.string().min(1, "Mô tả là bắt buộc"),
   stock: z.number().min(0, "Tồn kho phải không âm"),
   price: z.number().min(0, "Giá phải là số dương"),
@@ -69,6 +71,7 @@ export function ProductDialog({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: product?.name || "",
+      shortDescription: product?.shortDescription || "",
       description: product?.description || "",
       stock: product?.stock || 0,
       price: product?.price || 0,
@@ -108,7 +111,7 @@ export function ProductDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {product ? "Chỉnh sửa sản phẩm" : "Tạo sản phẩm mới"}
@@ -138,12 +141,35 @@ export function ProductDialog({
 
             <FormField
               control={form.control}
+              name="shortDescription"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mô tả ngắn</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Nhập mô tả ngắn sản phẩm"
+                      {...field}
+                      rows={3}
+                      className="resize-none min-h-[100px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Mô tả</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Nhập mô tả sản phẩm" {...field} />
+                    <RichTextEditor
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder="Nhập mô tả sản phẩm"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -326,8 +352,8 @@ export function ProductDialog({
                           </SelectContent>
                         </Select>
                       ) : (
-                        <div className="flex items-center justify-center h-10 px-3 py-2 text-sm text-muted-foreground border border-input rounded-md bg-muted/50">
-                          Đã chọn tất cả danh mục
+                        <div className="w-fit flex items-center justify-center h-10 px-3 py-2 text-sm text-muted-foreground border border-input rounded-md bg-muted/50">
+                          Hiện không có danh mục nào, vui lòng tạo danh mục mới
                         </div>
                       )}
                     </div>

@@ -36,6 +36,7 @@ export async function getHomepageData(): Promise<HomepageData | null> {
         subtitle: slide.subtitle || "",
         description: slide.description || "",
         imageUrl: slide.image?.url || "/assets/placeholder-banner.png",
+        imageMobileUrl: slide.image_mobile?.url || undefined,
         videoUrl: slide.video_url || undefined,
         ctaText: slide.cta_text || undefined,
         ctaLink: slide.cta_link?.url || undefined,

@@ -4,6 +4,7 @@ import { memo, useRef, useEffect, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { SlideComponentProps } from "./types";
 
 export const SlideVideoComponent = memo(
@@ -19,11 +20,16 @@ export const SlideVideoComponent = memo(
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
     const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+    const isMobile = useIsMobile();
 
     const videoUrl = slide.videoUrl || "/assets/sample-video.mp4";
     const imageUrl = slide.imageUrl || "/assets/placeholder-banner.png";
-    const isImageLoaded = loadedImages.has(imageUrl);
-    const hasImageError = imageErrors.has(imageUrl);
+    const imageMobileUrl = slide.imageMobileUrl || imageUrl;
+    const posterUrl = isMobile ? imageMobileUrl : imageUrl;
+    const isDesktopLoaded = loadedImages.has(imageUrl);
+    const isMobileLoaded = loadedImages.has(imageMobileUrl);
+    const hasDesktopError = imageErrors.has(imageUrl);
+    const hasMobileError = imageErrors.has(imageMobileUrl);
     const fallbackImage = "/assets/placeholder-banner.png";
     const isActive = slideIndex === currentSlide;
 
@@ -139,7 +145,7 @@ export const SlideVideoComponent = memo(
             loop
             playsInline
             preload="auto"
-            poster={imageUrl}
+            poster={posterUrl}
           />
 
           {/* Video loading placeholder */}
@@ -147,24 +153,36 @@ export const SlideVideoComponent = memo(
             <div className="absolute inset-0 z-0 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse" />
           )}
 
-          {/* Fallback image while video loads or if video fails */}
+          {/* Fallback image while video loads - desktop (md and up) */}
           <div
             className={cn(
-              "absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all duration-1000",
+              "absolute inset-0 z-0 hidden md:block bg-cover bg-center bg-no-repeat transition-all duration-1000",
               isVideoLoaded && "opacity-0",
-              !isVideoLoaded && !isImageLoaded && !hasImageError && "opacity-0",
-              !isVideoLoaded && isImageLoaded && "opacity-100",
+              !isVideoLoaded && !isDesktopLoaded && !hasDesktopError && "opacity-0",
+              !isVideoLoaded && isDesktopLoaded && "opacity-100",
             )}
             style={{
-              backgroundImage: `url(${hasImageError ? fallbackImage : imageUrl})`,
-              transform:
-                slideIndex === currentSlide ? "scale(1.05)" : "scale(1.0)",
-              willChange: slideIndex === currentSlide ? "transform" : "auto",
+              backgroundImage: `url(${hasDesktopError ? fallbackImage : imageUrl})`,
+            }}
+          />
+
+          {/* Fallback image while video loads - mobile (below md) */}
+          <div
+            className={cn(
+              "absolute inset-0 z-0 md:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000",
+              isVideoLoaded && "opacity-0",
+              !isVideoLoaded && !isMobileLoaded && !hasMobileError && "opacity-0",
+              !isVideoLoaded && isMobileLoaded && "opacity-100",
+            )}
+            style={{
+              backgroundImage: `url(${hasMobileError ? fallbackImage : imageMobileUrl})`,
             }}
           />
 
           {/* Gradient overlay for better text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/50 z-20 pointer-events-none" />
+          {slide.useOverlay && (
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/50 z-20 pointer-events-none" />
+          )}
 
           {/* Content */}
           <div className="relative z-30 container mx-auto px-4 sm:px-6 lg:px-8">

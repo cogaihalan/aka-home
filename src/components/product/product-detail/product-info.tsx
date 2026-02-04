@@ -99,14 +99,14 @@ export const ProductInfo = memo(function ProductInfo({
     if (navigator.share) {
       navigator.share({
         title: product.name,
-        text: product.description,
+        text: product.shortDescription,
         url: window.location.href,
       });
     } else {
       // Fallback to clipboard
       navigator.clipboard.writeText(window.location.href);
     }
-  }, [product.name, product.description]);
+  }, [product.name, product.shortDescription]);
 
   const handleQuantityChange = useCallback(
     (value: string) => {
@@ -152,7 +152,9 @@ export const ProductInfo = memo(function ProductInfo({
           />
         </div>
 
-        <p className="text-muted-foreground">{product.description}</p>
+        {!!product.shortDescription && <p className="text-muted-foreground">{product.shortDescription}</p>}
+
+        <div className="wysiwyg" dangerouslySetInnerHTML={{ __html: product.description }} />
       </div>
 
       <Separator />

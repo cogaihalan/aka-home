@@ -139,7 +139,7 @@ export function ProductCard({
                   />
                 )}
                 <p className="hidden text-xs text-muted-foreground md:line-clamp-2">
-                  {product.description}
+                  {product.shortDescription}
                 </p>
               </div>
 
@@ -336,7 +336,7 @@ export function ProductCard({
             )}
 
             <p className="hidden text-sm text-muted-foreground md:line-clamp-2">
-              {product.description}
+              {product.shortDescription}
             </p>
 
             <div className="flex items-center justify-between">
@@ -526,7 +526,7 @@ export function ProductCard({
           )}
 
           <p className="hidden text-sm text-muted-foreground md:line-clamp-2">
-            {product.description}
+            {product.shortDescription}
           </p>
 
           <div className="flex items-center justify-between">

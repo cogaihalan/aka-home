@@ -9,6 +9,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @import "../styles/slider.css";
+@import "../styles/quill.css";
 @import "../styles/wysiwyg.css";
 @import "../styles/prismic.css";
 

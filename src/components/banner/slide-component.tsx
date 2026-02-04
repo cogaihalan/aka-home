@@ -17,35 +17,53 @@ export const SlideComponent = memo(
     imageErrors,
   }: SlideComponentProps) => {
     const imageUrl = slide.imageUrl;
-    const isImageLoaded = loadedImages.has(imageUrl);
-    const hasImageError = imageErrors.has(imageUrl);
+    const imageMobileUrl = slide.imageMobileUrl || slide.imageUrl;
+    const isDesktopLoaded = loadedImages.has(imageUrl);
+    const isMobileLoaded = loadedImages.has(imageMobileUrl);
+    const hasDesktopError = imageErrors.has(imageUrl);
+    const hasMobileError = imageErrors.has(imageMobileUrl);
     const fallbackImage = "/assets/placeholder-banner.png";
 
     return (
       <div className="h-full">
         <div className="relative h-full flex items-center">
-          {/* Background Image - optimized for LCP */}
+          {/* Desktop background (md and up) */}
           <div
             className={cn(
-              "absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all duration-1000",
-              !isImageLoaded && !hasImageError && "opacity-0",
-              isImageLoaded && "opacity-100",
+              "absolute inset-0 z-0 hidden md:block bg-cover bg-center bg-no-repeat transition-all duration-1000",
+              !isDesktopLoaded && !hasDesktopError && "opacity-0",
+              isDesktopLoaded && "opacity-100",
             )}
             style={{
-              backgroundImage: `url(${hasImageError ? fallbackImage : imageUrl})`,
-              transform:
-                slideIndex === currentSlide ? "scale(1.05)" : "scale(1.0)",
-              willChange: slideIndex === currentSlide ? "transform" : "auto",
+              backgroundImage: `url(${hasDesktopError ? fallbackImage : imageUrl})`,
             }}
           />
 
-          {/* Image loading placeholder */}
-          {!isImageLoaded && !hasImageError && (
-            <div className="absolute inset-0 z-0 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse" />
+          {/* Mobile background (below md) */}
+          <div
+            className={cn(
+              "absolute inset-0 z-0 md:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000",
+              !isMobileLoaded && !hasMobileError && "opacity-0",
+              isMobileLoaded && "opacity-100",
+            )}
+            style={{
+              backgroundImage: `url(${hasMobileError ? fallbackImage : imageMobileUrl})`,
+            }}
+          />
+
+          {/* Image loading placeholder - desktop */}
+          {!isDesktopLoaded && !hasDesktopError && (
+            <div className="absolute inset-0 z-0 hidden md:block bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse" />
+          )}
+          {/* Image loading placeholder - mobile */}
+          {!isMobileLoaded && !hasMobileError && (
+            <div className="absolute inset-0 z-0 md:hidden bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse" />
           )}
 
           {/* Gradient overlay for better text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/50 z-20 pointer-events-none" />
+          {slide.useOverlay && (
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/50 z-20 pointer-events-none" />
+          )}
 
           {/* Content */}
           <div className="relative z-30 container mx-auto px-4 sm:px-6 lg:px-8">

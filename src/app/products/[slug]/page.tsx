@@ -40,12 +40,12 @@ export async function generateMetadata({
     return {
       title: `${product.name} - AKA Store`,
       description:
-        product.description ||
+        product.shortDescription ||
         `Shop ${product.name} at AKA Store. Premium quality products with fast shipping.`,
       openGraph: {
         title: `${product.name} - AKA Store`,
         description:
-          product.description || `Shop ${product.name} at AKA Store.`,
+          product.shortDescription || `Shop ${product.name} at AKA Store.`,
         images: product.images.length > 0 ? [product.images[0].url] : [],
       },
     };

@@ -51,6 +51,17 @@
                 "thumbnails": []
               }
             },
+            "image_mobile": {
+              "type": "Image",
+              "config": {
+                "label": "Mobile Background Image",
+                "constraint": {
+                  "width": 768,
+                  "height": 600
+                },
+                "thumbnails": []
+              }
+            },
             "video_url": {
               "type": "Text",
               "config": {
@@ -70,6 +81,13 @@
               "config": {
                 "label": "CTA Button Link",
                 "placeholder": "Select or enter a link"
+              }
+            },
+            "use_overlay": {
+              "type": "Boolean",
+              "config": {
+                "label": "Use Overlay",
+                "default_value": true
               }
             }
           }

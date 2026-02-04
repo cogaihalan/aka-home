@@ -28,48 +28,66 @@ const FullWidthBanner = memo(function FullWidthBanner({
     return null;
   }
 
+  const preloadImage = useCallback(
+    (url: string, priority: "high" | "low") => {
+      const img = new Image();
+      img.fetchPriority = priority;
+      img.loading = priority === "high" ? "eager" : "lazy";
+      img.onload = () => {
+        setLoadedImages((prev) => new Set([...Array.from(prev), url]));
+      };
+      img.onerror = () => {
+        setImageErrors((prev) => new Set([...Array.from(prev), url]));
+      };
+      img.src = url;
+    },
+    [],
+  );
+
   useEffect(() => {
     let idleCallbackId: number | undefined;
     let timeoutId: NodeJS.Timeout | undefined;
 
-    // Load first image immediately for LCP
+    // Load first slide images immediately for LCP (desktop + mobile)
     const firstSlide = bannerSlides[0];
     if (firstSlide) {
-      const firstImg = new Image();
-      firstImg.fetchPriority = "high";
-      firstImg.loading = "eager";
-      firstImg.onload = () => {
-        setLoadedImages(
-          (prev) => new Set([...Array.from(prev), firstSlide.imageUrl]),
-        );
-        setIsLoaded(true);
+      let loadedCount = 0;
+      const urlsToLoad = [
+        firstSlide.imageUrl,
+        ...(firstSlide.imageMobileUrl ? [firstSlide.imageMobileUrl] : []),
+      ];
+      const checkLoaded = () => {
+        loadedCount += 1;
+        if (loadedCount >= urlsToLoad.length) setIsLoaded(true);
       };
-      firstImg.onerror = () => {
-        setImageErrors(
-          (prev) => new Set([...Array.from(prev), firstSlide.imageUrl]),
-        );
-        setIsLoaded(true);
-      };
-      firstImg.src = firstSlide.imageUrl;
+      urlsToLoad.forEach((url) => {
+        const img = new Image();
+        img.fetchPriority = "high";
+        img.loading = "eager";
+        img.onload = () => {
+          setLoadedImages(
+            (prev) => new Set([...Array.from(prev), url]),
+          );
+          checkLoaded();
+        };
+        img.onerror = () => {
+          setImageErrors(
+            (prev) => new Set([...Array.from(prev), url]),
+          );
+          checkLoaded();
+        };
+        img.src = url;
+      });
+      if (urlsToLoad.length === 0) setIsLoaded(true);
     }
 
     const loadRemainingImages = () => {
       const remainingSlides = bannerSlides.slice(1);
       remainingSlides.forEach((slide) => {
-        const img = new Image();
-        img.fetchPriority = "low";
-        img.loading = "lazy";
-        img.onload = () => {
-          setLoadedImages(
-            (prev) => new Set([...Array.from(prev), slide.imageUrl]),
-          );
-        };
-        img.onerror = () => {
-          setImageErrors(
-            (prev) => new Set([...Array.from(prev), slide.imageUrl]),
-          );
-        };
-        img.src = slide.imageUrl;
+        preloadImage(slide.imageUrl, "low");
+        if (slide.imageMobileUrl) {
+          preloadImage(slide.imageMobileUrl, "low");
+        }
       });
     };
 
@@ -90,7 +108,7 @@ const FullWidthBanner = memo(function FullWidthBanner({
         clearTimeout(timeoutId);
       }
     };
-  }, [bannerSlides]);
+  }, [bannerSlides, preloadImage]);
 
   const goToSlide = useCallback(
     (index: number) => {
@@ -119,7 +137,7 @@ const FullWidthBanner = memo(function FullWidthBanner({
   return (
     <section
       className={cn(
-        "relative w-full h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden",
+        "relative w-full h-[500px] sm:h-[600px] md:h-[675px] overflow-hidden",
         className,
       )}
     >
@@ -144,9 +162,10 @@ const FullWidthBanner = memo(function FullWidthBanner({
             setCurrentSlide(event.detail.slide);
           }}
         >
-          {bannerSlides.map((slide, slideIndex) =>
-            slide.type === "video" ? (
-              <SlideVideoComponent
+          {bannerSlides.map((slide, slideIndex) => {
+            const Component = slide.type === "video" ? SlideVideoComponent : SlideComponent;
+            return (
+              <Component
                 key={slide.id}
                 slide={slide}
                 slideIndex={slideIndex}
@@ -156,19 +175,8 @@ const FullWidthBanner = memo(function FullWidthBanner({
                 loadedImages={loadedImages}
                 imageErrors={imageErrors}
               />
-            ) : (
-              <SlideComponent
-                key={slide.id}
-                slide={slide}
-                slideIndex={slideIndex}
-                currentSlide={currentSlide}
-                isAnimating={isAnimating}
-                isLoaded={isLoaded}
-                loadedImages={loadedImages}
-                imageErrors={imageErrors}
-              />
-            ),
-          )}
+            );
+          })}
         </Glider>
       </div>
 

@@ -57,23 +57,7 @@ export const ProductTabs = memo(function ProductTabs({
               <CardTitle>Mô tả sản phẩm</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-muted-foreground leading-relaxed">
-                {product.description}
-              </p>
-
-              {product.features && product.features.length > 0 && (
-                <div>
-                  <h4 className="font-semibold mb-3">Tính năng chính</h4>
-                  <ul className="space-y-2">
-                    {product.features.map((feature, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <div className="wysiwyg" dangerouslySetInnerHTML={{ __html: product.description }} />
             </CardContent>
           </Card>
         );

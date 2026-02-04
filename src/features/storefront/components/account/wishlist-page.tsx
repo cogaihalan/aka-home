@@ -162,7 +162,7 @@ export default function WishlistPage() {
 
                     {/* Description */}
                     <p className="text-sm text-muted-foreground line-clamp-2">
-                      {item.product.description}
+                      {item.product.shortDescription}
                     </p>
 
                     {/* Price */}

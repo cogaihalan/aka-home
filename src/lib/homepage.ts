@@ -39,6 +39,7 @@ export async function getHomepageData(): Promise<HomepageData | null> {
         videoUrl: slide.video_url || undefined,
         ctaText: slide.cta_text || undefined,
         ctaLink: slide.cta_link?.url || undefined,
+        useOverlay: slide.use_overlay || true,
       }),
     );
 
