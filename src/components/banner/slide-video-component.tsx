@@ -4,7 +4,7 @@ import { memo, useRef, useEffect, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsTablet } from "@/hooks/use-mobile";
 import { SlideComponentProps } from "./types";
 
 export const SlideVideoComponent = memo(
@@ -20,15 +20,15 @@ export const SlideVideoComponent = memo(
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
     const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-    const isMobile = useIsMobile();
+    const isTablet = useIsTablet();
 
-    const videoUrl = isMobile
+    const videoUrl = isTablet
       ? slide.videoMobileUrl || slide.videoUrl
       : slide.videoUrl;
 
     const imageUrl = slide.imageUrl || "/assets/placeholder-banner.png";
     const imageMobileUrl = slide.imageMobileUrl || imageUrl;
-    const posterUrl = isMobile ? imageMobileUrl : imageUrl;
+    const posterUrl = isTablet ? imageMobileUrl : imageUrl;
     const isDesktopLoaded = loadedImages.has(imageUrl);
     const isMobileLoaded = loadedImages.has(imageMobileUrl);
     const hasDesktopError = imageErrors.has(imageUrl);
@@ -121,7 +121,7 @@ export const SlideVideoComponent = memo(
           }
         }
       },
-      [isVideoPlaying],
+      [isVideoPlaying]
     );
 
     return (
@@ -137,13 +137,8 @@ export const SlideVideoComponent = memo(
             className={cn(
               "absolute inset-0 z-0 w-full h-full object-cover transition-all duration-1000",
               !isVideoLoaded && "opacity-0",
-              isVideoLoaded && "opacity-100",
+              isVideoLoaded && "opacity-100"
             )}
-            style={{
-              transform:
-                slideIndex === currentSlide ? "scale(1.05)" : "scale(1.0)",
-              willChange: slideIndex === currentSlide ? "transform" : "auto",
-            }}
             muted
             loop
             playsInline
@@ -151,37 +146,32 @@ export const SlideVideoComponent = memo(
             poster={posterUrl}
           />
 
-          {/* Video loading placeholder */}
-          {!isVideoLoaded && (
-            <div className="absolute inset-0 z-0 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse" />
-          )}
-
-          {/* Fallback image while video loads - desktop (md and up) */}
+          {/* Fallback image while video loads - desktop (lg and up) */}
           <div
             className={cn(
-              "absolute inset-0 z-0 hidden md:block bg-cover bg-center bg-no-repeat transition-all duration-1000",
+              "absolute inset-0 z-0 hidden lg:block bg-cover bg-center bg-no-repeat transition-all duration-1000",
               isVideoLoaded && "opacity-0",
               !isVideoLoaded &&
                 !isDesktopLoaded &&
                 !hasDesktopError &&
                 "opacity-0",
-              !isVideoLoaded && isDesktopLoaded && "opacity-100",
+              !isVideoLoaded && isDesktopLoaded && "opacity-100"
             )}
             style={{
               backgroundImage: `url(${hasDesktopError ? fallbackImage : imageUrl})`,
             }}
           />
 
-          {/* Fallback image while video loads - mobile (below md) */}
+          {/* Fallback image while video loads - mobile (below lg) */}
           <div
             className={cn(
-              "absolute inset-0 z-0 md:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000",
+              "absolute inset-0 z-0 lg:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000",
               isVideoLoaded && "opacity-0",
               !isVideoLoaded &&
                 !isMobileLoaded &&
                 !hasMobileError &&
                 "opacity-0",
-              !isVideoLoaded && isMobileLoaded && "opacity-100",
+              !isVideoLoaded && isMobileLoaded && "opacity-100"
             )}
             style={{
               backgroundImage: `url(${hasMobileError ? fallbackImage : imageMobileUrl})`,
@@ -202,7 +192,7 @@ export const SlideVideoComponent = memo(
                   "space-y-6 text-center lg:text-left transition-all duration-700",
                   slideIndex === currentSlide && !isAnimating && isLoaded
                     ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8",
+                    : "opacity-0 translate-y-8"
                 )}
               >
                 <div className="space-y-4">
@@ -211,7 +201,7 @@ export const SlideVideoComponent = memo(
                       "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight text-balance transition-all duration-700 delay-200",
                       slideIndex === currentSlide && !isAnimating && isLoaded
                         ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-12",
+                        : "opacity-0 translate-y-12"
                     )}
                   >
                     {slide.title}
@@ -220,7 +210,7 @@ export const SlideVideoComponent = memo(
                         "block text-primary transition-all duration-700 delay-300",
                         slideIndex === currentSlide && !isAnimating && isLoaded
                           ? "opacity-100 translate-x-0"
-                          : "opacity-0 translate-x-8",
+                          : "opacity-0 translate-x-8"
                       )}
                     >
                       {slide.subtitle}
@@ -232,7 +222,7 @@ export const SlideVideoComponent = memo(
                       "text-base sm:text-lg md:text-xl text-white max-w-2xl text-pretty transition-all duration-700 delay-400",
                       slideIndex === currentSlide && !isAnimating && isLoaded
                         ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-6",
+                        : "opacity-0 translate-y-6"
                     )}
                   >
                     {slide.description}
@@ -245,7 +235,7 @@ export const SlideVideoComponent = memo(
                     "flex flex-col sm:flex-row gap-4 justify-center lg:justify-start w-fit mx-auto sm:w-full transition-all duration-700 delay-700",
                     slideIndex === currentSlide && !isAnimating && isLoaded
                       ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-8",
+                      : "opacity-0 translate-y-8"
                   )}
                 >
                   {slide.ctaLink && (
@@ -277,7 +267,7 @@ export const SlideVideoComponent = memo(
         </div>
       </div>
     );
-  },
+  }
 );
 
 SlideVideoComponent.displayName = "SlideVideoComponent";

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsTablet } from "@/hooks/use-mobile";
 
 type VerticalPosition = "top" | "center" | "bottom";
 type HorizontalPosition = "left" | "center" | "right";
@@ -49,20 +49,20 @@ const HeroBanner = ({
   overlayOpacity = 50,
   children,
 }: HeroBannerProps) => {
-  const isMobile = useIsMobile();
+  const isTablet = useIsTablet();
   return (
     <section className="-mx-4 sm:-mx-6 lg:-mx-8">
       <div
         className={cn(
-          "relative w-full h-[450px] sm:h-[500px] md:h-[600px] overflow-hidden",
-          className,
+          "relative w-full h-auto aspect-square lg:aspect-[32/15] overflow-hidden",
+          className
         )}
       >
         {/* Background Image */}
         <div
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 hover:scale-105"
           style={{
-            backgroundImage: `url(${isMobile ? (mobileImageUrl ? mobileImageUrl : imageUrl) : imageUrl})`,
+            backgroundImage: `url(${isTablet ? (mobileImageUrl ? mobileImageUrl : imageUrl) : imageUrl})`,
           }}
         />
 
@@ -79,14 +79,14 @@ const HeroBanner = ({
           className={cn(
             "relative z-20 h-full flex mx-auto p-4 sm:px-6 lg:px-8",
             verticalPositionClasses[verticalPos],
-            horizontalPositionClasses[horizontalPos],
+            horizontalPositionClasses[horizontalPos]
           )}
         >
           {/* Text Content */}
           <div
             className={cn(
               "flex flex-col space-y-4 max-w-2xl",
-              textAlignClasses[horizontalPos],
+              textAlignClasses[horizontalPos]
             )}
           >
             {subtitle && (

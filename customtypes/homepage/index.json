@@ -46,7 +46,7 @@
                 "label": "Background Image",
                 "constraint": {
                   "width": 1920,
-                  "height": 850
+                  "height": 900
                 },
                 "thumbnails": []
               }
@@ -56,8 +56,8 @@
               "config": {
                 "label": "Mobile Background Image",
                 "constraint": {
-                  "width": 600,
-                  "height": 600
+                  "width": 1000,
+                  "height": 1000
                 },
                 "thumbnails": []
               }

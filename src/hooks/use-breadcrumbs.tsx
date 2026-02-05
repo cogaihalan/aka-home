@@ -100,7 +100,11 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
   "/pages/about-us": [{ title: "Về chúng tôi", link: "/pages/about-us" }],
   "/affiliate": [{ title: "Chương trình Affiliate", link: "/affiliate" }],
   "/pages/certificate": [{ title: "Chứng nhận", link: "/pages/certificate" }],
+  "/pages/promotions": [{ title: "Khuyến mại", link: "/pages/promotions" }],
   "/pages/guide": [{ title: "Hướng dẫn", link: "/pages/guide" }],
+  "/pages/food-safety-hygiene": [
+    { title: "Vệ sinh an toàn", link: "/pages/food-safety-hygiene" },
+  ],
 };
 
 export function useBreadcrumbs() {

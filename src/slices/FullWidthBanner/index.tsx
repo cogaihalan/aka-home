@@ -64,10 +64,10 @@ const FullWidthBanner: FC<FullWidthBannerProps> = ({ slice }) => {
         className={cn(
           "relative flex p-6 md:p-16 w-full overflow-hidden",
           "transition-all duration-1000 ease-out",
-          "h-[500px] sm:h-[600px] md:h-[675px]",
+          "aspect-square lg:aspect-[32/15] h-auto",
           hasIntersected ? "opacity-100" : "opacity-0",
           getVerticalClass(),
-          getHorizontalClass(),
+          getHorizontalClass()
         )}
       >
         {/* Desktop Background Image */}
@@ -111,13 +111,13 @@ const FullWidthBanner: FC<FullWidthBannerProps> = ({ slice }) => {
             "transition-all duration-700 ease-out",
             hasIntersected
               ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8",
+              : "opacity-0 translate-y-8"
           )}
         >
           <div
             className={cn(
               "w-full md:w-fit md:max-w-112",
-              getContentAlignmentClass(),
+              getContentAlignmentClass()
             )}
           >
             {/* Title */}
@@ -128,7 +128,7 @@ const FullWidthBanner: FC<FullWidthBannerProps> = ({ slice }) => {
                   "mb-4 transition-all duration-500 ease-out text-white",
                   hasIntersected
                     ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-4",
+                    : "opacity-0 translate-y-4"
                 )}
               />
             )}
@@ -141,7 +141,7 @@ const FullWidthBanner: FC<FullWidthBannerProps> = ({ slice }) => {
                   "mb-6 transition-all duration-500 ease-out !text-white",
                   hasIntersected
                     ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-4",
+                    : "opacity-0 translate-y-4"
                 )}
               />
             )}
@@ -154,7 +154,7 @@ const FullWidthBanner: FC<FullWidthBannerProps> = ({ slice }) => {
                     "transition-all duration-500 ease-out",
                     hasIntersected
                       ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-4",
+                      : "opacity-0 translate-y-4"
                   )}
                   style={{ transitionDelay: hasIntersected ? "600ms" : "0ms" }}
                 >

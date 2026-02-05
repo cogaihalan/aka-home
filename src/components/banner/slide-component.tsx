@@ -27,38 +27,29 @@ export const SlideComponent = memo(
     return (
       <div className="h-full">
         <div className="relative h-full flex items-center">
-          {/* Desktop background (md and up) */}
+          {/* Desktop background (lg and up) */}
           <div
             className={cn(
-              "absolute inset-0 z-0 hidden md:block bg-cover bg-center bg-no-repeat transition-all duration-1000",
+              "absolute inset-0 z-0 hidden lg:block bg-cover bg-center bg-no-repeat transition-all duration-1000",
               !isDesktopLoaded && !hasDesktopError && "opacity-0",
-              isDesktopLoaded && "opacity-100",
+              isDesktopLoaded && "opacity-100"
             )}
             style={{
               backgroundImage: `url(${hasDesktopError ? fallbackImage : imageUrl})`,
             }}
           />
 
-          {/* Mobile background (below md) */}
+          {/* Mobile background (below lg) */}
           <div
             className={cn(
-              "absolute inset-0 z-0 md:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000",
+              "absolute inset-0 z-0 lg:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000",
               !isMobileLoaded && !hasMobileError && "opacity-0",
-              isMobileLoaded && "opacity-100",
+              isMobileLoaded && "opacity-100"
             )}
             style={{
               backgroundImage: `url(${hasMobileError ? fallbackImage : imageMobileUrl})`,
             }}
           />
-
-          {/* Image loading placeholder - desktop */}
-          {!isDesktopLoaded && !hasDesktopError && (
-            <div className="absolute inset-0 z-0 hidden md:block bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse" />
-          )}
-          {/* Image loading placeholder - mobile */}
-          {!isMobileLoaded && !hasMobileError && (
-            <div className="absolute inset-0 z-0 md:hidden bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse" />
-          )}
 
           {/* Gradient overlay for better text contrast */}
           {slide.useOverlay && (
@@ -74,7 +65,7 @@ export const SlideComponent = memo(
                   "space-y-6 text-center lg:text-left transition-all duration-700",
                   slideIndex === currentSlide && !isAnimating && isLoaded
                     ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8",
+                    : "opacity-0 translate-y-8"
                 )}
               >
                 <div className="space-y-4">
@@ -83,7 +74,7 @@ export const SlideComponent = memo(
                       "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight text-balance transition-all duration-700 delay-200",
                       slideIndex === currentSlide && !isAnimating && isLoaded
                         ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-12",
+                        : "opacity-0 translate-y-12"
                     )}
                   >
                     {slide.title}
@@ -92,7 +83,7 @@ export const SlideComponent = memo(
                         "block text-primary transition-all duration-700 delay-300",
                         slideIndex === currentSlide && !isAnimating && isLoaded
                           ? "opacity-100 translate-x-0"
-                          : "opacity-0 translate-x-8",
+                          : "opacity-0 translate-x-8"
                       )}
                     >
                       {slide.subtitle}
@@ -104,7 +95,7 @@ export const SlideComponent = memo(
                       "text-base sm:text-lg md:text-xl text-white max-w-2xl text-pretty transition-all duration-700 delay-400",
                       slideIndex === currentSlide && !isAnimating && isLoaded
                         ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-6",
+                        : "opacity-0 translate-y-6"
                     )}
                   >
                     {slide.description}
@@ -117,7 +108,7 @@ export const SlideComponent = memo(
                     "flex flex-col sm:flex-row gap-4 justify-center lg:justify-start w-fit mx-auto sm:w-full transition-all duration-700 delay-700",
                     slideIndex === currentSlide && !isAnimating && isLoaded
                       ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-8",
+                      : "opacity-0 translate-y-8"
                   )}
                 >
                   {slide.ctaLink && (
@@ -149,7 +140,7 @@ export const SlideComponent = memo(
         </div>
       </div>
     );
-  },
+  }
 );
 
 SlideComponent.displayName = "SlideComponent";

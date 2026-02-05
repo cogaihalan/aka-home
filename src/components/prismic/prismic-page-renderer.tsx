@@ -17,10 +17,7 @@ interface SliceData {
   slice_label?: string | null;
 }
 
-
-export function PrismicPageRenderer({
-  content,
-}: PrismicPageRendererProps) {
+export function PrismicPageRenderer({ content }: PrismicPageRendererProps) {
   // Type assertion to handle the data structure
   const data = content.data as any;
 
@@ -31,20 +28,31 @@ export function PrismicPageRenderer({
   }
 
   return (
-    <div className="prismic-page-content">
+    <div className="prismic-page-content min-w-0 w-full overflow-hidden">
       {data.slices.map((slice: SliceData, index: number) => {
         // Map slice_type to component name
         const componentName = slice.slice_type;
-        
+
         // Get the corresponding component
-        const SliceComponent = components[componentName as keyof typeof components];
-        
+        const SliceComponent =
+          components[componentName as keyof typeof components];
+
         if (!SliceComponent) {
-          console.warn(`No component found for slice type: ${slice.slice_type}`);
+          console.warn(
+            `No component found for slice type: ${slice.slice_type}`
+          );
           return (
-            <div key={slice.id || index} className="slice-error bg-red-50 border border-red-200 rounded-lg p-4 m-4">
-              <p className="text-red-600 font-medium">Unknown slice type: {slice.slice_type}</p>
-              <p className="text-red-500 text-sm mt-1">This slice could not be rendered. Please check your slice configuration.</p>
+            <div
+              key={slice.id || index}
+              className="slice-error bg-red-50 border border-red-200 rounded-lg p-4 m-4"
+            >
+              <p className="text-red-600 font-medium">
+                Unknown slice type: {slice.slice_type}
+              </p>
+              <p className="text-red-500 text-sm mt-1">
+                This slice could not be rendered. Please check your slice
+                configuration.
+              </p>
             </div>
           );
         }
@@ -62,9 +70,17 @@ export function PrismicPageRenderer({
         } catch (error) {
           console.error(`Error rendering slice ${slice.slice_type}:`, error);
           return (
-            <div key={slice.id || index} className="slice-error bg-yellow-50 border border-yellow-200 rounded-lg p-4 m-4">
-              <p className="text-yellow-600 font-medium">Error rendering slice: {slice.slice_type}</p>
-              <p className="text-yellow-500 text-sm mt-1">There was an error rendering this slice. Please check the slice data.</p>
+            <div
+              key={slice.id || index}
+              className="slice-error bg-yellow-50 border border-yellow-200 rounded-lg p-4 m-4"
+            >
+              <p className="text-yellow-600 font-medium">
+                Error rendering slice: {slice.slice_type}
+              </p>
+              <p className="text-yellow-500 text-sm mt-1">
+                There was an error rendering this slice. Please check the slice
+                data.
+              </p>
             </div>
           );
         }
