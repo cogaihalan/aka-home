@@ -149,13 +149,7 @@ export const SlideVideoComponent = memo(
           {/* Fallback image while video loads - desktop (lg and up) */}
           <div
             className={cn(
-              "absolute inset-0 z-0 hidden lg:block bg-cover bg-center bg-no-repeat transition-all duration-1000",
-              isVideoLoaded && "opacity-0",
-              !isVideoLoaded &&
-                !isDesktopLoaded &&
-                !hasDesktopError &&
-                "opacity-0",
-              !isVideoLoaded && isDesktopLoaded && "opacity-100"
+              "absolute inset-0 z-0 hidden lg:block bg-cover bg-center bg-no-repeat transition-all duration-1000"
             )}
             style={{
               backgroundImage: `url(${hasDesktopError ? fallbackImage : imageUrl})`,
@@ -165,13 +159,7 @@ export const SlideVideoComponent = memo(
           {/* Fallback image while video loads - mobile (below lg) */}
           <div
             className={cn(
-              "absolute inset-0 z-0 lg:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000",
-              isVideoLoaded && "opacity-0",
-              !isVideoLoaded &&
-                !isMobileLoaded &&
-                !hasMobileError &&
-                "opacity-0",
-              !isVideoLoaded && isMobileLoaded && "opacity-100"
+              "absolute inset-0 z-0 lg:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000"
             )}
             style={{
               backgroundImage: `url(${hasMobileError ? fallbackImage : imageMobileUrl})`,

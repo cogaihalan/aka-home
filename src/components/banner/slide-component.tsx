@@ -13,13 +13,10 @@ export const SlideComponent = memo(
     currentSlide,
     isAnimating,
     isLoaded,
-    loadedImages,
     imageErrors,
   }: SlideComponentProps) => {
     const imageUrl = slide.imageUrl;
     const imageMobileUrl = slide.imageMobileUrl || slide.imageUrl;
-    const isDesktopLoaded = loadedImages.has(imageUrl);
-    const isMobileLoaded = loadedImages.has(imageMobileUrl);
     const hasDesktopError = imageErrors.has(imageUrl);
     const hasMobileError = imageErrors.has(imageMobileUrl);
     const fallbackImage = "/assets/placeholder-banner.png";
@@ -30,9 +27,7 @@ export const SlideComponent = memo(
           {/* Desktop background (lg and up) */}
           <div
             className={cn(
-              "absolute inset-0 z-0 hidden lg:block bg-cover bg-center bg-no-repeat transition-all duration-1000",
-              !isDesktopLoaded && !hasDesktopError && "opacity-0",
-              isDesktopLoaded && "opacity-100"
+              "absolute inset-0 z-0 hidden lg:block bg-cover bg-center bg-no-repeat transition-all duration-1000"
             )}
             style={{
               backgroundImage: `url(${hasDesktopError ? fallbackImage : imageUrl})`,
@@ -42,9 +37,7 @@ export const SlideComponent = memo(
           {/* Mobile background (below lg) */}
           <div
             className={cn(
-              "absolute inset-0 z-0 lg:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000",
-              !isMobileLoaded && !hasMobileError && "opacity-0",
-              isMobileLoaded && "opacity-100"
+              "absolute inset-0 z-0 lg:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000"
             )}
             style={{
               backgroundImage: `url(${hasMobileError ? fallbackImage : imageMobileUrl})`,
