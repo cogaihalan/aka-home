@@ -14,7 +14,6 @@ export const SlideVideoComponent = memo(
     currentSlide,
     isAnimating,
     isLoaded,
-    loadedImages,
     imageErrors,
   }: SlideComponentProps) => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -29,16 +28,14 @@ export const SlideVideoComponent = memo(
     const imageUrl = slide.imageUrl || "/assets/placeholder-banner.png";
     const imageMobileUrl = slide.imageMobileUrl || imageUrl;
     const posterUrl = isTablet ? imageMobileUrl : imageUrl;
-    const isDesktopLoaded = loadedImages.has(imageUrl);
-    const isMobileLoaded = loadedImages.has(imageMobileUrl);
     const hasDesktopError = imageErrors.has(imageUrl);
     const hasMobileError = imageErrors.has(imageMobileUrl);
     const fallbackImage = "/assets/placeholder-banner.png";
     const isActive = slideIndex === currentSlide;
 
-    // Autoplay video when slide becomes active
+    // Autoplay video when slide is active and video is ready to play
     useEffect(() => {
-      if (videoRef.current && isActive && !isAnimating) {
+      if (videoRef.current && isActive && !isAnimating && isVideoLoaded) {
         const playPromise = videoRef.current.play();
         if (playPromise !== undefined) {
           playPromise
@@ -54,7 +51,7 @@ export const SlideVideoComponent = memo(
         videoRef.current.pause();
         setIsVideoPlaying(false);
       }
-    }, [isActive, isAnimating]);
+    }, [isActive, isAnimating, isVideoLoaded]);
 
     // Handle video loading
     useEffect(() => {
@@ -121,7 +118,7 @@ export const SlideVideoComponent = memo(
           }
         }
       },
-      [isVideoPlaying]
+      [isVideoPlaying],
     );
 
     return (
@@ -137,8 +134,9 @@ export const SlideVideoComponent = memo(
             className={cn(
               "absolute inset-0 z-0 w-full h-full object-cover transition-all duration-1000",
               !isVideoLoaded && "opacity-0",
-              isVideoLoaded && "opacity-100"
+              isVideoLoaded && "opacity-100",
             )}
+            autoPlay
             muted
             loop
             playsInline
@@ -149,7 +147,7 @@ export const SlideVideoComponent = memo(
           {/* Fallback image while video loads - desktop (lg and up) */}
           <div
             className={cn(
-              "absolute inset-0 z-0 hidden lg:block bg-cover bg-center bg-no-repeat transition-all duration-1000"
+              "absolute inset-0 z-0 hidden lg:block bg-cover bg-center bg-no-repeat transition-all duration-1000",
             )}
             style={{
               backgroundImage: `url(${hasDesktopError ? fallbackImage : imageUrl})`,
@@ -159,7 +157,8 @@ export const SlideVideoComponent = memo(
           {/* Fallback image while video loads - mobile (below lg) */}
           <div
             className={cn(
-              "absolute inset-0 z-0 lg:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000"
+              "absolute inset-0 z-0 lg:hidden bg-cover bg-center bg-no-repeat transition-all duration-1000",
+              isVideoLoaded && "opacity-0",
             )}
             style={{
               backgroundImage: `url(${hasMobileError ? fallbackImage : imageMobileUrl})`,
@@ -180,7 +179,7 @@ export const SlideVideoComponent = memo(
                   "space-y-6 text-center lg:text-left transition-all duration-700",
                   slideIndex === currentSlide && !isAnimating && isLoaded
                     ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
+                    : "opacity-0 translate-y-8",
                 )}
               >
                 <div className="space-y-4">
@@ -189,7 +188,7 @@ export const SlideVideoComponent = memo(
                       "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight text-balance transition-all duration-700 delay-200",
                       slideIndex === currentSlide && !isAnimating && isLoaded
                         ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-12"
+                        : "opacity-0 translate-y-12",
                     )}
                   >
                     {slide.title}
@@ -198,7 +197,7 @@ export const SlideVideoComponent = memo(
                         "block text-primary transition-all duration-700 delay-300",
                         slideIndex === currentSlide && !isAnimating && isLoaded
                           ? "opacity-100 translate-x-0"
-                          : "opacity-0 translate-x-8"
+                          : "opacity-0 translate-x-8",
                       )}
                     >
                       {slide.subtitle}
@@ -210,7 +209,7 @@ export const SlideVideoComponent = memo(
                       "text-base sm:text-lg md:text-xl text-white max-w-2xl text-pretty transition-all duration-700 delay-400",
                       slideIndex === currentSlide && !isAnimating && isLoaded
                         ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-6"
+                        : "opacity-0 translate-y-6",
                     )}
                   >
                     {slide.description}
@@ -223,7 +222,7 @@ export const SlideVideoComponent = memo(
                     "flex flex-col sm:flex-row gap-4 justify-center lg:justify-start w-fit mx-auto sm:w-full transition-all duration-700 delay-700",
                     slideIndex === currentSlide && !isAnimating && isLoaded
                       ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-8"
+                      : "opacity-0 translate-y-8",
                   )}
                 >
                   {slide.ctaLink && (
@@ -255,7 +254,7 @@ export const SlideVideoComponent = memo(
         </div>
       </div>
     );
-  }
+  },
 );
 
 SlideVideoComponent.displayName = "SlideVideoComponent";
