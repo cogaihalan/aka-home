@@ -40,11 +40,15 @@
   }
 
   & ul {
-    @apply list-inside list-disc pl-2;
+    @apply list-disc pl-4;
   }
 
   & ol {
-    @apply list-inside list-decimal pl-2;
+    @apply list-decimal pl-4;
+  }
+
+  & li {
+    @apply mb-2;
   }
 
   & iframe {

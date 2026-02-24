@@ -36,11 +36,7 @@ class UnifiedCategoryService {
       ? `${this.basePath}?${queryString}`
       : this.basePath;
 
-    console.log(endpoint);
-
     const response = await apiClient.get<CategoryListResponse>(endpoint);
-    console.log(response.data);
-
     return response.data!;
   }
 

@@ -18,6 +18,7 @@ const FullWidthBanner: FC<FullWidthBannerProps> = ({ slice }) => {
   const verticalPosition = slice.primary.verticalPosition || "middle";
   const horizontalPosition = slice.primary.horizontalPosition || "center";
   const contentAlignment = slice.primary.contentAlignment || "left";
+  const useOverlay = slice.primary.useOverlay;
 
   // Position classes
   const getVerticalClass = () => {
@@ -56,120 +57,118 @@ const FullWidthBanner: FC<FullWidthBannerProps> = ({ slice }) => {
   };
 
   return (
-    <div className="-mx-4 sm:-mx-6 lg:-mx-8">
-      <section
-        ref={ref}
-        data-slice-type={slice.slice_type}
-        data-slice-variation={slice.variation}
-        className={cn(
-          "relative flex p-6 md:p-16 w-full overflow-hidden",
-          "transition-all duration-1000 ease-out",
-          "aspect-square lg:aspect-[32/15] h-auto",
-          hasIntersected ? "opacity-100" : "opacity-0",
-          getVerticalClass(),
-          getHorizontalClass()
-        )}
-      >
-        {/* Desktop Background Image */}
-        {isFilled.image(slice.primary.backgroundImage) && (
+    <section
+      ref={ref}
+      data-slice-type={slice.slice_type}
+      data-slice-variation={slice.variation}
+      className={cn(
+        "relative flex p-6 md:p-16 w-full overflow-hidden",
+        "transition-all duration-1000 ease-out",
+        "aspect-square lg:aspect-[16/9] h-auto",
+        hasIntersected ? "opacity-100" : "opacity-0",
+        getVerticalClass(),
+        getHorizontalClass(),
+      )}
+    >
+      {/* Desktop Background Image */}
+      {isFilled.image(slice.primary.backgroundImage) && (
+        <PrismicNextImage
+          field={slice.primary.backgroundImage}
+          className="absolute inset-0 w-full h-full object-cover hidden lg:block"
+          priority
+          alt=""
+        />
+      )}
+
+      {/* Mobile Background Image */}
+      {isFilled.image(slice.primary.mobileBackgroundImage) && (
+        <PrismicNextImage
+          field={slice.primary.mobileBackgroundImage}
+          className="absolute inset-0 w-full h-full object-cover block lg:hidden"
+          priority
+          alt=""
+        />
+      )}
+
+      {/* Fallback to desktop image on mobile if mobile image not provided */}
+      {isFilled.image(slice.primary.backgroundImage) &&
+        !isFilled.image(slice.primary.mobileBackgroundImage) && (
           <PrismicNextImage
             field={slice.primary.backgroundImage}
-            className="absolute inset-0 w-full h-full object-cover hidden md:block"
+            className="absolute inset-0 w-full h-full object-cover block lg:hidden"
             priority
             alt=""
           />
         )}
 
-        {/* Mobile Background Image */}
-        {isFilled.image(slice.primary.mobileBackgroundImage) && (
-          <PrismicNextImage
-            field={slice.primary.mobileBackgroundImage}
-            className="absolute inset-0 w-full h-full object-cover block md:hidden"
-            priority
-            alt=""
-          />
-        )}
+      {/* Overlay for better text readability */}
+      {useOverlay && <div className="absolute z-1 inset-0 bg-black/30" />}
 
-        {/* Fallback to desktop image on mobile if mobile image not provided */}
-        {isFilled.image(slice.primary.backgroundImage) &&
-          !isFilled.image(slice.primary.mobileBackgroundImage) && (
-            <PrismicNextImage
-              field={slice.primary.backgroundImage}
-              className="absolute inset-0 w-full h-full object-cover block md:hidden"
-              priority
-              alt=""
+      {/* Content Container */}
+      <div
+        className={cn(
+          "relative z-10 w-full md:w-fit md:max-w-112",
+          "transition-all duration-700 ease-out",
+          hasIntersected
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-8",
+        )}
+      >
+        <div
+          className={cn(
+            "w-full md:w-fit md:max-w-112",
+            getContentAlignmentClass(),
+          )}
+        >
+          {/* Title */}
+          {isFilled.richText(slice.primary.title) && (
+            <HeadingField
+              field={slice.primary.title}
+              className={cn(
+                "mb-4 transition-all duration-500 ease-out text-white",
+                hasIntersected
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4",
+              )}
             />
           )}
 
-        {/* Overlay for better text readability */}
-        <div className="absolute z-1 inset-0 bg-black/30" />
-
-        {/* Content Container */}
-        <div
-          className={cn(
-            "relative z-10 w-full md:w-fit md:max-w-112",
-            "transition-all duration-700 ease-out",
-            hasIntersected
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          )}
-        >
-          <div
-            className={cn(
-              "w-full md:w-fit md:max-w-112",
-              getContentAlignmentClass()
-            )}
-          >
-            {/* Title */}
-            {isFilled.richText(slice.primary.title) && (
-              <HeadingField
-                field={slice.primary.title}
-                className={cn(
-                  "mb-4 transition-all duration-500 ease-out text-white",
-                  hasIntersected
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-4"
-                )}
-              />
-            )}
-
-            {/* Description */}
-            {isFilled.richText(slice.primary.description) && (
-              <RichTextField
-                field={slice.primary.description}
-                className={cn(
-                  "mb-6 transition-all duration-500 ease-out !text-white",
-                  hasIntersected
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-4"
-                )}
-              />
-            )}
-
-            {/* Call to Action */}
-            {isFilled.link(slice.primary.callToActionLink) &&
-              isFilled.keyText(slice.primary.callToActionText) && (
-                <div
-                  className={cn(
-                    "transition-all duration-500 ease-out",
-                    hasIntersected
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-4"
-                  )}
-                  style={{ transitionDelay: hasIntersected ? "600ms" : "0ms" }}
-                >
-                  <PrismicNextLink
-                    field={slice.primary.callToActionLink}
-                    className="inline-flex items-center justify-center rounded-lg text-sm sm:text-base md:text-lg font-semibold px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 transition-all duration-300 bg-primary text-white hover:bg-primary/90 hover:shadow-lg"
-                  >
-                    {slice.primary.callToActionText}
-                  </PrismicNextLink>
-                </div>
+          {/* Description */}
+          {isFilled.richText(slice.primary.description) && (
+            <RichTextField
+              field={slice.primary.description}
+              className={cn(
+                "mb-6 transition-all duration-500 ease-out !text-white",
+                hasIntersected
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4",
               )}
-          </div>
+            />
+          )}
+
+          {/* Call to Action */}
+          {isFilled.link(slice.primary.callToActionLink) &&
+            isFilled.keyText(slice.primary.callToActionText) && (
+              <div
+                className={cn(
+                  "transition-all duration-500 ease-out",
+                  hasIntersected
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4",
+                )}
+                style={{ transitionDelay: hasIntersected ? "600ms" : "0ms" }}
+              >
+                <PrismicNextLink
+                  field={slice.primary.callToActionLink}
+                  className="inline-flex items-center justify-center rounded-lg text-sm sm:text-base md:text-lg font-semibold px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 transition-all duration-300 bg-primary text-white hover:bg-primary/90 hover:shadow-lg"
+                >
+                  {slice.primary.callToActionText}
+                </PrismicNextLink>
+              </div>
+            )}
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 

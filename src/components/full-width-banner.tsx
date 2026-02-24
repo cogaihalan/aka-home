@@ -87,7 +87,7 @@ const FullWidthBanner = memo(function FullWidthBanner({
     if ("requestIdleCallback" in window) {
       idleCallbackId = (window as any).requestIdleCallback(
         loadRemainingImages,
-        { timeout: 3000 }
+        { timeout: 3000 },
       );
     } else {
       timeoutId = setTimeout(loadRemainingImages, 1000);
@@ -114,7 +114,7 @@ const FullWidthBanner = memo(function FullWidthBanner({
         }, 100);
       }
     },
-    [isAnimating]
+    [isAnimating],
   );
 
   const nextSlide = useCallback(() => {
@@ -131,7 +131,7 @@ const FullWidthBanner = memo(function FullWidthBanner({
     <section
       className={cn(
         "relative w-full h-auto aspect-square lg:aspect-[32/15] overflow-hidden",
-        className
+        className,
       )}
     >
       {/* Loading skeleton */}
@@ -205,7 +205,7 @@ const FullWidthBanner = memo(function FullWidthBanner({
                 "w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 hover:scale-125 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed",
                 index === currentSlide
                   ? "bg-btn-primary scale-125 shadow-lg shadow-primary/50"
-                  : "bg-white/40 hover:bg-white/60"
+                  : "bg-white/40 hover:bg-white/60",
               )}
               aria-label={`Go to slide ${index + 1}`}
             />

@@ -39,7 +39,7 @@ export function PrismicPageRenderer({ content }: PrismicPageRendererProps) {
 
         if (!SliceComponent) {
           console.warn(
-            `No component found for slice type: ${slice.slice_type}`
+            `No component found for slice type: ${slice.slice_type}`,
           );
           return (
             <div

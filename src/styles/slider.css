@@ -64,11 +64,6 @@
   }
 }
 
-/* Hover effects */
-.glider-slide:hover img {
-  @apply scale-105;
-}
-
 /* Product Image Gallery Specific Styles */
 .product-image-gallery .glider-container {
   @apply rounded-lg overflow-hidden;

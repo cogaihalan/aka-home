@@ -42,13 +42,12 @@ export default function AffiliatePage() {
           <Card>
             <CardHeader>
               <Gift className="h-8 w-8 text-fg-primary mb-2" />
-              <CardTitle>Sản Phẩm Độc Quyền</CardTitle>
+              <CardTitle>Sản Phẩm Chất Lượng</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription className="text-base">
-                Đối tác của chúng tôi có cơ hội quảng bá những sản phẩm độc đáo
-                và chất lượng cao, giúp tăng khả năng chuyển đổi và hài lòng
-                khách hàng.
+                Chúng tôi cam kết cung cấp sản phẩm chất lượng cao, được chứng
+                nhận quốc tế giúp tăng độ tin cậy của đại lý
               </CardDescription>
             </CardContent>
           </Card>
@@ -60,9 +59,7 @@ export default function AffiliatePage() {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-base">
-                Chúng tôi cam kết cung cấp hoa hồng cao và công bằng cho các đối
-                tác của chúng tôi. Khi bạn thành công, chúng tôi cũng thành
-                công.
+                Chia sẻ doanh thu - hoa hồng lên đến 15%
               </CardDescription>
             </CardContent>
           </Card>
@@ -74,9 +71,9 @@ export default function AffiliatePage() {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-base">
-                Chúng tôi cam kết hỗ trợ mọi đối tác của mình. Bạn sẽ có sẵn tất
-                cả các công cụ cần thiết để quảng bá sản phẩm một cách hiệu quả
-                nhất.
+                Chúng tôi cam kết hỗ trợ mọi đối tác của mình. Bạn sẽ được tặng
+                sản phẩm miễn phí, hỗ trợ nhiệt tình từ Aka trong quá trình hợp
+                tác.
               </CardDescription>
             </CardContent>
           </Card>
@@ -209,7 +206,8 @@ export default function AffiliatePage() {
             </CardHeader>
             <CardContent>
               <CardDescription>
-                FB, youtube, instagram. Tạo nội dung chia sẻ về sản phẩm
+                Tiktok, Facebook, Youtube, Instagram. Tạo nội dung chia sẻ về
+                sản phẩm
               </CardDescription>
             </CardContent>
           </Card>

@@ -33,11 +33,7 @@
           "config": {
             "label": "Layout",
             "placeholder": "Choose the gallery layout",
-            "options": [
-              "carousel",
-              "mansory",
-              "featured"
-            ],
+            "options": ["carousel", "mansory", "featured"],
             "default_value": "carousel"
           }
         },
@@ -82,8 +78,8 @@
           "config": {
             "label": "Image",
             "constraint": {
-              "width": 1200,
-              "height": 800
+              "width": 1414,
+              "height": 2000
             },
             "thumbnails": []
           }

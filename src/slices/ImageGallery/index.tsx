@@ -110,8 +110,6 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
               <GliderContainer
                 ref={gliderRef}
                 settings={{
-                  hasArrows: false,
-                  hasDots: false,
                   slidesToShow: 1,
                   slidesToScroll: 1,
                   draggable: true,
@@ -122,6 +120,14 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
                       setCurrentSlide(event.slide);
                     }
                   },
+                  responsive: [
+                    {
+                      breakpoint: 768,
+                      settings: {
+                        slidesToShow: 2,
+                      },
+                    },
+                  ],
                 }}
                 className="image-gallery-carousel"
                 slideClassName="image-gallery-slide"
@@ -133,15 +139,19 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
                     onClick={() => openModal(index)}
                   >
                     {isFilled.image(item.image) && (
-                      <div className="relative overflow-hidden rounded-lg">
+                      <div className="relative overflow-hidden">
                         <PrismicNextImage
                           field={item.image}
-                          className="w-full h-auto max-h-[600px] object-cover transition-all duration-500 ease-in-out"
+                          className="w-full h-auto aspect-[1414/2000] object-cover transition-all duration-500 ease-in-out"
+                          width={1414}
+                          height={2000}
                           alt={""}
                         />
                         {item.caption && (
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-white transition-opacity duration-300">
-                            <p className="text-sm md:text-base">{item.caption}</p>
+                            <p className="text-sm md:text-base">
+                              {item.caption}
+                            </p>
                           </div>
                         )}
                       </div>
@@ -151,12 +161,13 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
               </GliderContainer>
 
               {/* Custom Navigation Arrows */}
-              {showNavigation && images.length > 1 && (
+              {showNavigation && images.length > 2 && (
                 <>
                   <button
                     type="button"
                     onClick={() => {
-                      const prev = (currentSlide - 1 + images.length) % images.length;
+                      const prev =
+                        (currentSlide - 1 + images.length) % images.length;
                       setCurrentSlide(prev);
                       if (gliderRef.current) {
                         gliderRef.current.scrollItem(prev);
@@ -186,7 +197,7 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
             </div>
 
             {/* Thumbnails */}
-            {showThumbnails && images.length > 1 && (
+            {showThumbnails && images.length > 2 && (
               <div className="flex gap-2 justify-center overflow-x-auto pb-2">
                 {images.map((item, index) => (
                   <button
@@ -201,7 +212,7 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
                       "flex-shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-lg overflow-hidden border-2 transition-all duration-300 ease-in-out",
                       currentSlide === index
                         ? "border-primary shadow-lg opacity-100"
-                        : "border-transparent opacity-60 hover:opacity-100"
+                        : "border-transparent opacity-60 hover:opacity-100",
                     )}
                   >
                     {isFilled.image(item.image) && (
@@ -247,7 +258,7 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
                   <p className="text-lg">{images[modalImageIndex].caption}</p>
                 </div>
               )}
-              {images.length > 1 && (
+              {images.length > 2 && (
                 <>
                   <button
                     onClick={prevModalImage}
@@ -279,10 +290,9 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
   if (layout === "mansory") {
     // Distribute images into 4 columns for masonry effect
     const columns = 4;
-    const columnImages: Array<{ item: typeof images[0]; originalIndex: number }[]> = Array.from(
-      { length: columns },
-      () => []
-    );
+    const columnImages: Array<
+      { item: (typeof images)[0]; originalIndex: number }[]
+    > = Array.from({ length: columns }, () => []);
 
     images.forEach((image, index) => {
       columnImages[index % columns].push({ item: image, originalIndex: index });
@@ -581,4 +591,3 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
 };
 
 export default ImageGallery;
-

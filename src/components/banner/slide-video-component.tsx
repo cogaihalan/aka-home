@@ -148,6 +148,7 @@ export const SlideVideoComponent = memo(
           <div
             className={cn(
               "absolute inset-0 z-0 hidden lg:block bg-cover bg-center bg-no-repeat transition-all duration-1000",
+              isVideoLoaded && "opacity-0",
             )}
             style={{
               backgroundImage: `url(${hasDesktopError ? fallbackImage : imageUrl})`,

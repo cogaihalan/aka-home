@@ -42,24 +42,18 @@ export interface GliderContainerProps {
 }
 
 const GliderContainer = forwardRef<any, GliderContainerProps>(
-  ({ 
-    children, 
-    settings = {}, 
-    className, 
-    slideClassName,
-  }, ref) => {
+  ({ children, settings = {}, className, slideClassName }, ref) => {
     const gliderRef = useRef<any>(null);
 
     const defaultSettings: GliderSettings = {
       hasArrows: false, // Disable default arrows
-      hasDots: false,   // Disable default dots
+      hasDots: false, // Disable default dots
       slidesToShow: 3,
       slidesToScroll: 1,
       scrollLock: true,
       duration: 0.5,
       draggable: true,
       dragVelocity: 1.5,
-      scrollLockDelay: 250,
       rewind: false,
       autoPlay: false,
       autoPlayDelay: 4000,
@@ -95,7 +89,7 @@ const GliderContainer = forwardRef<any, GliderContainerProps>(
           ref={(glider) => {
             gliderRef.current = glider;
             if (ref) {
-              if (typeof ref === 'function') {
+              if (typeof ref === "function") {
                 ref(glider);
               } else {
                 ref.current = glider;
@@ -113,7 +107,7 @@ const GliderContainer = forwardRef<any, GliderContainerProps>(
         </Glider>
       </div>
     );
-  }
+  },
 );
 
 GliderContainer.displayName = "GliderContainer";
