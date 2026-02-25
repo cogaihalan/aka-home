@@ -172,7 +172,7 @@ export default function AffiliatePage() {
         <div className="text-center space-y-4">
           <Sparkles className="h-12 w-12 text-fg-primary mx-auto" />
           <h2 className="text-3xl font-bold">
-            Chia sẻ doanh thu - hoa hồng lên đến 30%
+            Chia sẻ doanh thu - hoa hồng lên đến 15%
           </h2>
           <p className="text-muted-foreground max-w-3xl mx-auto">
             Trong hệ thống chia sẻ doanh thu, bạn kiếm được phần trăm doanh thu
