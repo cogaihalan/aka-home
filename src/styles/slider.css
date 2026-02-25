@@ -32,17 +32,17 @@
 /* Glider Navigation Styles */
 .glider-prev,
 .glider-next {
-  @apply absolute top-2/5 text-[0px] before:bg-background hover:before:opacity-90 before:shadow-lg before:border before:border-border before:bg-no-repeat before:bg-center before:bg-cover before:content-[''] before:absolute before:top-0 before:w-8 before:h-8 before:rounded-full;
+  @apply absolute top-2/5 text-[0px] before:bg-background hover:before:opacity-90 before:shadow-lg before:border before:border-border before:bg-no-repeat before:bg-center before:bg-cover before:content-[''] before:absolute before:top-0 before:w-10 before:h-10 before:rounded-full;
 }
 
 .glider-prev:before {
   background-image: url("/assets/icons/chevron-left.svg");
-  @apply -left-1.5;
+  @apply left-4.5;
 }
 
 .glider-next:before {
   background-image: url("/assets/icons/chevron-right.svg");
-  @apply -right-1.5;
+  @apply right-4.5;
 }
 
 .glider-prev:hover,
@@ -139,8 +139,8 @@
   @apply overflow-hidden;
 }
 
-.product-carousel .glider-slide {
-  @apply px-3;
+.product-carousel .glider-track {
+  @apply gap-3;
 }
 
 .product-carousel .glider-prev,
@@ -153,30 +153,12 @@
   @apply bg-background shadow-xl;
 }
 
-/* Responsive adjustments for product carousel */
-@media (max-width: 768px) {
-  .product-carousel .glider-slide {
-    @apply px-2;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .product-carousel .glider-slide {
-    @apply px-3;
-  }
-}
-
-@media (min-width: 1025px) {
-  .product-carousel .glider-slide {
-    @apply px-4;
-  }
-}
-
 /* Image Gallery Carousel Specific Styles */
 .image-gallery-carousel .glider-container {
   @apply overflow-hidden rounded-lg;
 }
 
+.product-carousel .glider-slide,
 .image-gallery-carousel .glider-slide,
 .image-gallery-slide {
   @apply px-0 transition-all duration-700 ease-in-out;

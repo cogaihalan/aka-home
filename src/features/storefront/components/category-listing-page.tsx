@@ -42,37 +42,39 @@ export default function CategoryListingPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {categories.map((category) => (
-          <Card
-            disableBlockPadding={true}
-            key={category.id}
-            className="group cursor-pointer overflow-hidden"
-          >
-            <Link href={`/categories/${generateSlug(category.name)}`}>
-              <div className="relative bg-muted overflow-hidden">
-                <Image
-                  src={
-                    category?.thumbnailUrl || "/assets/placeholder-image.jpeg"
-                  }
-                  alt={category.name}
-                  width={300}
-                  height={300}
-                  className="w-full h-full aspect-video object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <CardContent className="p-4">
-                <h3 className="font-semibold mb-2 group-hover:text-fg-accent transition-colors">
-                  {category.name}
-                </h3>
-                {category.description && (
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {category.description}
-                  </p>
-                )}
-              </CardContent>
-            </Link>
-          </Card>
-        ))}
+        {categories
+          .filter((category) => category.id !== 5)
+          .map((category) => (
+            <Card
+              disableBlockPadding={true}
+              key={category.id}
+              className="group cursor-pointer overflow-hidden"
+            >
+              <Link href={`/categories/${generateSlug(category.name)}`}>
+                <div className="relative bg-muted overflow-hidden">
+                  <Image
+                    src={
+                      category?.thumbnailUrl || "/assets/placeholder-image.jpeg"
+                    }
+                    alt={category.name}
+                    width={300}
+                    height={300}
+                    className="w-full h-full aspect-video object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <CardContent className="p-4">
+                  <h3 className="font-semibold mb-2 group-hover:text-fg-accent transition-colors">
+                    {category.name}
+                  </h3>
+                  {category.description && (
+                    <p className="text-sm text-muted-foreground mb-2">
+                      {category.description}
+                    </p>
+                  )}
+                </CardContent>
+              </Link>
+            </Card>
+          ))}
       </div>
     </div>
   );

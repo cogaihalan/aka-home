@@ -1,7 +1,13 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { OrderHistoryAction, Product } from "@/types";
-import { CheckCircle, Truck, RefreshCw, AlertCircle, Clock } from "lucide-react";
+import {
+  CheckCircle,
+  Truck,
+  RefreshCw,
+  AlertCircle,
+  Clock,
+} from "lucide-react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -19,7 +25,7 @@ export function formatPrice(
     currency?: string;
     locale?: string;
     showCurrency?: boolean;
-  } = {}
+  } = {},
 ): string {
   const { currency = "đ", locale = "vi-VN", showCurrency = true } = options;
 
@@ -36,7 +42,7 @@ export function formatBytes(
   opts: {
     decimals?: number;
     sizeType?: "accurate" | "normal";
-  } = {}
+  } = {},
 ) {
   const { decimals = 0, sizeType = "normal" } = opts;
 
@@ -66,7 +72,10 @@ export function isProductOutOfStock(product: Product): boolean {
 /**
  * Get stock status text for display
  */
-export function getStockStatusText(product: Product): string {
+export function getStockStatusText(
+  product: Product,
+  addToCartText?: string,
+): string {
   if (product.stock <= 0) {
     return "Hết hàng";
   }
@@ -75,11 +84,12 @@ export function getStockStatusText(product: Product): string {
     return `Chỉ còn ${product.stock} sản phẩm`;
   }
 
-  return "Thêm vào giỏ";
+  return addToCartText || "Thêm vào giỏ";
 }
 
-
-export function getStatusBadgeVariant(status: string): "default" | "secondary" | "destructive" | "outline" {
+export function getStatusBadgeVariant(
+  status: string,
+): "default" | "secondary" | "destructive" | "outline" {
   switch (status.toUpperCase()) {
     case "DELIVERED":
     case "PAID":
@@ -122,7 +132,6 @@ export function getStatusText(status: string) {
       return status.replace("_", " ");
   }
 }
-
 
 export function getOrderActionText(action: OrderHistoryAction): string {
   switch (action) {

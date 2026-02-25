@@ -105,6 +105,7 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
   "/pages/food-safety-hygiene": [
     { title: "Vệ sinh an toàn", link: "/pages/food-safety-hygiene" },
   ],
+  "/blog": [{ title: "Bài viết", link: "/blog" }],
 };
 
 export function useBreadcrumbs() {
@@ -136,6 +137,17 @@ export function useBreadcrumbs() {
     if (segments[0] === "categories" && segments[1]) {
       return [
         { title: "Danh mục", link: "/categories" },
+        {
+          title: segments[1].charAt(0).toUpperCase() + segments[1].slice(1),
+          link: pathname,
+        },
+      ];
+    }
+
+    // Handle blog pages
+    if (segments[0] === "blog" && segments[1]) {
+      return [
+        { title: "Bài viết", link: "/blog" },
         {
           title: segments[1].charAt(0).toUpperCase() + segments[1].slice(1),
           link: pathname,

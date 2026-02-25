@@ -27,6 +27,7 @@ interface ProductCardProps {
   variant?: "default" | "compact" | "featured";
   showWishlist?: boolean;
   className?: string;
+  addToCartText?: string;
 }
 
 export function ProductCard({
@@ -34,6 +35,7 @@ export function ProductCard({
   variant = "default",
   showWishlist = true,
   className,
+  addToCartText = "Thêm vào giỏ",
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
@@ -53,7 +55,7 @@ export function ProductCard({
 
   // Stock status checks
   const isOutOfStock = isProductOutOfStock(product);
-  const stockStatusText = getStockStatusText(product);
+  const stockStatusText = getStockStatusText(product, addToCartText);
 
   // Cart state
   const productInCart = isInCart(product.id);

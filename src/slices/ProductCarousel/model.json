@@ -30,6 +30,24 @@
             "single": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
           }
         },
+        "contentAlignment": {
+          "type": "Select",
+          "config": {
+            "label": "Content Alignment",
+            "placeholder": "Choose the text alignment for content",
+            "options": ["left", "center", "right"],
+            "default_value": "center"
+          }
+        },
+        "queryPromotionProducts": {
+          "type": "Boolean",
+          "config": {
+            "label": "Query Promotion Products",
+            "default_value": false,
+            "placeholder_false": "No",
+            "placeholder_true": "Yes"
+          }
+        },
         "productCount": {
           "type": "Number",
           "config": {
@@ -42,6 +60,20 @@
           "config": {
             "label": "Items Per View",
             "placeholder": "3"
+          }
+        },
+        "itemsPerViewTablet": {
+          "type": "Number",
+          "config": {
+            "label": "Items Per View (Tablet)",
+            "placeholder": "2"
+          }
+        },
+        "itemsPerViewMobile": {
+          "type": "Number",
+          "config": {
+            "label": "Items Per View (Mobile)",
+            "placeholder": "1"
           }
         },
         "showNavigation": {

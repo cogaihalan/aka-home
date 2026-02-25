@@ -17,6 +17,7 @@ interface HeroBannerProps {
   className?: string;
   overlayOpacity?: number;
   children?: React.ReactNode;
+  aspectRatio?: string;
 }
 
 const verticalPositionClasses: Record<VerticalPosition, string> = {
@@ -48,14 +49,15 @@ const HeroBanner = ({
   className,
   overlayOpacity = 50,
   children,
+  aspectRatio = "32/15",
 }: HeroBannerProps) => {
   const isTablet = useIsTablet();
   return (
     <section className="-mx-4 sm:-mx-6 lg:-mx-8">
       <div
         className={cn(
-          "relative w-full h-auto aspect-square lg:aspect-[32/15] overflow-hidden",
-          className
+          `relative w-full h-auto aspect-square lg:aspect-[${aspectRatio}] overflow-hidden`,
+          className,
         )}
       >
         {/* Background Image */}
@@ -79,14 +81,14 @@ const HeroBanner = ({
           className={cn(
             "relative z-20 h-full flex mx-auto p-4 sm:px-6 lg:px-8",
             verticalPositionClasses[verticalPos],
-            horizontalPositionClasses[horizontalPos]
+            horizontalPositionClasses[horizontalPos],
           )}
         >
           {/* Text Content */}
           <div
             className={cn(
               "flex flex-col space-y-4 max-w-2xl",
-              textAlignClasses[horizontalPos]
+              textAlignClasses[horizontalPos],
             )}
           >
             {subtitle && (

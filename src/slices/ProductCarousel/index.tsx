@@ -1,7 +1,7 @@
 "use client";
 import React, { FC, useState, useEffect, useCallback } from "react";
 import { isFilled } from "@prismicio/client";
-import { SliceComponentProps, PrismicRichText } from "@prismicio/react";
+import { SliceComponentProps } from "@prismicio/react";
 import { HeadingField, RichTextField } from "@/components/prismic/fields";
 import { AnimatedContainer } from "@/components/ui/animated-container";
 import { GliderContainer } from "@/components/ui/glider-container";
@@ -9,6 +9,7 @@ import { ProductCard } from "@/components/product";
 import { ProductCardSkeleton } from "@/components/product/product-card-skeleton";
 import { storefrontCatalogService } from "@/lib/api/services/storefront/catalog";
 import type { Product } from "@/types/product";
+import type { QueryParams } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 
 export type ProductCarouselProps = SliceComponentProps<any>;
@@ -22,8 +23,12 @@ const ProductCarousel: FC<ProductCarouselProps> = ({ slice }) => {
   // Configuration from slice
   const productCount = slice.primary.productCount || 10;
   const itemsPerView = slice.primary.itemsPerView || 3;
+  const itemsPerViewTablet = slice.primary.itemsPerViewTablet || 2;
+  const itemsPerViewMobile = slice.primary.itemsPerViewMobile || 1;
   const showNavigation = slice.primary.showNavigation !== false;
   const showDots = slice.primary.showDots !== false;
+  const contentAlignment = slice.primary.contentAlignment || "center";
+  const queryPromotionProducts = slice.primary.queryPromotionProducts;
 
   // Fetch products from API
   const fetchProducts = useCallback(async () => {
@@ -31,10 +36,16 @@ const ProductCarousel: FC<ProductCarouselProps> = ({ slice }) => {
       setIsLoading(true);
       setError(null);
 
-      const response = await storefrontCatalogService.getProducts({
+      const queryParams: QueryParams = {
         page: 1,
         size: productCount,
-      });
+      };
+
+      if (queryPromotionProducts) {
+        queryParams.categoryIds = ["5"];
+      }
+
+      const response = await storefrontCatalogService.getProducts(queryParams);
 
       setProducts(response.items || []);
     } catch (err) {
@@ -69,13 +80,16 @@ const ProductCarousel: FC<ProductCarouselProps> = ({ slice }) => {
           )}
 
           {/* Product Cards Skeleton Grid */}
-          <div className={cn(
-            "grid gap-6",
-            itemsPerView === 1 && "grid-cols-1",
-            itemsPerView === 2 && "grid-cols-1 md:grid-cols-2",
-            itemsPerView === 3 && "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
-            itemsPerView === 4 && "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-          )}>
+          <div
+            className={cn(
+              "grid gap-6",
+              itemsPerView === 1 && "grid-cols-1",
+              itemsPerView === 2 && "grid-cols-1 md:grid-cols-2",
+              itemsPerView === 3 && "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+              itemsPerView === 4 &&
+                "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+            )}
+          >
             {Array.from({ length: itemsPerView }).map((_, index) => (
               <ProductCardSkeleton key={index} variant="default" />
             ))}
@@ -95,7 +109,9 @@ const ProductCarousel: FC<ProductCarouselProps> = ({ slice }) => {
       >
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <p className="text-destructive mb-4">Error loading products: {error}</p>
+            <p className="text-destructive mb-4">
+              Error loading products: {error}
+            </p>
             <button
               onClick={fetchProducts}
               className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors"
@@ -118,7 +134,9 @@ const ProductCarousel: FC<ProductCarouselProps> = ({ slice }) => {
       >
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <p className="text-muted-foreground">No products available at the moment.</p>
+            <p className="text-muted-foreground">
+              No products available at the moment.
+            </p>
           </div>
         </div>
       </section>
@@ -138,13 +156,19 @@ const ProductCarousel: FC<ProductCarouselProps> = ({ slice }) => {
           <AnimatedContainer
             animation="slideUp"
             delay={0}
-            className="text-center mb-12"
+            className={`text-${contentAlignment} mb-8`}
           >
             {isFilled.richText(slice.primary.title) && (
-              <HeadingField field={slice.primary.title} className="text-4xl font-bold mb-4" />
+              <HeadingField
+                field={slice.primary.title}
+                className="text-4xl font-bold mb-4"
+              />
             )}
             {isFilled.richText(slice.primary.subtitle) && (
-              <RichTextField field={slice.primary.subtitle} className="text-lg text-muted-foreground max-w-2xl mx-auto" />
+              <RichTextField
+                field={slice.primary.subtitle}
+                className="text-lg text-muted-foreground max-w-2xl mx-auto"
+              />
             )}
           </AnimatedContainer>
         )}
@@ -155,25 +179,19 @@ const ProductCarousel: FC<ProductCarouselProps> = ({ slice }) => {
           settings={{
             hasArrows: showNavigation,
             hasDots: showDots,
-            slidesToShow: itemsPerView,
+            slidesToShow: itemsPerViewMobile,
             slidesToScroll: 1,
             responsive: [
               {
-                breakpoint: 1024,
+                breakpoint: 1280,
                 settings: {
-                  slidesToShow: Math.min(itemsPerView, 3),
+                  slidesToShow: itemsPerView,
                 },
               },
               {
                 breakpoint: 768,
                 settings: {
-                  slidesToShow: Math.min(itemsPerView, 2),
-                },
-              },
-              {
-                breakpoint: 480,
-                settings: {
-                  slidesToShow: 1,
+                  slidesToShow: itemsPerViewTablet,
                 },
               },
             ],
@@ -181,16 +199,17 @@ const ProductCarousel: FC<ProductCarouselProps> = ({ slice }) => {
           className="product-carousel"
         >
           {products.map((product, index) => (
-              <AnimatedContainer
+            <AnimatedContainer
               key={product.id}
-                animation="scaleIn"
-                delay={200 + index * 100}
+              animation="scaleIn"
+              delay={200 + index * 100}
               className="h-full"
             >
               <ProductCard
                 product={product}
                 variant="default"
                 className="h-full"
+                addToCartText="Mua ngay"
               />
             </AnimatedContainer>
           ))}

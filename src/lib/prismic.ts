@@ -6,14 +6,16 @@ export const repositoryName =
 
 export const routes = [
   { type: "page", path: "/pages/:uid" },
+  { type: "blog_post", path: "/blog/:uid" },
 ];
 
 export function createPrismicClient(config = {}) {
   const client = createClient(repositoryName, {
     routes,
-    fetchOptions: {
-      next: { revalidate: 0 },
-    },
+    fetchOptions:
+      process.env.NODE_ENV === "production"
+        ? { next: { tags: ["prismic"] }, cache: "force-cache" }
+        : { next: { revalidate: 5 } },
     ...config,
   });
 
@@ -33,7 +35,7 @@ export class PrismicPerformanceMonitor {
 
   static async measureFetch<T>(
     operation: string,
-    fn: () => Promise<T>
+    fn: () => Promise<T>,
   ): Promise<T> {
     const start = performance.now();
 
@@ -50,7 +52,7 @@ export class PrismicPerformanceMonitor {
       const end = performance.now();
       console.error(
         `❌ Prismic ${operation} failed: ${(end - start).toFixed(2)}ms`,
-        error
+        error,
       );
       throw error;
     }
@@ -90,7 +92,7 @@ export class OptimizedPrismicClient {
         const result = await this.client.getByUID(type as any, uid, options);
         PrismicPerformanceMonitor.setCached(cacheKey, result);
         return result;
-      }
+      },
     );
   }
 
@@ -108,19 +110,19 @@ export class OptimizedPrismicClient {
         const result = await this.client.getAllByType(type as any, options);
         PrismicPerformanceMonitor.setCached(cacheKey, result);
         return result;
-      }
+      },
     );
   }
 
   async getByID<T = any>(id: string, options: any = {}) {
     return PrismicPerformanceMonitor.measureFetch(`getByID(${id})`, () =>
-      this.client.getByID(id, options)
+      this.client.getByID(id, options),
     );
   }
 
   async getSingle<T = any>(type: string, options: any = {}) {
     return PrismicPerformanceMonitor.measureFetch(`getSingle(${type})`, () =>
-      this.client.getSingle(type as any, options)
+      this.client.getSingle(type as any, options),
     );
   }
 

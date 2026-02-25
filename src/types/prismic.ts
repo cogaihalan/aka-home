@@ -77,21 +77,20 @@ export interface PrismicCategory extends PrismicDocument {
   };
 }
 
-// Blog post content type
+// Blog post content type (matches customtypes/blog_post)
 export interface PrismicBlogPost extends PrismicDocument {
   type: "blog_post";
   data: {
     title: string;
-    slug: string;
-    content: any; // Rich text content
-    excerpt: string;
+    excerpt?: string;
     featured_image?: {
       url: string;
-      alt: string;
+      alt?: string;
     };
-    author: string;
-    published_date: string;
-    tags: string[];
+    content: any; // Rich text (StructuredText)
+    author?: string;
+    published_date?: string;
+    tags?: Array<{ tag?: string }>; // Prismic Group field
     meta_title?: string;
     meta_description?: string;
   };

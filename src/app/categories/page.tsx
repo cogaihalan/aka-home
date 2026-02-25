@@ -13,13 +13,9 @@ export default function CategoriesPage() {
   return (
     <>
       <HeroBanner
-        title="Danh mục"
-        description="Khám phá các danh mục sản phẩm"
         imageUrl="/assets/banner-products.jpg"
         mobileImageUrl="/assets/banner-products-mobile.jpg"
-        verticalPos="bottom"
-        horizontalPos="left"
-        overlayOpacity={30}
+        overlayOpacity={0}
       />
       <Suspense fallback={null}>
         <CategoryListingPage />
