@@ -12,10 +12,10 @@ export const routes = [
 export function createPrismicClient(config = {}) {
   const client = createClient(repositoryName, {
     routes,
-    fetchOptions: 
+    fetchOptions:
       process.env.NODE_ENV === "production"
-          ? { next: { revalidate: 60 } }
-          : { next: { revalidate: 0 } },
+        ? { next: { tags: ["prismic"] }, cache: "force-cache" }
+        : { next: { revalidate: 0 } },
     ...config,
   });
 
