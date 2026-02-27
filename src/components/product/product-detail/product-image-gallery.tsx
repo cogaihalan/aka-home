@@ -5,8 +5,11 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import Glider from "react-glider";
+import { Swiper, SwiperSlide } from "swiper/react";
+import type { Swiper as SwiperType } from "swiper";
 import { Fancybox } from "@fancyapps/ui";
+
+import "swiper/css";
 
 interface ProductImage {
   id: number;
@@ -25,7 +28,7 @@ export const ProductImageGallery = memo(function ProductImageGallery({
   className,
 }: ProductImageGalleryProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const mainGliderRef = useRef<any>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
   const [isLgScreen, setIsLgScreen] = useState(false);
 
@@ -81,27 +84,21 @@ export const ProductImageGallery = memo(function ProductImageGallery({
 
   const handleSlideChange = useCallback((index: number) => {
     setCurrentSlide(index);
-    if (mainGliderRef.current) {
-      mainGliderRef.current.scrollItem(index);
-    }
+    swiperRef.current?.slideTo(index);
   }, []);
 
   const handlePrevious = useCallback(() => {
     const newIndex =
       currentSlide > 0 ? currentSlide - 1 : sortedImages.length - 1;
     setCurrentSlide(newIndex);
-    if (mainGliderRef.current) {
-      mainGliderRef.current.scrollItem("prev");
-    }
+    swiperRef.current?.slideTo(newIndex);
   }, [currentSlide, sortedImages.length]);
 
   const handleNext = useCallback(() => {
     const newIndex =
       currentSlide < sortedImages.length - 1 ? currentSlide + 1 : 0;
     setCurrentSlide(newIndex);
-    if (mainGliderRef.current) {
-      mainGliderRef.current.scrollItem("next");
-    }
+    swiperRef.current?.slideTo(newIndex);
   }, [currentSlide, sortedImages.length]);
 
   if (!images || images.length === 0) {
@@ -125,27 +122,19 @@ export const ProductImageGallery = memo(function ProductImageGallery({
       className={cn("space-y-4 product-image-gallery", className)}
     >
       <div className="relative group">
-        <Glider
-          ref={mainGliderRef}
-          hasArrows={false}
-          hasDots={false}
-          slidesToShow={1}
-          slidesToScroll={1}
-          scrollLock={true}
-          duration={0.5}
-          draggable={true}
-          dragVelocity={1.5}
-          scrollLockDelay={250}
-          rewind={false}
-          onSlideVisible={(glider: any) => {
-            if (glider && typeof glider.slide === "number") {
-              setCurrentSlide(glider.slide);
-            }
+        <Swiper
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
           }}
-          className="glider-container"
+          slidesPerView={1}
+          slidesPerGroup={1}
+          speed={500}
+          grabCursor
+          onSlideChange={(swiper) => setCurrentSlide(swiper.activeIndex)}
+          className="product-image-gallery-swiper !overflow-hidden rounded-lg"
         >
           {sortedImages.map((image, index) => (
-            <div key={image.id} className="glider-slide">
+            <SwiperSlide key={image.id} className="!h-auto">
               <div className="bg-muted rounded-lg overflow-hidden transform transition-all duration-300 ease-out relative group min-h-[300px] max-h-[500px] flex items-center justify-center">
                 <a
                   href={image.url}
@@ -161,7 +150,7 @@ export const ProductImageGallery = memo(function ProductImageGallery({
                       e.stopPropagation();
                       return;
                     }
-                    // Allow touch events to propagate to glider for swiping
+                    // Allow touch events to propagate to swiper for swiping
                     // Only prevent default if it's a click (not a drag)
                     if (e.detail === 0) {
                       // This is likely a programmatic click, allow it
@@ -191,7 +180,7 @@ export const ProductImageGallery = memo(function ProductImageGallery({
                       e.stopPropagation();
                       // Trigger the Fancybox lightbox by clicking the anchor element
                       const anchorElement = e.currentTarget
-                        .closest(".glider-slide")
+                        .closest(".swiper-slide")
                         ?.querySelector(
                           "a[data-fancybox]",
                         ) as HTMLAnchorElement;
@@ -204,9 +193,9 @@ export const ProductImageGallery = memo(function ProductImageGallery({
                   </Button>
                 </div>
               </div>
-            </div>
+            </SwiperSlide>
           ))}
-        </Glider>
+        </Swiper>
 
         {/* Navigation Arrows */}
         {sortedImages.length > 1 && (

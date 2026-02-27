@@ -246,7 +246,13 @@ export class PrismicApiService {
       this.client.getAllByType("page", {
         fetchOptions: { next: { revalidate: 0 } },
       }),
-      this.client.getAllByType("category", {
+      this.client.getAllByType("mega_menu", {
+        fetchOptions: { next: { revalidate: 0 } },
+      }),
+      this.client.getAllByType("blog_post", {
+        fetchOptions: { next: { revalidate: 0 } },
+      }),
+      this.client.getAllByType("homepage", {
         fetchOptions: { next: { revalidate: 0 } },
       }),
     ]);

@@ -4,7 +4,7 @@ import { isFilled, Content } from "@prismicio/client";
 import { SliceComponentProps } from "@prismicio/react";
 import { PrismicNextImage } from "@prismicio/next";
 import { HeadingField, RichTextField } from "@/components/prismic/fields";
-import { GliderContainer } from "@/components/ui/glider-container";
+import { SwiperContainer } from "@/components/ui/swiper-container";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
@@ -20,17 +20,17 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
-  const gliderRef = useRef<any>(null);
+  const swiperRef = useRef<any>(null);
   const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Auto-play functionality
   useEffect(() => {
     if (autoPlay && layout === "carousel" && images.length > 0) {
       autoPlayTimerRef.current = setInterval(() => {
-        setCurrentSlide((prev) => (prev + 1) % images.length);
-        if (gliderRef.current) {
-          gliderRef.current.scrollItem((currentSlide + 1) % images.length);
-        }
+        const currentIndex = swiperRef.current?.activeIndex ?? 0;
+        const nextIndex = (currentIndex + 1) % images.length;
+        setCurrentSlide(nextIndex);
+        swiperRef.current?.slideTo(nextIndex);
       }, autoPlayInterval);
 
       return () => {
@@ -39,7 +39,7 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
         }
       };
     }
-  }, [autoPlay, layout, images.length, autoPlayInterval, currentSlide]);
+  }, [autoPlay, layout, images.length, autoPlayInterval]);
 
   const openModal = (index: number) => {
     setModalImageIndex(index);
@@ -107,15 +107,13 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
 
             {/* Main Carousel */}
             <div className="relative mb-4">
-              <GliderContainer
-                ref={gliderRef}
+              <SwiperContainer
+                ref={swiperRef}
                 settings={{
                   slidesToShow: 1,
                   slidesToScroll: 1,
-                  draggable: true,
                   duration: 0.8,
-                  autoPlay: false, // We handle autoPlay manually
-                  onSlideVisible: (event: any) => {
+                  onSlideVisible: (event) => {
                     if (event && typeof event.slide === "number") {
                       setCurrentSlide(event.slide);
                     }
@@ -158,7 +156,7 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
                     )}
                   </div>
                 ))}
-              </GliderContainer>
+              </SwiperContainer>
 
               {/* Custom Navigation Arrows */}
               {showNavigation && images.length > 2 && (
@@ -169,9 +167,7 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
                       const prev =
                         (currentSlide - 1 + images.length) % images.length;
                       setCurrentSlide(prev);
-                      if (gliderRef.current) {
-                        gliderRef.current.scrollItem(prev);
-                      }
+                      swiperRef.current?.slideTo(prev);
                     }}
                     className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/90 hover:bg-white shadow-lg transition-all duration-300 ease-in-out hover:scale-110"
                     aria-label="Previous image"
@@ -183,9 +179,7 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
                     onClick={() => {
                       const next = (currentSlide + 1) % images.length;
                       setCurrentSlide(next);
-                      if (gliderRef.current) {
-                        gliderRef.current.scrollItem(next);
-                      }
+                      swiperRef.current?.slideTo(next);
                     }}
                     className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/90 hover:bg-white shadow-lg transition-all duration-300 ease-in-out hover:scale-110"
                     aria-label="Next image"
@@ -204,9 +198,7 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
                     key={index}
                     onClick={() => {
                       setCurrentSlide(index);
-                      if (gliderRef.current) {
-                        gliderRef.current.scrollItem(index);
-                      }
+                      swiperRef.current?.slideTo(index);
                     }}
                     className={cn(
                       "flex-shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-lg overflow-hidden border-2 transition-all duration-300 ease-in-out",

@@ -7,17 +7,10 @@ import {
   ReactNode,
   useCallback,
   memo,
-  lazy,
-  Suspense,
 } from "react";
 import { Product } from "@/types";
+import { QuickViewModal } from "@/components/product/quick-view/quick-view-modal";
 
-// Lazy load the modal for better performance
-const QuickViewModal = lazy(() =>
-  import("@/components/product/quick-view/quick-view-modal").then((module) => ({
-    default: module.QuickViewModal,
-  }))
-);
 
 interface QuickViewContextType {
   openQuickView: (product: Product) => void;

@@ -4,7 +4,7 @@ import { isFilled } from "@prismicio/client";
 import { SliceComponentProps } from "@prismicio/react";
 import { HeadingField, RichTextField } from "@/components/prismic/fields";
 import { AnimatedContainer } from "@/components/ui/animated-container";
-import { GliderContainer } from "@/components/ui/glider-container";
+import { SwiperContainer } from "@/components/ui/swiper-container";
 import { ProductCard } from "@/components/product";
 import { ProductCardSkeleton } from "@/components/product/product-card-skeleton";
 import { storefrontCatalogService } from "@/lib/api/services/storefront/catalog";
@@ -18,7 +18,7 @@ const ProductCarousel: FC<ProductCarouselProps> = ({ slice }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const gliderRef = React.useRef<any>(null);
+  const swiperRef = React.useRef<any>(null);
 
   // Configuration from slice
   const productCount = slice.primary.productCount || 10;
@@ -174,29 +174,23 @@ const ProductCarousel: FC<ProductCarouselProps> = ({ slice }) => {
         )}
 
         {/* Product Carousel */}
-        <GliderContainer
-          ref={gliderRef}
+        <SwiperContainer
+          ref={swiperRef}
           settings={{
             hasArrows: showNavigation,
             hasDots: showDots,
-            slidesToShow: itemsPerViewMobile,
-            slidesToScroll: 1,
-            responsive: [
-              {
-                breakpoint: 1280,
-                settings: {
-                  slidesToShow: itemsPerView,
-                },
+            slidesPerView: itemsPerViewMobile,
+            slidesPerGroup: 1,
+            breakpoints: {
+              1280: {
+                slidesPerView: itemsPerView,
               },
-              {
-                breakpoint: 768,
-                settings: {
-                  slidesToShow: itemsPerViewTablet,
-                },
+              768: {
+                slidesPerView: itemsPerViewTablet,
               },
-            ],
+            },
           }}
-          className="product-carousel"
+          className="product-carousel !overflow-hidden"
         >
           {products.map((product, index) => (
             <AnimatedContainer
@@ -213,7 +207,7 @@ const ProductCarousel: FC<ProductCarouselProps> = ({ slice }) => {
               />
             </AnimatedContainer>
           ))}
-        </GliderContainer>
+        </SwiperContainer>
       </div>
     </section>
   );

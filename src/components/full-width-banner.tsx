@@ -2,8 +2,11 @@
 
 import { useRef, useState, useCallback, useEffect, useMemo, memo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Glider from "react-glider";
+import { Swiper, SwiperSlide } from "swiper/react";
+import type { Swiper as SwiperType } from "swiper";
 import { cn } from "@/lib/utils";
+
+import "swiper/css";
 import {
   SlideComponent,
   SlideVideoComponent,
@@ -15,7 +18,7 @@ const FullWidthBanner = memo(function FullWidthBanner({
   slides,
   className,
 }: FullWidthBannerProps) {
-  const gliderRef = useRef<any>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -105,13 +108,11 @@ const FullWidthBanner = memo(function FullWidthBanner({
 
   const goToSlide = useCallback(
     (index: number) => {
-      if (gliderRef.current && !isAnimating) {
+      if (swiperRef.current && !isAnimating) {
         setIsAnimating(true);
-        setTimeout(() => {
-          gliderRef.current.scrollItem(index);
-          setCurrentSlide(index);
-          setIsAnimating(false);
-        }, 100);
+        swiperRef.current.slideTo(index);
+        setCurrentSlide(index);
+        setTimeout(() => setIsAnimating(false), 500);
       }
     },
     [isAnimating],
@@ -138,29 +139,23 @@ const FullWidthBanner = memo(function FullWidthBanner({
       {!isLoaded && <LoadingSkeleton slideCount={bannerSlides.length} />}
 
       <div className={cn("absolute inset-0", !isLoaded && "opacity-0")}>
-        <Glider
-          ref={gliderRef}
-          draggable={true}
-          dragVelocity={1.5}
-          hasArrows={false}
-          hasDots={false}
-          slidesToShow={1}
-          slidesToScroll={1}
-          duration={1.2}
-          scrollLock={true}
-          scrollLockDelay={250}
-          rewind={false}
-          className="h-full"
-          onSlideVisible={(event: any) => {
-            setCurrentSlide(event.detail.slide);
+        <Swiper
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
           }}
+          slidesPerView={1}
+          slidesPerGroup={1}
+          speed={1200}
+          grabCursor
+          onSlideChange={(swiper) => setCurrentSlide(swiper.activeIndex)}
+          className="h-full w-full !overflow-hidden"
         >
           {bannerSlides.map((slide, slideIndex) => {
             const Component =
               slide.type === "video" ? SlideVideoComponent : SlideComponent;
             return (
-              <Component
-                key={slide.id}
+              <SwiperSlide key={slide.id} className="!h-full">
+                <Component
                 slide={slide}
                 slideIndex={slideIndex}
                 currentSlide={currentSlide}
@@ -169,9 +164,10 @@ const FullWidthBanner = memo(function FullWidthBanner({
                 loadedImages={loadedImages}
                 imageErrors={imageErrors}
               />
+              </SwiperSlide>
             );
           })}
-        </Glider>
+        </Swiper>
       </div>
 
       {/* Navigation Arrows */}

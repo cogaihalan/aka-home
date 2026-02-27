@@ -62,7 +62,7 @@ AKA Ecommerce is a comprehensive e-commerce solution featuring:
 - **Recharts** - Data visualization
 - **TanStack Table** - Data tables
 - **Kbar** - Command palette
-- **Glider.js** - Carousel/slider
+- **Swiper** - Carousel/slider
 - **date-fns** - Date utilities
 - **Web Vitals** - Performance monitoring
 

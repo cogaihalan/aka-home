@@ -1,84 +1,56 @@
-.glider-container {
+/* Swiper base styles - touch and overflow */
+.swiper-container {
   @apply overflow-hidden;
   touch-action: pan-x;
   -webkit-overflow-scrolling: touch;
 }
 
-.glider {
+.swiper {
   @apply overflow-hidden;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  touch-action: pan-x;
   -webkit-overflow-scrolling: touch;
 }
 
-.glider::-webkit-scrollbar {
-  @apply hidden;
-}
-
-.glider-contain,
-.glider-track {
-  @apply h-full;
-  touch-action: pan-x;
-  -webkit-overflow-scrolling: touch;
-}
-
-.glider-slide {
-  @apply min-h-[0] min-w-[0] transition-transform duration-300 ease-out;
+.swiper-slide {
+  @apply min-h-0 min-w-0 transition-transform duration-300 ease-out;
   touch-action: pan-x;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Glider Navigation Styles */
-.glider-prev,
-.glider-next {
-  @apply absolute top-2/5 text-[0px] before:bg-background hover:before:opacity-90 before:shadow-lg before:border before:border-border before:bg-no-repeat before:bg-center before:bg-cover before:content-[''] before:absolute before:top-0 before:w-10 before:h-10 before:rounded-full;
+/* Swiper Navigation - Product Carousel */
+.product-carousel .swiper-button-prev,
+.product-carousel .swiper-button-next {
+  @apply bg-background/90 hover:bg-background shadow-lg border border-border w-10 h-10 rounded-full;
 }
 
-.glider-prev:before {
-  background-image: url("/assets/icons/chevron-left.svg");
-  @apply left-4.5;
-}
-
-.glider-next:before {
-  background-image: url("/assets/icons/chevron-right.svg");
-  @apply right-4.5;
-}
-
-.glider-prev:hover,
-.glider-next:hover {
+.product-carousel .swiper-button-prev:hover,
+.product-carousel .swiper-button-next:hover {
   @apply bg-background shadow-xl;
 }
 
-/* Glider Dots Styles */
+.product-carousel .swiper-button-prev::after,
+.product-carousel .swiper-button-next::after {
+  @apply text-lg font-bold text-foreground;
+}
 
-.glider-dots {
-  @apply mt-4;
+/* Swiper Pagination - Product Carousel */
+.product-carousel .swiper-pagination-bullet {
+  @apply w-3 h-3 rounded-full bg-muted-foreground/30 hover:bg-muted-foreground/50;
+}
 
-  .glider-dot {
-    @apply w-3 h-3 rounded-full bg-muted-foreground/30 hover:bg-muted-foreground/50;
-  }
-
-  .glider-dot.active {
-    @apply bg-primary;
-  }
+.product-carousel .swiper-pagination-bullet-active {
+  @apply bg-primary;
 }
 
 /* Product Image Gallery Specific Styles */
-.product-image-gallery .glider-container {
+.product-image-gallery .product-image-gallery-swiper {
   @apply rounded-lg overflow-hidden;
 }
 
-.product-image-gallery .glider-slide {
+.product-image-gallery .swiper-slide {
   @apply px-0;
 }
 
-.product-image-gallery .glider-slide img {
-  @apply transition-all duration-500 ease-out;
-}
-
-/* Smooth transitions for product gallery */
-.product-image-gallery .glider-slide {
+.product-image-gallery .swiper-slide img {
   @apply transition-all duration-500 ease-out;
 }
 
@@ -95,84 +67,31 @@
   @apply scale-105;
 }
 
-/* Thumbnail slider specific styles */
-.product-image-gallery .glider-slide {
-  @apply px-0;
-}
-
-/* Thumbnail slider container */
-.product-image-gallery .glider-container {
-  @apply overflow-hidden;
-}
-
-/* Custom navigation arrows are now handled by GliderContainer component */
-
 /* Navigation arrow styles */
 .product-gallery-nav {
   @apply transition-opacity duration-200;
 }
 
-/* Thumbnail slider items - fit exactly to image */
-.product-image-gallery .glider-slide {
-  @apply flex-shrink-0;
-}
-
-/* Responsive adjustments */
-@media (max-width: 1023px) {
-  .glider-slide {
-    @apply px-0;
-  }
-}
-
-@media (min-width: 1025px) {
-  .glider-slide {
-    @apply px-4;
-  }
-
-  .product-image-gallery .glider-slide {
-    @apply px-0;
-  }
-}
-
-/* Product Carousel Specific Styles */
-.product-carousel .glider-container {
-  @apply overflow-hidden;
-}
-
-.product-carousel .glider-track {
-  @apply gap-3;
-}
-
-.product-carousel .glider-prev,
-.product-carousel .glider-next {
-  @apply bg-background/90 hover:bg-background shadow-lg border border-border;
-}
-
-.product-carousel .glider-prev:hover,
-.product-carousel .glider-next:hover {
-  @apply bg-background shadow-xl;
-}
-
-/* Image Gallery Carousel Specific Styles */
-.image-gallery-carousel .glider-container {
-  @apply overflow-hidden rounded-lg;
-}
-
-.product-carousel .glider-slide,
-.image-gallery-carousel .glider-slide,
+.image-gallery-carousel .swiper-slide,
 .image-gallery-slide {
   @apply px-0 transition-all duration-700 ease-in-out;
   will-change: transform;
 }
 
-.image-gallery-carousel .glider-slide img,
+.image-gallery-carousel .swiper-slide img,
 .image-gallery-slide img {
   @apply transition-all duration-700 ease-in-out;
   will-change: transform, opacity;
 }
 
-/* Smooth fade and slide effect for image gallery */
-.image-gallery-carousel .glider-track {
-  @apply transition-transform duration-700 ease-in-out;
-  will-change: transform;
+/* Image Gallery Carousel Specific Styles */
+.image-gallery-carousel .swiper-container {
+  @apply overflow-hidden rounded-lg;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1023px) {
+  .swiper-slide {
+    @apply px-0;
+  }
 }
