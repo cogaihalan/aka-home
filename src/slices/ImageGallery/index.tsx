@@ -110,22 +110,14 @@ const ImageGallery: FC<ImageGalleryProps> = ({ slice }) => {
               <SwiperContainer
                 ref={swiperRef}
                 settings={{
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                  slidesPerView: 1,
+                  slidesPerGroup: 1,
                   duration: 0.8,
-                  onSlideVisible: (event) => {
-                    if (event && typeof event.slide === "number") {
-                      setCurrentSlide(event.slide);
-                    }
-                  },
-                  responsive: [
-                    {
-                      breakpoint: 768,
-                      settings: {
-                        slidesToShow: 2,
-                      },
+                  breakpoints: {
+                    768: {
+                      slidesPerView: 2,
                     },
-                  ],
+                  },
                 }}
                 className="image-gallery-carousel"
                 slideClassName="image-gallery-slide"
