@@ -17,9 +17,21 @@
 }
 
 /* Swiper Navigation - Product Carousel */
+
+.product-carousel.swiper {
+  @apply pb-8;
+}
+
+
+
 .product-carousel .swiper-button-prev,
 .product-carousel .swiper-button-next {
   @apply bg-background/90 hover:bg-background shadow-lg border border-border w-10 h-10 rounded-full;
+}
+
+.product-carousel .swiper-button-prev .swiper-navigation-icon,
+.product-carousel .swiper-button-next .swiper-navigation-icon {
+  @apply size-4 text-black;
 }
 
 .product-carousel .swiper-button-prev:hover,
@@ -33,12 +45,16 @@
 }
 
 /* Swiper Pagination - Product Carousel */
+.product-carousel .swiper-pagination.swiper-pagination-bullets {
+  @apply !bottom-0;
+}
+
 .product-carousel .swiper-pagination-bullet {
-  @apply w-3 h-3 rounded-full bg-muted-foreground/30 hover:bg-muted-foreground/50;
+  @apply w-3 h-3 rounded-full bg-foreground/30 hover:bg-btn-primary;
 }
 
 .product-carousel .swiper-pagination-bullet-active {
-  @apply bg-primary;
+  @apply bg-btn-primary;
 }
 
 /* Product Image Gallery Specific Styles */
