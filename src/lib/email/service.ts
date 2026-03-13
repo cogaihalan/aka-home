@@ -1,6 +1,7 @@
 import { resend, FROM_EMAIL, FROM_NAME } from "./resend";
 import { render } from "@react-email/render";
 import { OrderConfirmationEmail } from "./templates/order-confirmation";
+import { AdminOrderNotificationEmail } from "./templates/admin-order-notification";
 import { OrderStatusUpdateEmail } from "./templates/order-status-update";
 import { PaymentNotificationEmail } from "./templates/payment-notification";
 import { ShippedOrderEmail } from "./templates/shipped-order";
@@ -102,6 +103,38 @@ export class EmailService {
       return { success: true, messageId: result.data?.id };
     } catch (error) {
       console.error("Error sending order confirmation email:", error);
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : "Unknown error" 
+      };
+    }
+  }
+
+  /**
+   * Send admin notification when customer places order successfully
+   */
+  async sendAdminOrderNotification(params: SendOrderConfirmationParams): Promise<{ success: boolean; messageId?: string; error?: string }> {
+    const ADMIN_EMAIL = "sales@phulocgroup.vn";
+
+    try {
+      const html = await render(
+        AdminOrderNotificationEmail({
+          order: params.order,
+          customerName: params.customerName,
+          customerEmail: params.customerEmail,
+        })
+      );
+
+      const result = await resend.emails.send({
+        from: `${FROM_NAME} <${FROM_EMAIL}>`,
+        to: ADMIN_EMAIL,
+        subject: `🛒 Đơn hàng mới #${params.order.code} - ${params.customerName}`,
+        html,
+      });
+
+      return { success: true, messageId: result.data?.id };
+    } catch (error) {
+      console.error("Error sending admin order notification email:", error);
       return { 
         success: false, 
         error: error instanceof Error ? error.message : "Unknown error" 

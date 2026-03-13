@@ -14,22 +14,34 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await emailService.sendOrderConfirmation({
-      order: order as Order,
-      customerName,
-      customerEmail,
-    });
+    const [customerResult, adminResult] = await Promise.all([
+      emailService.sendOrderConfirmation({
+        order: order as Order,
+        customerName,
+        customerEmail,
+      }),
+      emailService.sendAdminOrderNotification({
+        order: order as Order,
+        customerName,
+        customerEmail,
+      }),
+    ]);
 
-    if (!result.success) {
+    if (!customerResult.success) {
       return NextResponse.json(
-        { error: result.error || "Failed to send email" },
+        { error: customerResult.error || "Failed to send order confirmation email" },
         { status: 500 }
       );
     }
 
+    if (!adminResult.success) {
+      console.error("Failed to send admin notification email:", adminResult.error);
+      // Don't fail the request - admin notification is secondary
+    }
+
     return NextResponse.json({ 
       success: true, 
-      messageId: result.messageId 
+      messageId: customerResult.messageId 
     });
   } catch (error) {
     console.error("Error in order confirmation email API:", error);

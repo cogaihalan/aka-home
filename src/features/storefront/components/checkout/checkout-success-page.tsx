@@ -118,12 +118,14 @@ export default function CheckoutSuccessPage(props: OrderDataProps) {
             <ContactItem
               icon={<Mail className="h-5 w-5 text-muted-foreground" />}
               title="Email hỗ trợ"
-              value="support@akastore.com"
+              value="info@akahome.vn"
+              type="email"
             />
             <ContactItem
               icon={<Phone className="h-5 w-5 text-muted-foreground" />}
               title="Hotline"
-              value="1900 1234"
+              value="091 212 0880"
+              type="phone"
             />
           </div>
         </CardContent>
@@ -190,15 +192,22 @@ interface ContactItemProps {
   icon: React.ReactNode;
   title: string;
   value: string;
+  type: "email" | "phone" | "address";
 }
 
-function ContactItem({ icon, title, value }: ContactItemProps) {
+function ContactItem({ icon, title, value, type }: ContactItemProps) {
   return (
     <div className="flex items-center gap-3">
       {icon}
       <div>
         <p className="font-medium">{title}</p>
-        <p className="text-sm text-muted-foreground">{value}</p>
+        {type === "email" ? (
+          <a href={`mailto:${value}`} className="text-sm text-muted-foreground">{value}</a>
+        ) : type === "phone" ? (
+          <a href={`tel:${value}`} className="text-sm text-muted-foreground">{value}</a>
+        ) : (
+          <p className="text-sm text-muted-foreground">{value}</p>
+        )}
       </div>
     </div>
   );
