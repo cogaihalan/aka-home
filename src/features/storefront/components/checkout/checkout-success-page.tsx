@@ -7,6 +7,13 @@ import { Price } from "@/components/ui/price";
 import { CheckCircle, Package, Mail, Phone } from "lucide-react";
 import Link from "next/link";
 import { Order } from "@/types";
+import { useEffect, useRef } from "react";
+
+declare global {
+  interface Window {
+    fbq?: (...args: unknown[]) => void;
+  }
+}
 
 interface OrderDataProps {
   order: Order | null;
@@ -14,6 +21,34 @@ interface OrderDataProps {
 
 export default function CheckoutSuccessPage(props: OrderDataProps) {
   const { order } = props;
+  const trackedOrders = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (!order || typeof window === "undefined" || !window.fbq) {
+      return;
+    }
+
+    const orderKey = order.code || String(order.id);
+    if (trackedOrders.current.has(orderKey)) {
+      return;
+    }
+
+    trackedOrders.current.add(orderKey);
+
+    const totalItems = order.items.reduce(
+      (sum, item) => sum + item.quantity,
+      0,
+    );
+
+    window.fbq("track", "Purchase", {
+      currency: "VND",
+      value: Number(order.finalAmount || 0),
+      content_type: "product",
+      content_ids: order.items.map((item) => String(item.productId)),
+      num_items: totalItems,
+      order_id: order.code,
+    });
+  }, [order]);
 
   return (
     <div className="max-w-4xl mx-auto py-8 lg:py-16 space-y-6">

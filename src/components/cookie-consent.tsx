@@ -76,6 +76,9 @@ export function CookieConsentBanner() {
           });
           console.log("Cookie consent accepted - Analytics enabled");
         }
+        if (typeof window !== "undefined" && window.fbq) {
+          window.fbq("consent", "grant");
+        }
       }}
       onDecline={() => {
         if (typeof window !== "undefined" && window.gtag) {
@@ -84,6 +87,9 @@ export function CookieConsentBanner() {
             ad_storage: "denied",
           });
           console.log("Cookie consent declined - Analytics disabled");
+        }
+        if (typeof window !== "undefined" && window.fbq) {
+          window.fbq("consent", "revoke");
         }
       }}
     >

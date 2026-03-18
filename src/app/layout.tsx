@@ -11,6 +11,7 @@ import "./theme.css";
 import ConditionalLayout from "@/components/layout/conditional-layout";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { GoogleAnalyticsComponent } from "@/components/google-analytics";
+import { MetaPixelComponent } from "@/components/meta-pixel";
 import { WebVitalsReporter } from "@/components/web-vitals";
 
 const META_THEME_COLORS = {
@@ -111,6 +112,7 @@ export default async function RootLayout({
         </ThemeProvider>
 
         <GoogleAnalyticsComponent />
+        <MetaPixelComponent />
         <WebVitalsReporter />
       </body>
     </html>
