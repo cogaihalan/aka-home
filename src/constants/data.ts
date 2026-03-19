@@ -19,14 +19,6 @@ export const navItems: NavItem[] = [
     items: [],
   },
   {
-    title: "Người dùng",
-    url: "/admin/users",
-    icon: "users",
-    shortcut: ["u", "u"],
-    isActive: false,
-    items: [],
-  },
-  {
     title: "Đơn hàng",
     url: "/admin/orders",
     icon: "package",

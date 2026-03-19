@@ -207,21 +207,6 @@ export function MiniAuthDropdown({ className }: MiniAuthDropdownProps) {
                   <span>Địa chỉ</span>
                 </Link>
               </Button>
-
-              <Button
-                asChild
-                variant="ghost"
-                className="w-full justify-start h-10 px-3"
-                onClick={closeDropdown}
-              >
-                <Link
-                  href="/account/submissions"
-                  className="flex items-center gap-3"
-                >
-                  <Award className="w-4 h-4" />
-                  <span>Bài dự thi</span>
-                </Link>
-              </Button>
             </div>
           </div>
 

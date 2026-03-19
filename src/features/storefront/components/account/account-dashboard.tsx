@@ -53,27 +53,27 @@ export default function AccountDashboard({ orders }: { orders: Order[] }) {
         <p className="text-muted-foreground text-lg">
           Từ bảng điều khiển tài khoản của bạn, bạn có thể dễ dàng kiểm tra &
           xem đơn hàng{" "}
-          <Link href="/account/orders" className="text-red-600 hover:underline">
+          <Link href="/account/orders" className="hover:underline">
             Gần đây
           </Link>
           , manage your{" "}
           <Link
             href="/account/addresses"
-            className="text-red-600 hover:underline"
+            className="hover:underline"
           >
             Địa chỉ giao hàng và thanh toán
           </Link>{" "}
           và chỉnh sửa{" "}
           <Link
             href="/account/profile"
-            className="text-red-600 hover:underline"
+            className="hover:underline"
           >
             Mật khẩu
           </Link>{" "}
           và{" "}
           <Link
             href="/account/profile"
-            className="text-red-600 hover:underline"
+            className="hover:underline"
           >
             Chi tiết tài khoản
           </Link>
@@ -126,7 +126,7 @@ export default function AccountDashboard({ orders }: { orders: Order[] }) {
             </div>
             <Button
               variant="outline"
-              className="w-full border-red-600 text-red-600 hover:bg-red-50"
+              className="w-full"
               onClick={() => router.push("/account/profile")}
             >
               <Edit className="mr-2 h-4 w-4" />
@@ -178,7 +178,7 @@ export default function AccountDashboard({ orders }: { orders: Order[] }) {
             </div>
             <Button
               variant="outline"
-              className="w-full border-red-600 text-red-600 hover:bg-red-50"
+              className="w-full"
               onClick={() => router.push("/account/addresses")}
             >
               <Edit className="mr-2 h-4 w-4" />
@@ -196,7 +196,7 @@ export default function AccountDashboard({ orders }: { orders: Order[] }) {
           </CardTitle>
           <button
             onClick={() => router.push("/account/orders")}
-            className="text-red-600 hover:underline flex items-center"
+            className="hover:underline flex items-center"
           >
             Xem tất cả <ArrowRight className="ml-1 h-4 w-4" />
           </button>
@@ -234,7 +234,7 @@ export default function AccountDashboard({ orders }: { orders: Order[] }) {
                         onClick={() =>
                           router.push(`/account/orders/${order.id}`)
                         }
-                        className="text-red-600 hover:underline flex items-center"
+                        className="hover:underline flex items-center"
                       >
                         Xem chi tiết <ArrowRight className="ml-1 h-4 w-4" />
                       </button>

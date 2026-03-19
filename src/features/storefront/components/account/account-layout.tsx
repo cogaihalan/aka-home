@@ -114,7 +114,7 @@ export default function AccountLayout({ children }: AccountLayoutProps) {
                   className={cn(
                     "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
                     isActive
-                      ? "bg-primary text-white [&>svg]:text-white"
+                      ? "bg-btn-primary text-btn-primary-text [&>svg]:text-btn-primary-text"
                       : "hover:bg-muted",
                     "hover:no-underline",
                   )}
@@ -158,7 +158,7 @@ export default function AccountLayout({ children }: AccountLayoutProps) {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
                   isActive
-                    ? "bg-primary text-white pointer-events-none"
+                    ? "bg-btn-primary text-btn-primary-text pointer-events-none"
                     : "hover:bg-muted",
                 )}
               >

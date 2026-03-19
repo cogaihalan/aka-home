@@ -16,7 +16,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   // Persisting the sidebar state in the cookie.
-  let defaultOpen = false;
+  let defaultOpen = true;
 
   // Only read cookies in non-static contexts
   if (
