@@ -13,7 +13,7 @@ import { AffiliateApprovalStatus, AffiliateAccount } from "@/types";
 import type { AffiliateApproval } from "@/types";
 import { Price } from "@/components/ui/price";
 import { Button } from "@/components/ui/button";
-import { storefrontServerAffiliateApprovalService } from "@/lib/api/services/storefront/extensions/affiliate/affiliate-approval";
+import { storefrontAffiliateApprovalService } from "@/lib/api/services/storefront/extensions/affiliate/client/affiliate-approval-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -68,7 +68,7 @@ export default function AffiliateAccountPage({
   const handleCreateAffiliateApproval = async () => {
     setIsSubmittingApproval(true);
     try {
-      await storefrontServerAffiliateApprovalService.createAffiliateApproval();
+      await storefrontAffiliateApprovalService.createAffiliateApproval();
       toast.success("Yêu cầu affiliate đã được gửi thành công");
       router.refresh();
     } catch (error) {
