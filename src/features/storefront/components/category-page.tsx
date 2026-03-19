@@ -33,7 +33,6 @@ import {
   useCategories,
   useAppLoading,
 } from "@/components/providers/app-provider";
-import { log } from "console";
 
 interface CategoryPageProps {
   categorySlug: string;
@@ -197,8 +196,6 @@ export default function CategoryPage({ categorySlug }: CategoryPageProps) {
   const handlePageChange = (page: number) => {
     updatePage(page);
   };
-
-  console.log(categorySlug);
 
   // Don't render anything if category is invalid (will redirect)
   const categoryId = getCategoryIdFromSlug(categorySlug);

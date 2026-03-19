@@ -12,6 +12,11 @@ import { CheckCircle, XCircle, Clock } from "lucide-react";
 import { AffiliateApprovalStatus, AffiliateAccount } from "@/types";
 import type { AffiliateApproval } from "@/types";
 import { Price } from "@/components/ui/price";
+import { Button } from "@/components/ui/button";
+import { storefrontServerAffiliateApprovalService } from "@/lib/api/services/storefront/extensions/affiliate/affiliate-approval";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function AffiliateAccountPage({
   approval,
@@ -20,6 +25,9 @@ export default function AffiliateAccountPage({
   approval: AffiliateApproval;
   account: AffiliateAccount;
 }) {
+  const router = useRouter();
+  const [isSubmittingApproval, setIsSubmittingApproval] = useState(false);
+
   const getStatusConfig = (status: AffiliateApprovalStatus) => {
     switch (status) {
       case AffiliateApprovalStatus.APPROVED:
@@ -54,6 +62,20 @@ export default function AffiliateAccountPage({
           description:
             "Bạn chưa đăng ký làm affiliate. Vui lòng đăng ký để bắt đầu.",
         };
+    }
+  };
+
+  const handleCreateAffiliateApproval = async () => {
+    setIsSubmittingApproval(true);
+    try {
+      await storefrontServerAffiliateApprovalService.createAffiliateApproval();
+      toast.success("Yêu cầu affiliate đã được gửi thành công");
+      router.refresh();
+    } catch (error) {
+      console.error("Error creating affiliate approval:", error);
+      toast.error("Không thể gửi yêu cầu affiliate. Vui lòng thử lại.");
+    } finally {
+      setIsSubmittingApproval(false);
     }
   };
 
@@ -99,6 +121,15 @@ export default function AffiliateAccountPage({
             <p className="text-sm text-muted-foreground">
               {statusConfig.description}
             </p>
+            {!approval && (
+              <Button
+                type="button"
+                onClick={handleCreateAffiliateApproval}
+                disabled={isSubmittingApproval}
+              >
+                {isSubmittingApproval ? "Đang gửi yêu cầu..." : "Gửi yêu cầu affiliate"}
+              </Button>
+            )}
             {approval?.reason && (
               <div className="mt-2 p-3 bg-muted rounded-md">
                 <p className="text-sm font-medium mb-1">Lý do:</p>

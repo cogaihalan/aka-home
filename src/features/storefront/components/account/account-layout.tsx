@@ -42,7 +42,6 @@ const accountNav: AccountNavItem[] = [
   { label: "Đơn hàng", href: "/account/orders", icon: Package },
   { label: "Địa chỉ", href: "/account/addresses", icon: MapPin },
   { label: "Hồ sơ", href: "/account/profile", icon: Settings },
-  { label: "Bài dự thi", href: "/account/submissions", icon: Award },
   {
     label: "Affiliate",
     href: "/account/affiliate",

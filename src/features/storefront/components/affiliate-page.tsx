@@ -91,11 +91,6 @@ export default function AffiliatePage() {
             phát triển cùng nhau.
           </p>
         </div>
-        <div className="flex justify-center">
-          <Button asChild size="lg">
-            <Link href="/auth/sign-up">Tham gia ngay</Link>
-          </Button>
-        </div>
       </section>
 
       {/* Benefits Section */}
