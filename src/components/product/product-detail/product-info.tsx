@@ -24,6 +24,7 @@ import {
 import { cn, isProductOutOfStock, getStockStatusText } from "@/lib/utils";
 import { Product } from "@/types";
 import { ProductRating } from "@/components/ui/product-rating";
+import { generateProductUrl } from "@/lib/utils/slug";
 
 interface ProductInfoProps {
   product: Product & {
@@ -92,21 +93,22 @@ export const ProductInfo = memo(function ProductInfo({
       addToWishlist,
       removeFromWishlist,
       router,
-    ]
+    ],
   );
 
   const handleShare = useCallback(() => {
     if (navigator.share) {
       navigator.share({
         title: product.name,
-        text: product.shortDescription,
-        url: window.location.href,
+        url: generateProductUrl(product.name, product.id),
       });
     } else {
       // Fallback to clipboard
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(
+        generateProductUrl(product.name, product.id),
+      );
     }
-  }, [product.name, product.shortDescription]);
+  }, [product.name, product.id]);
 
   const handleQuantityChange = useCallback(
     (value: string) => {
@@ -116,7 +118,7 @@ export const ProductInfo = memo(function ProductInfo({
         setQuantity(Math.min(numValue, maxQuantity));
       }
     },
-    [product.stockCount]
+    [product.stockCount],
   );
 
   return (
@@ -152,7 +154,9 @@ export const ProductInfo = memo(function ProductInfo({
           />
         </div>
 
-        {!!product.shortDescription && <p className="text-muted-foreground">{product.shortDescription}</p>}
+        {!!product.shortDescription && (
+          <p className="text-muted-foreground">{product.shortDescription}</p>
+        )}
       </div>
 
       <Separator />
@@ -238,7 +242,7 @@ export const ProductInfo = memo(function ProductInfo({
             size="lg"
             className={cn(
               "flex-1",
-              isOutOfStock && "opacity-50 cursor-not-allowed"
+              isOutOfStock && "opacity-50 cursor-not-allowed",
             )}
             onClick={onAddToCart}
             disabled={isProductLoading(product.id) || isOutOfStock}
@@ -262,7 +266,7 @@ export const ProductInfo = memo(function ProductInfo({
             onClick={handleWishlistToggle}
             className={cn(
               isWishlisted &&
-                "bg-red-50 border-red-200 text-red-600 hover:bg-red-100"
+                "bg-red-50 border-red-200 text-red-600 hover:bg-red-100",
             )}
           >
             <Heart className={cn("h-4 w-4", isWishlisted && "fill-current")} />
@@ -277,7 +281,7 @@ export const ProductInfo = memo(function ProductInfo({
           size="lg"
           className={cn(
             "w-full",
-            isOutOfStock && "opacity-50 cursor-not-allowed"
+            isOutOfStock && "opacity-50 cursor-not-allowed",
           )}
           onClick={handleBuyNow}
           disabled={isProductLoading(product.id) || isOutOfStock}
