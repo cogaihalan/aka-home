@@ -47,15 +47,17 @@ export interface AffiliateApproval {
 
 // Affiliate Links
 export interface AffiliateLink {
-    id: number;
-    name: string;
-    code: string;
-    targetUrl: string;
-    campaignName: string;
-    activeByAffiliate: boolean;
-    activeByAdmin: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+  id: number;
+  name: string;
+  code: string;
+  targetUrl: string;
+  campaignName: string;
+  activeByAffiliate: boolean;
+  activeByAdmin: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  link: string;
+  clickCount: number;
 }
 
 // Affiliate Payout Method
@@ -70,7 +72,7 @@ export interface AffiliatePayoutMethod {
   status: "ACTIVE" | "INACTIVE" | "DELETED";
   createdAt: Date;
   updatedAt: Date;
-  }
+}
 
 // Affiliate Withdrawal
 export interface AffiliateWithdrawal {

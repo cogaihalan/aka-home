@@ -90,6 +90,34 @@ export function createColumns(
       },
     },
     {
+      id: "link",
+      accessorKey: "link",
+      header: "Link",
+      cell: ({ row }) => {
+        const link = row.getValue("link") as string;
+        return (
+          <div className="flex items-center gap-2 max-w-2xs">
+            <Link
+              href={link}
+              target="_blank"
+              className="text-sm text-fg-primary hover:underline truncate"
+            >
+              {link}
+            </Link>
+          </div>
+        );
+      },
+    },
+    {
+      id: "clickCount",
+      accessorKey: "clickCount",
+      header: "Số lần click",
+      cell: ({ row }) => {
+        const clickCount = row.getValue("clickCount") as number;
+        return <div className="text-sm">{clickCount}</div>;
+      },
+    },
+    {
       id: "status",
       accessorKey: "activeByAffiliate",
       header: "Trạng thái",
