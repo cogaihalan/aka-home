@@ -14,7 +14,7 @@ export function createPrismicClient(config = {}) {
     routes,
     fetchOptions:
       process.env.NODE_ENV === "production"
-        ? { next: { tags: ["prismic"] }, cache: "force-cache" }
+        ? { next: { tags: ["prismic"], revalidate: 3600 } }
         : { next: { revalidate: 0 } },
     ...config,
   });

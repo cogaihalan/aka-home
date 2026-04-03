@@ -81,7 +81,7 @@ export const columns: ColumnDef<PrismicContent>[] = [
             variant="outline"
             onClick={() =>
               window.open(
-                `${process.env.NEXT_PUBLIC_PRISMIC_URL}/builder/pages/${page.id}`,
+                `${process.env.NEXT_PUBLIC_PRISMIC_URL}builder/pages/${page.id}`,
                 "_blank",
               )
             }
