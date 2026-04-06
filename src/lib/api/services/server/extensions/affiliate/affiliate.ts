@@ -1,63 +1,129 @@
-
 import { serverApiClient } from "@/lib/api/server";
-import type { AffiliateWithdrawal } from "@/types";
-import type { QueryParams, AffiliateAccountListResponse, AffiliateWithdrawalListResponse, AffiliateTransactionListResponse } from "@/lib/api/types";
-
+import type { AffiliateWithdrawal, AffiliateCommissionRate } from "@/types";
+import type {
+  QueryParams,
+  AffiliateAccountListResponse,
+  AffiliateWithdrawalListResponse,
+  AffiliateTransactionListResponse,
+  AffiliateCommissionRateAccountResponse,
+} from "@/lib/api/types";
 
 export class ServerAffiliateService {
-    protected basePath = "/admin/affiliate/account";
-    protected withdrawPath = "/withdraw-history";
+  protected basePath = "/admin/affiliate/account";
+  protected withdrawPath = "/withdraw-history";
 
-    async getAffiliateAccount(params: QueryParams = {}): Promise<AffiliateAccountListResponse> {
-        const searchParams = new URLSearchParams();
-        if (params.page !== undefined) searchParams.append("page", params.page.toString());
-        if (params.size !== undefined) searchParams.append("size", params.size.toString());
-        if (params.sort !== undefined) searchParams.append("sort", params.sort.toString());
+  async getAffiliateAccount(
+    params: QueryParams = {},
+  ): Promise<AffiliateAccountListResponse> {
+    const searchParams = new URLSearchParams();
+    if (params.page !== undefined)
+      searchParams.append("page", params.page.toString());
+    if (params.size !== undefined)
+      searchParams.append("size", params.size.toString());
+    if (params.sort !== undefined)
+      searchParams.append("sort", params.sort.toString());
 
-        if (params.affiliateId !== undefined) searchParams.append("affiliateId", params.affiliateId.toString());
+    if (params.affiliateId !== undefined)
+      searchParams.append("affiliateId", params.affiliateId.toString());
 
-        if (params.affiliateCode !== undefined) searchParams.append("affiliateCode", params.affiliateCode.toString());
+    if (params.affiliateCode !== undefined)
+      searchParams.append("affiliateCode", params.affiliateCode.toString());
 
-        const response = await serverApiClient.get<AffiliateAccountListResponse>(`${this.basePath}?${searchParams.toString()}`);
-        return response.data!;
-    }
+    const response = await serverApiClient.get<AffiliateAccountListResponse>(
+      `${this.basePath}?${searchParams.toString()}`,
+    );
+    return response.data!;
+  }
 
-    async getAffiliateWithdrawals(params: QueryParams = {}): Promise<AffiliateWithdrawalListResponse> {
-        const searchParams = new URLSearchParams();
-        if (params.page !== undefined) searchParams.append("page", params.page.toString());
-        if (params.size !== undefined) searchParams.append("size", params.size.toString());
-        if (params.sort !== undefined) searchParams.append("sort", params.sort.toString());
+  async getAffiliateWithdrawals(
+    params: QueryParams = {},
+  ): Promise<AffiliateWithdrawalListResponse> {
+    const searchParams = new URLSearchParams();
+    if (params.page !== undefined)
+      searchParams.append("page", params.page.toString());
+    if (params.size !== undefined)
+      searchParams.append("size", params.size.toString());
+    if (params.sort !== undefined)
+      searchParams.append("sort", params.sort.toString());
 
-        if (params.affiliateId !== undefined) searchParams.append("affiliateId", params.affiliateId.toString());
+    if (params.affiliateId !== undefined)
+      searchParams.append("affiliateId", params.affiliateId.toString());
 
-        if (params.affiliateCode !== undefined) searchParams.append("affiliateCode", params.affiliateCode);
+    if (params.affiliateCode !== undefined)
+      searchParams.append("affiliateCode", params.affiliateCode);
 
-        if (params.status !== undefined) searchParams.append("status", params.status.toString());
+    if (params.status !== undefined)
+      searchParams.append("status", params.status.toString());
 
-        const response = await serverApiClient.get<AffiliateWithdrawalListResponse>(`${this.basePath}${this.withdrawPath}?${searchParams.toString()}`);
-        return response.data!;
-    }
+    const response = await serverApiClient.get<AffiliateWithdrawalListResponse>(
+      `${this.basePath}${this.withdrawPath}?${searchParams.toString()}`,
+    );
+    return response.data!;
+  }
 
-    async getAffiliateTransactions(params: QueryParams = {}): Promise<AffiliateTransactionListResponse> {
-        const searchParams = new URLSearchParams();
-        if (params.page !== undefined) searchParams.append("page", params.page.toString());
-        if (params.size !== undefined) searchParams.append("size", params.size.toString());
-        if (params.sort !== undefined) searchParams.append("sort", params.sort.toString());
+  async getAffiliateTransactions(
+    params: QueryParams = {},
+  ): Promise<AffiliateTransactionListResponse> {
+    const searchParams = new URLSearchParams();
+    if (params.page !== undefined)
+      searchParams.append("page", params.page.toString());
+    if (params.size !== undefined)
+      searchParams.append("size", params.size.toString());
+    if (params.sort !== undefined)
+      searchParams.append("sort", params.sort.toString());
 
-        if (params.affiliateId !== undefined) searchParams.append("affiliateId", params.affiliateId.toString());
+    if (params.affiliateId !== undefined)
+      searchParams.append("affiliateId", params.affiliateId.toString());
 
-        if (params.affiliateCode !== undefined) searchParams.append("affiliateCode", params.affiliateCode);
+    if (params.affiliateCode !== undefined)
+      searchParams.append("affiliateCode", params.affiliateCode);
 
-        if (params.type !== undefined) searchParams.append("type", params.type);
+    if (params.type !== undefined) searchParams.append("type", params.type);
 
-        const response = await serverApiClient.get<AffiliateTransactionListResponse>(`${this.basePath}/transactions?${searchParams.toString()}`);
-        return response.data!;
-    }
+    const response =
+      await serverApiClient.get<AffiliateTransactionListResponse>(
+        `${this.basePath}/transactions?${searchParams.toString()}`,
+      );
+    return response.data!;
+  }
 
-    async updateAffiliateWithdrawalStatus(id: number): Promise<AffiliateWithdrawal> {
-        const response = await serverApiClient.post<AffiliateWithdrawal>(`${this.basePath}/${id}`);
-        return response.data!;
-    }
+  async updateAffiliateWithdrawalStatus(
+    id: number,
+  ): Promise<AffiliateWithdrawal> {
+    const response = await serverApiClient.post<AffiliateWithdrawal>(
+      `${this.basePath}/${id}`,
+    );
+    return response.data!;
+  }
+
+  async getDefaultAffiliateCommissionRate(): Promise<AffiliateCommissionRate> {
+    const response = await serverApiClient.get<AffiliateCommissionRate>(
+      `${this.basePath}/commission-rate`,
+    );
+    return response.data!;
+  }
+
+  async updateDefaultAffiliateCommissionRate(
+    commissionRate: number,
+  ): Promise<AffiliateCommissionRate> {
+    const response = await serverApiClient.post<AffiliateCommissionRate>(
+      `${this.basePath}/commission-rate`,
+      { commissionRate },
+    );
+    return response.data!;
+  }
+
+  async updateAffiliateCommissionRate(
+    affiliateId: number,
+    commissionRate: number,
+  ): Promise<AffiliateCommissionRateAccountResponse> {
+    const response =
+      await serverApiClient.post<AffiliateCommissionRateAccountResponse>(
+        `${this.basePath}/${affiliateId}/commission-rate`,
+        { commissionRate },
+      );
+    return response.data!;
+  }
 }
 
 export const serverAffiliateService = new ServerAffiliateService();

@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 // Affiliate Approval
 export enum AffiliateApprovalStatus {
   PENDING = "PENDING",
@@ -26,6 +28,10 @@ export interface AffiliateUserAccount {
   email: string;
   fullName: string;
   userName: string;
+}
+
+export interface AdvancedAffiliateUserAccount extends AffiliateUserAccount {
+  user: User;
 }
 
 export interface AffiliateApproval {
@@ -103,4 +109,9 @@ export interface AffiliateTransaction {
   orderId: number;
   withdrawalRequestId: number;
   createdAt: Date;
+}
+
+export interface AffiliateCommissionRate {
+  id: number;
+  commissionRate: number;
 }

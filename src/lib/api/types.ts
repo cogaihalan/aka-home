@@ -24,6 +24,7 @@ import type {
   AffiliateTransaction,
   AffiliateAccount,
   AffiliateTransactionType,
+  AdvancedAffiliateUserAccount,
 } from "@/types";
 
 // Base API types
@@ -152,6 +153,11 @@ export interface AffiliateWithdrawalListResponse {
 export interface AffiliateTransactionListResponse {
   items: AffiliateTransaction[];
   pagination: PaginationResponse;
+}
+
+export interface AffiliateCommissionRateAccountResponse {
+  id: number;
+  affiliate: AdvancedAffiliateUserAccount;
 }
 
 // Error types

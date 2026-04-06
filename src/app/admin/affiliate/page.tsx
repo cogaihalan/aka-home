@@ -7,6 +7,8 @@ import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { DataTableSkeleton } from "@/components/ui/table/data-table-skeleton";
 import AffiliateListingPage from "@/features/affiliate/components/affiliate-listing";
+import { UpdateAffiliateButton } from "@/features/affiliate/components/update-affiliate-button";
+import { serverAffiliateService } from "@/lib/api/services/server/extensions/affiliate/affiliate";
 
 export const metadata: Metadata = {
   title: "Bảng quản trị: Đại lý/CTV",
@@ -17,6 +19,9 @@ export default async function Page(props: DashboardPageProps) {
   const searchParams = await props.searchParams;
   searchParamsCache.parse(searchParams);
 
+  const defaultCommissionRate =
+    await serverAffiliateService.getDefaultAffiliateCommissionRate();
+
   return (
     <PageContainer scrollable={false}>
       <div className="flex flex-1 flex-col space-y-4">
@@ -24,6 +29,9 @@ export default async function Page(props: DashboardPageProps) {
           <Heading
             title="Đại lý/CTV"
             description="Quản lý đại lý/CTV của hệ thống."
+          />
+          <UpdateAffiliateButton
+            defaultCommissionRate={defaultCommissionRate}
           />
         </div>
         <Separator />
