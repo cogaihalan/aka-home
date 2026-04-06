@@ -64,12 +64,12 @@ export function AffiliateDialog({
     try {
       if (type === "default") {
         await unifiedAffiliateService.updateDefaultAffiliateCommissionRate(
-          data.commissionRate / 100,
+          data.commissionRate,
         );
       } else {
         await unifiedAffiliateService.updateAffiliateCommissionRate({
           affiliateId: account?.affiliate?.id || 0,
-          commissionRate: data.commissionRate / 100,
+          commissionRate: data.commissionRate,
         });
       }
       onSuccess?.();
@@ -102,7 +102,7 @@ export function AffiliateDialog({
                   <FormControl>
                     <Input
                       type="number"
-                      step="1"
+                      step="0.1"
                       min="0"
                       max="100"
                       {...field}
