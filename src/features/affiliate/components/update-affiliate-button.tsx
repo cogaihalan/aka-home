@@ -28,7 +28,7 @@ export function UpdateAffiliateButton({
         onSuccess={() => {
           window.location.reload();
         }}
-        defaultCommissionRate={defaultCommissionRate.commissionRate * 100}
+        defaultCommissionRate={defaultCommissionRate.commissionRate}
       />
     </>
   );
