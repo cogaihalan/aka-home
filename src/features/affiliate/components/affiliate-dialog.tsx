@@ -67,6 +67,7 @@ export function AffiliateDialog({
           data.commissionRate / 100,
         );
       } else {
+        console.log(account, account!.affiliateId, data.commissionRate / 100);
         await unifiedAffiliateService.updateAffiliateCommissionRate(
           account!.affiliateId,
           data.commissionRate / 100,

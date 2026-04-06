@@ -26,7 +26,9 @@ export const columns: ColumnDef<AffiliateAccount>[] = [
     header: "Mã affiliate",
     cell: ({ row }) => {
       const affiliate = row.getValue("affiliate") as AffiliateUserAccount;
-      return <div className="font-medium text-sm w-4">{affiliate.code}</div>;
+      return (
+        <div className="font-medium text-sm min-w-40">{affiliate.code}</div>
+      );
     },
   },
   {
@@ -36,7 +38,7 @@ export const columns: ColumnDef<AffiliateAccount>[] = [
     cell: ({ row }) => {
       const affiliate = row.getValue("affiliate") as AffiliateUserAccount;
       return (
-        <div className="font-medium text-sm w-4">
+        <div className="font-medium text-sm min-w-40">
           {affiliate.fullName || affiliate.userName}
         </div>
       );
@@ -51,7 +53,7 @@ export const columns: ColumnDef<AffiliateAccount>[] = [
     cell: ({ row }) => {
       const balance = row.getValue("balance") as number;
       return (
-        <div className="font-medium text-sm w-4">
+        <div className="font-medium text-sm min-w-25">
           <Price
             price={balance}
             size="base"
@@ -71,7 +73,7 @@ export const columns: ColumnDef<AffiliateAccount>[] = [
     cell: ({ row }) => {
       const affiliate = row.getValue("affiliate") as AffiliateUserAccount;
       return (
-        <div className="font-medium text-sm w-4">
+        <div className="font-medium text-sm w-10">
           <Price
             price={affiliate.commissionRate}
             size="base"
