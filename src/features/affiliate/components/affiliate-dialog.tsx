@@ -89,9 +89,6 @@ export function AffiliateDialog({
           <DialogTitle>
             Chỉnh sửa tỷ lệ hoa hồng
             {type === "default" ? "mặc định" : "cá nhân"}
-            {account?.affiliateId
-              ? ` - ID: ${account.affiliateId}`
-              : "Không có ID, check lại xem"}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>

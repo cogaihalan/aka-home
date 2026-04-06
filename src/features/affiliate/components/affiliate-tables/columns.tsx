@@ -92,6 +92,7 @@ export const columns: ColumnDef<AffiliateAccount>[] = [
     header: "Hành động",
     cell: ({ row }) => {
       const data = row.original as AffiliateAccount;
+      console.log(data), row.original;
       return <CellAction data={data} />;
     },
   },
