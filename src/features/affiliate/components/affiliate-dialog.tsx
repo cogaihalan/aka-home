@@ -59,6 +59,8 @@ export function AffiliateDialog({
     } as FormData,
   });
 
+  console.log(account, account!.affiliateId);
+
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     try {
@@ -67,11 +69,10 @@ export function AffiliateDialog({
           data.commissionRate / 100,
         );
       } else {
-        console.log(account, account!.affiliateId, data.commissionRate / 100);
-        await unifiedAffiliateService.updateAffiliateCommissionRate(
-          account!.affiliateId,
-          data.commissionRate / 100,
-        );
+        await unifiedAffiliateService.updateAffiliateCommissionRate({
+          affiliateId: account!.affiliateId,
+          commissionRate: data.commissionRate / 100,
+        });
       }
       onSuccess?.();
       onOpenChange(false);

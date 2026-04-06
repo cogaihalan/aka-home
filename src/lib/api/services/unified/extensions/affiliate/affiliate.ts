@@ -112,10 +112,13 @@ export class UnifiedAffiliateService {
     return response.data!;
   }
 
-  async updateAffiliateCommissionRate(
-    affiliateId: number,
-    commissionRate: number,
-  ): Promise<AffiliateCommissionRateAccountResponse> {
+  async updateAffiliateCommissionRate({
+    affiliateId,
+    commissionRate,
+  }: {
+    affiliateId: number;
+    commissionRate: number;
+  }): Promise<AffiliateCommissionRateAccountResponse> {
     const response =
       await apiClient.post<AffiliateCommissionRateAccountResponse>(
         `${this.basePath}/${affiliateId}/commission-rate`,
