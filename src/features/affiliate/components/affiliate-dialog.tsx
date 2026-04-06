@@ -59,8 +59,6 @@ export function AffiliateDialog({
     } as FormData,
   });
 
-  console.log(account, account!.affiliateId);
-
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     try {
@@ -88,7 +86,13 @@ export function AffiliateDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[90%] mx-auto md:!max-w-[400px]">
         <DialogHeader>
-          <DialogTitle>Chỉnh sửa tỷ lệ hoa hồng</DialogTitle>
+          <DialogTitle>
+            Chỉnh sửa tỷ lệ hoa hồng
+            {type === "default" ? "mặc định" : "cá nhân"}
+            {account?.affiliateId
+              ? ` - ID: ${account.affiliateId}`
+              : "Không có ID, check lại xem"}
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
