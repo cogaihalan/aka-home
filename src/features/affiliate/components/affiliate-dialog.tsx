@@ -68,7 +68,7 @@ export function AffiliateDialog({
         );
       } else {
         await unifiedAffiliateService.updateAffiliateCommissionRate({
-          affiliateId: account!.affiliateId,
+          affiliateId: account?.affiliate?.id || 0,
           commissionRate: data.commissionRate / 100,
         });
       }
