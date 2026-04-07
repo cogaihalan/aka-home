@@ -88,7 +88,7 @@ export function AffiliateDialog({
         <DialogHeader>
           <DialogTitle>
             Chỉnh sửa tỷ lệ hoa hồng
-            {type === "default" ? "mặc định" : "cá nhân"}
+            {type === "default" ? " (mặc định)" : " (cá nhân)"}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
