@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -9,8 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { AddressForm } from "@/features/storefront/components/account/addresses/address-form";
 import { OrderSummary } from "@/components/order/order-summary";
 import { useCheckoutPage } from "@/hooks/use-checkout-page";
-import { formatPrice } from "@/lib/utils";
-import { Loader2, MapPin, CreditCard, Truck, CheckCircle } from "lucide-react";
+import { Loader2, MapPin, CreditCard } from "lucide-react";
 import { Address } from "@/types";
 
 export default function CheckoutPage() {
@@ -22,9 +22,12 @@ export default function CheckoutPage() {
     cart,
     loading,
     auth,
-    constants,
-    availableShippingMethods,
+    constants
   } = useCheckoutPage();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, []);
 
   // Loading states
   if (loading.auth || loading.addresses) {
@@ -39,12 +42,7 @@ export default function CheckoutPage() {
   }
 
   // Not authenticated
-  if (!auth.isAuthenticated) {
-    return null; // Will redirect
-  }
-
-  // Empty cart
-  if (cart.items.length === 0) {
+  if (!auth.isAuthenticated || cart.items.length === 0) {
     return null; // Will redirect
   }
 
@@ -159,61 +157,6 @@ export default function CheckoutPage() {
                 )}
               </CardContent>
             </Card>
-
-            {/* Shipping Fee */}
-            {/* <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Truck className="h-5 w-5" />
-                  Phí vận chuyển
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {availableShippingMethods.map((method) => {
-                    const isFree =
-                      method.id === "free" && cart.subtotal >= 1000000;
-                    const cost = isFree ? 0 : method.cost;
-
-                    return (
-                      <div
-                        key={method.id}
-                        className="flex items-center space-x-3 p-4 border rounded-lg bg-muted/30"
-                      >
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10">
-                          <Truck className="h-4 w-4 text-fg-primary" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">{method.name}</span>
-                            {isFree && method.id === "free" && (
-                              <Badge variant="secondary">Miễn phí</Badge>
-                            )}
-                          </div>
-                          <p className="text-sm text-muted-foreground">
-                            {method.description}
-                          </p>
-                          <p className="text-sm font-medium">
-                            {cost === 0 ? "Miễn phí" : formatPrice(cost)}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle className="h-5 w-5 text-green-600" />
-                          <span className="text-sm font-medium text-green-600">
-                            Đã chọn
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                {form.errors.shippingMethod && (
-                  <p className="text-sm text-red-500 mt-2">
-                    {form.errors.shippingMethod.message}
-                  </p>
-                )}
-              </CardContent>
-            </Card> */}
 
             {/* Payment Methods */}
             <Card>
