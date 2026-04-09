@@ -16,10 +16,48 @@ const DEFAULT_CALCULATION_OPTIONS = {
   freeShippingThreshold: 1000000, // 1 million VND
 };
 
+/** Monotonic id so an older in-flight loadCart cannot overwrite a newer session. */
+let loadCartRequestId = 0;
+let loadCartDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
 // Cart store implementation
 export const useCartStore = create<CartStore>()(
   persist(
-    (set, get) => ({
+    (set, get) => {
+      const runLoadCart = async () => {
+        const id = ++loadCartRequestId;
+
+        set({ isLoading: true, error: null });
+
+        try {
+          const cart = await unifiedCartService.getCart();
+
+          if (id !== loadCartRequestId) return;
+
+          set({
+            items: cart.items,
+            lastUpdated: Date.now(),
+            isLoading: false,
+          });
+        } catch (error) {
+          if (id !== loadCartRequestId) return;
+
+          const errorMessage =
+            error instanceof Error ? error.message : "Failed to load cart";
+
+          set({
+            error: errorMessage,
+            isLoading: false,
+          });
+
+          toast.error("Failed to load cart", {
+            description: errorMessage,
+            duration: 4000,
+          });
+        }
+      };
+
+      return {
       // Initial state
       items: [],
       isOpen: false,
@@ -259,39 +297,26 @@ export const useCartStore = create<CartStore>()(
       },
 
       // Persistence methods
-      loadCart: async () => {
-        set({ isLoading: true, error: null });
+      loadCart: async (options?: { force?: boolean }) => {
+        if (!options?.force) {
+          if (loadCartDebounceTimer) {
+            clearTimeout(loadCartDebounceTimer);
+          }
+          loadCartDebounceTimer = setTimeout(() => {
+            void runLoadCart();
+          }, 300);
 
-        try {
-          const cart = await unifiedCartService.getCart();
-
-          set({
-            items: cart.items,
-            lastUpdated: Date.now(),
-            isLoading: false,
-          });
-        } catch (error) {
-          const errorMessage =
-            error instanceof Error ? error.message : "Failed to load cart";
-
-          set({
-            error: errorMessage,
-            isLoading: false,
-          });
-
-          // Show error toast for load cart failures
-          toast.error("Failed to load cart", {
-            description: errorMessage,
-            duration: 4000,
-          });
+          return;
         }
+
+        await runLoadCart();
       },
 
       saveCart: () => {
-        // This is handled by Zustand persist middleware
         set({ lastUpdated: Date.now() });
       },
-    }),
+      };
+    },
     {
       name: "cart-storage",
       storage: createJSONStorage(() => localStorage),

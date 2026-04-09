@@ -118,6 +118,7 @@ export function useCart() {
     openCart: store.openCart,
     closeCart: store.closeCart,
     clearError,
+    loadCart: store.loadCart,
 
     // Utilities
     isInCart,

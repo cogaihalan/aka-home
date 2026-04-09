@@ -50,7 +50,7 @@ export interface CartStore {
   isItemInCart: (productId: number) => boolean;
 
   // Persistence
-  loadCart: () => Promise<void>;
+  loadCart: (options?: { force?: boolean }) => Promise<void>;
   saveCart: () => void;
 }
 
