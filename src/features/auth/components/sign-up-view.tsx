@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function SignUpViewPage() {
   return (
     <div className="flex items-center justify-center bg-background">
-      <div className="w-full max-w-md space-y-6 p-6">
+      <div className="w-full max-w-md space-y-6 py-4 md:p-6">
         <div className="text-center">
           <h1 className="text-2xl font-semibold tracking-tight">Đăng ký</h1>
           <p className="text-muted-foreground">Tạo tài khoản mới để bắt đầu</p>
