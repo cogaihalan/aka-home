@@ -153,7 +153,7 @@ export default function CheckoutSuccessPage(props: OrderDataProps) {
             <ContactItem
               icon={<Mail className="h-5 w-5 text-muted-foreground" />}
               title="Email hỗ trợ"
-              value="info@akahome.vn"
+              value="akascissors.vn@gmail.com"
               type="email"
             />
             <ContactItem

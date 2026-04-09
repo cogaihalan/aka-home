@@ -137,8 +137,8 @@ export default function AccountLayout({ children }: AccountLayoutProps) {
                         className={cn(
                           "block rounded-md px-3 py-2 text-sm transition-colors",
                           pathname === child.href
-                            ? "text-fg-primary"
-                            : "hover:text-fg-primary",
+                            ? "bg-primary"
+                            : "hover:bg-primary",
                         )}
                       >
                         {child.label}

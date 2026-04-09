@@ -89,7 +89,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     cell: ({ row }) => {
       const url = row.getValue("targetUrl") as string;
       return (
-        <div className="flex items-center gap-2 max-w-2xs">
+        <div className="flex items-center gap-2 min-w-48">
           <Link
             href={url}
             target="_blank"
@@ -99,6 +99,34 @@ export const columns: ColumnDef<AffiliateLink>[] = [
           </Link>
         </div>
       );
+    },
+  },
+  {
+    id: "link",
+    accessorKey: "link",
+    header: "Link",
+    cell: ({ row }) => {
+      const link = row.getValue("link") as string;
+      return (
+        <div className="flex items-center gap-2 min-w-48">
+          <Link
+            href={link}
+            target="_blank"
+            className="text-sm text-fg-primary hover:underline truncate"
+          >
+            {link}
+          </Link>
+        </div>
+      );
+    },
+  },
+  {
+    id: "clickCount",
+    accessorKey: "clickCount",
+    header: "Số lần click",
+    cell: ({ row }) => {
+      const clickCount = row.getValue("clickCount") as number;
+      return <div className="text-sm">{clickCount}</div>;
     },
   },
   {

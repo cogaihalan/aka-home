@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {
-  // const orders = await storefrontServerOrderService.getOrders({
-  //   page: 1,
-  //   size: 5,
-  //   sort: ["createdAt,desc"],
-  // });
+  const orders = await storefrontServerOrderService.getOrders({
+    page: 1,
+    size: 5,
+    sort: ["createdAt,desc"],
+  });
 
-  return <AccountDashboard orders={[]} />;
+  return <AccountDashboard orders={orders.items || []} />;
 }

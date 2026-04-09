@@ -42,11 +42,11 @@ export default function StorefrontFooter() {
               <div className="space-y-3 text-sm text-muted-foreground">
                 <a
                   className="block hover:text-fg-primary transition-colors"
-                  href="mailto:info@akahome.vn"
+                  href="mailto:akascissors.vn@gmail.com"
                 >
                   <div className="flex items-center space-x-2">
                     <Mail className="h-4 w-4" />
-                    <span>info@akahome.vn</span>
+                    <span>akascissors.vn@gmail.com</span>
                   </div>
                 </a>
                 <a
