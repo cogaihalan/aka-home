@@ -10,6 +10,7 @@ import { Column, ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "lucide-react";
 import { Price } from "@/components/ui/price";
+import { formatDate } from "@/lib/format";
 
 export const columns: ColumnDef<AffiliateTransaction>[] = [
   {
@@ -90,9 +91,7 @@ export const columns: ColumnDef<AffiliateTransaction>[] = [
     cell: ({ row }) => {
       const createdAt = row.getValue("createdAt") as Date;
       return (
-        <div className="font-medium text-sm w-4">
-          {createdAt.toLocaleDateString()}
-        </div>
+        <div className="font-medium text-sm w-4">{formatDate(createdAt)}</div>
       );
     },
     meta: {
