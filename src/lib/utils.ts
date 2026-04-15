@@ -1,13 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { OrderHistoryAction, Product } from "@/types";
-import {
-  CheckCircle,
-  Truck,
-  RefreshCw,
-  AlertCircle,
-  Clock,
-} from "lucide-react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

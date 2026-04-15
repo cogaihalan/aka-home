@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import HeroBanner from "@/components/ui/hero-banner";
 
-export default function AffiliatePage() {
+export default function AffiliatePage({ defaultCommissionRate }: { defaultCommissionRate: number }) {
   return (
     <div className="space-y-12 pb-8">
       {/* Hero Section */}
@@ -59,7 +59,7 @@ export default function AffiliatePage() {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-base">
-                Chia sẻ doanh thu - hoa hồng lên đến 15%
+                Chia sẻ doanh thu - hoa hồng lên đến {defaultCommissionRate}%
               </CardDescription>
             </CardContent>
           </Card>
@@ -167,7 +167,7 @@ export default function AffiliatePage() {
         <div className="text-center space-y-4">
           <Sparkles className="h-12 w-12 text-fg-primary mx-auto" />
           <h2 className="text-3xl font-bold">
-            Chia sẻ doanh thu - hoa hồng lên đến 15%
+            Chia sẻ doanh thu - hoa hồng lên đến {defaultCommissionRate}%
           </h2>
           <p className="text-muted-foreground max-w-3xl mx-auto">
             Trong hệ thống chia sẻ doanh thu, bạn kiếm được phần trăm doanh thu
