@@ -1,5 +1,3 @@
-"use client";
-
 import { DataTableWrapper } from "@/components/ui/table/data-table-wrapper";
 import { createColumns } from "./affiliate-transactions-columns";
 import { AffiliateTransaction } from "@/types";
