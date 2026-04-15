@@ -51,6 +51,7 @@ export default async function AffiliateTransactionsPageRoute(
       await storefrontServerAffiliateService.getAffiliateTransactions(
         queryParams,
       );
+
     transactions = response.items || [];
     totalItems = response.pagination?.total || 0;
   } catch (error) {

@@ -26,19 +26,6 @@ export const columns: ColumnDef<AffiliateTransaction>[] = [
     maxSize: 16,
   },
   {
-    id: "affiliate",
-    accessorKey: "affiliate",
-    header: "Người dùng",
-    cell: ({ row }) => {
-      const affiliate = row.getValue("affiliate") as AffiliateUserAccount;
-      return (
-        <div className="font-medium text-sm w-4">
-          {affiliate?.fullName || affiliate?.email}
-        </div>
-      );
-    },
-  },
-  {
     id: "amount",
     accessorKey: "amount",
     header: ({ column }: { column: Column<AffiliateTransaction, unknown> }) => (
@@ -59,27 +46,17 @@ export const columns: ColumnDef<AffiliateTransaction>[] = [
   },
   {
     id: "type",
-    accessorKey: "transactionType",
+    accessorKey: "type",
     header: "Loại giao dịch",
     cell: ({ row }) => {
       const type = row.getValue("type") as AffiliateTransactionType;
-      return (
-        <Badge variant="outline">
-          {type.charAt(0).toUpperCase() + type.slice(1)}
-        </Badge>
-      );
+      const typeLabels: Record<AffiliateTransactionType, string> = {
+        COMMISSION: "Hoa hồng",
+        WITHDRAWAL: "Rút tiền",
+        ADJUSTMENT: "Điều chỉnh",
+      };
+      return <Badge variant="outline">{typeLabels[type] || type}</Badge>;
     },
-    meta: {
-      label: "Loại giao dịch",
-      placeholder: "Lọc theo loại giao dịch...",
-      variant: "select",
-      options: [
-        { label: "Commission", value: AffiliateTransactionType.COMMISSION },
-        { label: "Withdrawal", value: AffiliateTransactionType.WITHDRAWAL },
-        { label: "Adjustment", value: AffiliateTransactionType.ADJUSTMENT },
-      ],
-    },
-    enableColumnFilter: true,
   },
   {
     id: "createdAt",

@@ -48,12 +48,8 @@ export function createColumns(): ColumnDef<AffiliateTransaction>[] {
     },
     {
       id: "type",
-      accessorKey: "transactionType",
-      header: ({
-        column,
-      }: {
-        column: Column<AffiliateTransaction, unknown>;
-      }) => <DataTableColumnHeader column={column} title="Loại giao dịch" />,
+      accessorKey: "type",
+      header: "Loại giao dịch",
       cell: ({ row }) => {
         const type = row.getValue("type") as AffiliateTransactionType;
         const typeLabels: Record<AffiliateTransactionType, string> = {
@@ -63,17 +59,27 @@ export function createColumns(): ColumnDef<AffiliateTransaction>[] {
         };
         return <Badge variant="outline">{typeLabels[type] || type}</Badge>;
       },
-      meta: {
-        label: "Loại giao dịch",
-        placeholder: "Lọc theo loại giao dịch...",
-        variant: "select",
-        options: [
-          { label: "Hoa hồng", value: AffiliateTransactionType.COMMISSION },
-          { label: "Rút tiền", value: AffiliateTransactionType.WITHDRAWAL },
-          { label: "Điều chỉnh", value: AffiliateTransactionType.ADJUSTMENT },
-        ],
+    },
+    {
+      id: "balanceBefore",
+      accessorKey: "balanceBefore",
+      header: ({
+        column,
+      }: {
+        column: Column<AffiliateTransaction, unknown>;
+      }) => <DataTableColumnHeader column={column} title="Số dư trước" />,
+      cell: ({ row }) => {
+        const balance = row.getValue("balanceBefore") as number;
+        return (
+          <Price
+            price={balance}
+            size="base"
+            weight="semibold"
+            showCurrency={true}
+            currency="đ"
+          />
+        );
       },
-      enableColumnFilter: true,
     },
     {
       id: "balanceAfter",
