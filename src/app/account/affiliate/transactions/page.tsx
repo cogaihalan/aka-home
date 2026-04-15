@@ -18,7 +18,7 @@ interface AffiliateTransactionsPageRouteProps {
 }
 
 export default async function AffiliateTransactionsPageRoute(
-  props: AffiliateTransactionsPageRouteProps
+  props: AffiliateTransactionsPageRouteProps,
 ) {
   const searchParams = await props.searchParams;
   searchParamsCache.parse(searchParams);
@@ -28,7 +28,7 @@ export default async function AffiliateTransactionsPageRoute(
   const pageLimit = searchParamsCache.get("perPage");
   const sort = searchParamsCache.get("sort");
   const transactionType = searchParamsCache.get(
-    "transactionType"
+    "transactionType",
   ) as AffiliateTransactionType;
 
   const queryParams: QueryParams = {
@@ -38,7 +38,9 @@ export default async function AffiliateTransactionsPageRoute(
       sort && sort.length > 0
         ? sort.map((item: any) => `${item.id},${item.desc ? "desc" : "asc"}`)
         : undefined,
-    type: transactionType,
+    type: transactionType
+      ? (transactionType as AffiliateTransactionType)
+      : undefined,
   };
 
   let transactions: any[] = [];
@@ -47,7 +49,7 @@ export default async function AffiliateTransactionsPageRoute(
   try {
     const response =
       await storefrontServerAffiliateService.getAffiliateTransactions(
-        queryParams
+        queryParams,
       );
     transactions = response.items || [];
     totalItems = response.pagination?.total || 0;

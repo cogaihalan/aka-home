@@ -8,7 +8,6 @@ import {
 } from "@/types";
 import { Column, ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { Calendar } from "lucide-react";
 import { Price } from "@/components/ui/price";
 import { formatDate } from "@/lib/format";
 
@@ -60,7 +59,7 @@ export const columns: ColumnDef<AffiliateTransaction>[] = [
   },
   {
     id: "type",
-    accessorKey: "type",
+    accessorKey: "transactionType",
     header: "Loại giao dịch",
     cell: ({ row }) => {
       const type = row.getValue("type") as AffiliateTransactionType;
@@ -85,20 +84,12 @@ export const columns: ColumnDef<AffiliateTransaction>[] = [
   {
     id: "createdAt",
     accessorKey: "createdAt",
-    header: ({ column }: { column: Column<AffiliateTransaction, unknown> }) => (
-      <DataTableColumnHeader column={column} title="Ngày tạo" />
-    ),
+    header: "Ngày tạo",
     cell: ({ row }) => {
       const createdAt = row.getValue("createdAt") as Date;
       return (
         <div className="font-medium text-sm w-4">{formatDate(createdAt)}</div>
       );
     },
-    meta: {
-      label: "Ngày tạo",
-      variant: "date",
-      icon: Calendar,
-    },
-    enableColumnFilter: true,
   },
 ];

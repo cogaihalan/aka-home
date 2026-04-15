@@ -12,11 +12,17 @@ export class StorefrontServerAffiliateService extends ServerAffiliateService {
     return response.data!;
   }
 
-  async createAffiliateWithdrawal(data: CreateAffiliateWithdrawalRequest): Promise<AffiliateWithdrawal> {
-    const response = await serverApiClient.post<AffiliateWithdrawal>(`${this.basePath}${this.withdrawPath}`, data);
+  async createAffiliateWithdrawal(
+    data: CreateAffiliateWithdrawalRequest,
+  ): Promise<AffiliateWithdrawal> {
+    const response = await serverApiClient.post<AffiliateWithdrawal>(
+      `${this.basePath}${this.withdrawPath}`,
+      data,
+    );
     return response.data!;
   }
 }
 
 // Export singleton instance
-export const storefrontServerAffiliateService = new StorefrontServerAffiliateService();
+export const storefrontServerAffiliateService =
+  new StorefrontServerAffiliateService();

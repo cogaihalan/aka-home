@@ -36,13 +36,19 @@ export function createColumns(): ColumnDef<AffiliateTransaction>[] {
       cell: ({ row }) => {
         const amount = row.getValue("amount") as number;
         return (
-          <Price price={amount} size="base" weight="semibold" showCurrency={true} currency="đ" />
+          <Price
+            price={amount}
+            size="base"
+            weight="semibold"
+            showCurrency={true}
+            currency="đ"
+          />
         );
       },
     },
     {
       id: "type",
-      accessorKey: "type",
+      accessorKey: "transactionType",
       header: ({
         column,
       }: {
@@ -80,18 +86,20 @@ export function createColumns(): ColumnDef<AffiliateTransaction>[] {
       cell: ({ row }) => {
         const balance = row.getValue("balanceAfter") as number;
         return (
-            <Price price={balance} size="base" weight="semibold" showCurrency={true} currency="đ" />
+          <Price
+            price={balance}
+            size="base"
+            weight="semibold"
+            showCurrency={true}
+            currency="đ"
+          />
         );
       },
     },
     {
       id: "createdAt",
       accessorKey: "createdAt",
-      header: ({
-        column,
-      }: {
-        column: Column<AffiliateTransaction, unknown>;
-      }) => <DataTableColumnHeader column={column} title="Ngày tạo" />,
+      header: "Ngày tạo",
       cell: ({ row }) => {
         const createdAt = row.getValue("createdAt") as Date;
         return (
@@ -100,14 +108,6 @@ export function createColumns(): ColumnDef<AffiliateTransaction>[] {
           </div>
         );
       },
-      meta: {
-        label: "Ngày tạo",
-        variant: "date",
-        icon: Calendar,
-      },
-      enableColumnFilter: true,
-      size: 120,
-      maxSize: 150,
     },
   ];
 }
