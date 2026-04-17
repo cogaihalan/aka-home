@@ -17,7 +17,8 @@ export interface ProductCategory {
   id: number;
   name: string;
   description: string;
-  parentId: number;
+  parentId: number | null;
+  thumbnailUrl: string | null;
 }
 
 export type ProductStatus =
@@ -39,7 +40,6 @@ export interface Product {
   discountPrice: number;
   status: ProductStatus;
   images: ProductImage[];
-  variants: ProductVariant[];
   categories: ProductCategory[];
 }
 

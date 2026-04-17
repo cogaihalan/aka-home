@@ -9,8 +9,11 @@ import Link from "next/link";
 import { useCart } from "@/hooks/use-cart";
 import { CartItem } from "@/components/cart";
 import { OrderSummary } from "@/components/order/order-summary";
+import { useCartStore } from "@/stores/cart-store";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
+  const router = useRouter();
   const {
     items: cartItems,
     isLoading: cartLoading,
@@ -18,6 +21,20 @@ export default function CartPage() {
     clearError,
     validateCart,
   } = useCart();
+  const {
+    selectedItemIds,
+    setItemSelected,
+    selectAllItems,
+    clearSelection,
+    getSelectedItems,
+    getSelectedSubtotal,
+    getSelectedShipping,
+    getSelectedTax,
+    getSelectedTotal,
+    getSelectedTotalItems,
+  } = useCartStore();
+  const selectedItems = getSelectedItems();
+  const selectedCount = selectedItems.length;
 
   // Validate cart on mount
   useEffect(() => {
@@ -122,10 +139,36 @@ export default function CartPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Cart Items */}
         <div className="lg:col-span-2 space-y-4">
+          <div className="flex items-center justify-between rounded-lg border px-4 py-3">
+            <p className="text-sm text-muted-foreground">
+              Đã chọn {selectedCount}/{cartItems.length} sản phẩm để thanh toán
+            </p>
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => selectAllItems()}
+              >
+                Chọn tất cả
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => clearSelection()}
+              >
+                Bỏ chọn
+              </Button>
+            </div>
+          </div>
           {cartItems.map((item) => (
             <CartItem
               key={item.id}
               item={item}
+              selectable={true}
+              selected={!!selectedItemIds[item.id]}
+              onSelectedChange={(checked) => setItemSelected(item.id, checked)}
               variant="default"
               showRemoveButton={true}
               showQuantityControls={true}
@@ -140,13 +183,20 @@ export default function CartPage() {
             showSecurityBadges={true}
             showActionButtons={true}
             showClearCart={true}
+            items={selectedItems}
+            customItemCount={getSelectedTotalItems()}
+            customSubtotal={getSelectedSubtotal()}
+            customShippingCost={getSelectedShipping()}
+            customTax={getSelectedTax()}
+            customTotal={getSelectedTotal()}
             onCheckout={() => {
+              if (selectedItems.length === 0) return;
               // Navigate to checkout
-              window.location.href = "/checkout";
+              router.push("/checkout");
             }}
             onContinueShopping={() => {
               // Navigate to products
-              window.location.href = "/products";
+              router.push("/products");
             }}
           />
         </div>

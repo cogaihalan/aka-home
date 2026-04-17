@@ -10,11 +10,16 @@ import { CartItem as CartItemType } from "@/types/cart";
 import { useCartStore, useCartItemLoading } from "@/stores/cart-store";
 import { cn, formatPrice } from "@/lib/utils";
 import { QuantitySelector } from "@/components/ui/quantity-selector";
+import { Checkbox } from "@/components/ui/checkbox";
+import { CheckedState } from "@radix-ui/react-checkbox";
 
 interface CartItemProps {
   item: CartItemType;
   showRemoveButton?: boolean;
   showQuantityControls?: boolean;
+  selectable?: boolean;
+  selected?: boolean;
+  onSelectedChange?: (checked: boolean) => void;
   variant?: "default" | "compact" | "minimal";
   className?: string;
 }
@@ -23,9 +28,16 @@ export function CartItem({
   item,
   showRemoveButton = true,
   showQuantityControls = true,
+  selectable = false,
+  selected = false,
+  onSelectedChange,
   variant = "default",
   className,
 }: CartItemProps) {
+  const handleSelectionChange = (checked: CheckedState) => {
+    onSelectedChange?.(checked === true);
+  };
+
   const { updateQuantity, removeItem } = useCartStore();
   const isItemLoading = useCartItemLoading(item.id);
 
@@ -160,6 +172,11 @@ export function CartItem({
     <Card className={cn("overflow-hidden", className)} disableBlockPadding>
       <CardContent className="p-4">
         <div className="flex gap-4">
+          {selectable && (
+            <div className="pt-1">
+              <Checkbox checked={selected} onCheckedChange={handleSelectionChange} />
+            </div>
+          )}
           <div className="w-20 h-20 bg-muted rounded-md overflow-hidden flex-shrink-0">
             <Image
               src={imageUrl}

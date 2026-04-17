@@ -60,7 +60,14 @@ export function useCheckoutPage() {
     isSignedIn: isAuthenticated,
     isLoaded: authLoading,
   } = useUser();
-  const { items, getSubtotal, getTax, getTotal, clearCart } = useCartStore();
+  const {
+    getSelectedItems,
+    getSelectedSubtotal,
+    getSelectedTax,
+    removeItem,
+  } = useCartStore();
+  const items = getSelectedItems();
+
   const {
     addresses,
     isLoading: addressesLoading,
@@ -111,9 +118,15 @@ export function useCheckoutPage() {
     }
   }, [isAuthenticated, authLoading, router]);
 
+  useEffect(() => {
+    if (!authLoading && isAuthenticated && items.length === 0) {
+      router.push("/cart");
+    }
+  }, [authLoading, isAuthenticated, items, router]);
+
   // Filter shipping methods based on order conditions
   const getAvailableShippingMethods = () => {
-    const subtotal = getSubtotal();
+    const subtotal = getSelectedSubtotal();
 
     return SHIPPING_METHODS.filter((method) => {
       // Free shipping is only available for orders over 1,000,000 VND
@@ -132,7 +145,7 @@ export function useCheckoutPage() {
 
   // Calculate shipping cost based on method and order total
   const calculateShippingCost = () => {
-    const subtotal = getSubtotal();
+    const subtotal = getSelectedSubtotal();
     const selectedMethod = SHIPPING_METHODS.find(
       (method) => method.id === watchedShippingMethod
     );
@@ -148,10 +161,10 @@ export function useCheckoutPage() {
   };
 
   // Calculate values
-  const subtotal = getSubtotal();
+  const subtotal = getSelectedSubtotal();
   const shippingCost = calculateShippingCost();
-  const tax = getTax();
-  const total = getTotal();
+  const tax = getSelectedTax();
+  const total = subtotal + shippingCost + tax;
 
   // Auto-select the first available shipping method
   useEffect(() => {
@@ -245,7 +258,7 @@ export function useCheckoutPage() {
       }
 
       toast.success("Đặt hàng thành công!");
-      await clearCart();
+      await Promise.all(items.map((item) => removeItem(item.product.id)));
 
       // Redirect to success page with order ID
       router.push(`/checkout/success?order_id=${createdOrder.id.toString()}`);

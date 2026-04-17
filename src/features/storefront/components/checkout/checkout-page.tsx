@@ -231,6 +231,12 @@ export default function CheckoutPage() {
               showClearCart={false}
               customShippingCost={cart.shippingCost}
               customTax={cart.tax}
+              customSubtotal={cart.subtotal}
+              customTotal={cart.total}
+              customItemCount={cart.items.reduce(
+                (count, item) => count + item.quantity,
+                0
+              )}
               showItems={true}
               items={cart.items}
             />

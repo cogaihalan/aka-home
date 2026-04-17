@@ -16,6 +16,26 @@ const DEFAULT_CALCULATION_OPTIONS = {
   freeShippingThreshold: 1000000, // 1 million VND
 };
 
+const sanitizeSelectedItemIds = (
+  selectedItemIds: Record<number, boolean>,
+  items: CartItem[]
+) => {
+  const validItemIds = new Set(items.map((item) => item.id));
+
+  return Object.fromEntries(
+    Object.entries(selectedItemIds).filter(
+      ([itemId, selected]) => selected && validItemIds.has(Number(itemId))
+    )
+  );
+};
+
+const calculateSubtotalForItems = (items: CartItem[]) => {
+  return items.reduce(
+    (total, item) => total + (item.product.discountPrice || item.price) * item.quantity,
+    0
+  );
+};
+
 /** Monotonic id so an older in-flight loadCart cannot overwrite a newer session. */
 let loadCartRequestId = 0;
 let loadCartDebounceTimer: ReturnType<typeof setTimeout> | null = null;
@@ -34,11 +54,12 @@ export const useCartStore = create<CartStore>()(
 
           if (id !== loadCartRequestId) return;
 
-          set({
+          set((state) => ({
             items: cart.items,
+            selectedItemIds: sanitizeSelectedItemIds(state.selectedItemIds, cart.items),
             lastUpdated: Date.now(),
             isLoading: false,
-          });
+          }));
         } catch (error) {
           if (id !== loadCartRequestId) return;
 
@@ -60,6 +81,7 @@ export const useCartStore = create<CartStore>()(
       return {
       // Initial state
       items: [],
+      selectedItemIds: {},
       isOpen: false,
       isLoading: false,
       error: null,
@@ -87,6 +109,10 @@ export const useCartStore = create<CartStore>()(
           success: (updatedCart) => {
             set((state) => ({
               items: updatedCart.items,
+              selectedItemIds: sanitizeSelectedItemIds(
+                state.selectedItemIds,
+                updatedCart.items
+              ),
               lastUpdated: Date.now(),
               itemLoadingStates: {
                 ...state.itemLoadingStates,
@@ -123,6 +149,10 @@ export const useCartStore = create<CartStore>()(
           const updatedCart = await unifiedCartService.removeCartItem(itemId);
           set((state) => ({
             items: updatedCart.items,
+            selectedItemIds: sanitizeSelectedItemIds(
+              state.selectedItemIds,
+              updatedCart.items
+            ),
             lastUpdated: Date.now(),
             itemLoadingStates: { ...state.itemLoadingStates, [itemId]: false },
           }));
@@ -161,6 +191,10 @@ export const useCartStore = create<CartStore>()(
           );
           set((state) => ({
             items: updatedCart.items,
+            selectedItemIds: sanitizeSelectedItemIds(
+              state.selectedItemIds,
+              updatedCart.items
+            ),
             lastUpdated: Date.now(),
             itemLoadingStates: { ...state.itemLoadingStates, [itemId]: false },
           }));
@@ -187,6 +221,7 @@ export const useCartStore = create<CartStore>()(
           success: (updatedCart) => {
             set({
               items: updatedCart.items,
+              selectedItemIds: {},
               lastUpdated: Date.now(),
               isLoading: false,
             });
@@ -208,6 +243,7 @@ export const useCartStore = create<CartStore>()(
       resetCart: () => {
         set({
           items: [],
+          selectedItemIds: {},
           lastUpdated: Date.now(),
           error: null,
         });
@@ -245,6 +281,85 @@ export const useCartStore = create<CartStore>()(
         return state.itemLoadingStates[itemId] || false;
       },
 
+      toggleItemSelected: (itemId: number) => {
+        set((state) => {
+          const isSelected = !!state.selectedItemIds[itemId];
+          if (isSelected) {
+            const { [itemId]: _, ...rest } = state.selectedItemIds;
+            return { selectedItemIds: rest };
+          }
+
+          return {
+            selectedItemIds: {
+              ...state.selectedItemIds,
+              [itemId]: true,
+            },
+          };
+        });
+      },
+
+      setItemSelected: (itemId: number, selected: boolean) => {
+        set((state) => {
+          if (!selected) {
+            const { [itemId]: _, ...rest } = state.selectedItemIds;
+            return { selectedItemIds: rest };
+          }
+
+          return {
+            selectedItemIds: {
+              ...state.selectedItemIds,
+              [itemId]: true,
+            },
+          };
+        });
+      },
+
+      selectAllItems: () => {
+        set((state) => ({
+          selectedItemIds: Object.fromEntries(
+            state.items.map((item) => [item.id, true])
+          ),
+        }));
+      },
+
+      clearSelection: () => {
+        set({ selectedItemIds: {} });
+      },
+
+      getSelectedItems: () => {
+        const state = get();
+        return state.items.filter((item) => !!state.selectedItemIds[item.id]);
+      },
+
+      getSelectedSubtotal: () => {
+        return calculateSubtotalForItems(get().getSelectedItems());
+      },
+
+      getSelectedTotalItems: () => {
+        return get()
+          .getSelectedItems()
+          .reduce((total, item) => total + item.quantity, 0);
+      },
+
+      getSelectedShipping: () => {
+        const subtotal = get().getSelectedSubtotal();
+        return subtotal >= DEFAULT_CALCULATION_OPTIONS.freeShippingThreshold
+          ? 0
+          : DEFAULT_CALCULATION_OPTIONS.shippingCost;
+      },
+
+      getSelectedTax: () => {
+        const subtotal = get().getSelectedSubtotal();
+        return subtotal * DEFAULT_CALCULATION_OPTIONS.taxRate;
+      },
+
+      getSelectedTotal: () => {
+        const subtotal = get().getSelectedSubtotal();
+        const shipping = get().getSelectedShipping();
+        const tax = get().getSelectedTax();
+        return subtotal + shipping + tax;
+      },
+
       // Utility functions
       getItemQuantity: (productId: number) => {
         const state = get();
@@ -258,11 +373,7 @@ export const useCartStore = create<CartStore>()(
       },
 
       getTotalPrice: () => {
-        const state = get();
-        return state?.items?.reduce(
-          (total, item) => total + (item.product.discountPrice || item.price) * item.quantity,
-          0
-        ) || 0;
+        return calculateSubtotalForItems(get().items);
       },
 
       getSubtotal: () => {

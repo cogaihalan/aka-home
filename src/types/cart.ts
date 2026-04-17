@@ -19,6 +19,7 @@ export interface Cart {
 export interface CartStore {
   // State
   items: CartItem[];
+  selectedItemIds: Record<number, boolean>;
   isOpen: boolean;
   isLoading: boolean;
   error: string | null;
@@ -38,6 +39,16 @@ export interface CartStore {
   setError: (error: string | null) => void;
   setItemLoading: (itemId: number, loading: boolean) => void;
   isItemLoading: (itemId: number) => boolean;
+  toggleItemSelected: (itemId: number) => void;
+  setItemSelected: (itemId: number, selected: boolean) => void;
+  selectAllItems: () => void;
+  clearSelection: () => void;
+  getSelectedItems: () => CartItem[];
+  getSelectedSubtotal: () => number;
+  getSelectedTotalItems: () => number;
+  getSelectedShipping: () => number;
+  getSelectedTax: () => number;
+  getSelectedTotal: () => number;
 
   // Utility functions
   getItemQuantity: (productId: number) => number;

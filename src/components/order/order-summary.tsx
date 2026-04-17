@@ -21,6 +21,9 @@ interface OrderSummaryProps {
   // For checkout page customization
   customShippingCost?: number;
   customTax?: number;
+  customSubtotal?: number;
+  customTotal?: number;
+  customItemCount?: number;
   showItems?: boolean;
   items?: CartItem[];
 }
@@ -35,6 +38,9 @@ export function OrderSummary({
   onContinueShopping,
   customShippingCost,
   customTax,
+  customSubtotal,
+  customTotal,
+  customItemCount,
   showItems = true,
   items: customItems,
 }: OrderSummaryProps) {
@@ -50,12 +56,13 @@ export function OrderSummary({
 
   // Use custom values if provided, otherwise use cart values
   const items = customItems || cartItems;
-  const subtotal = getSubtotal();
+  const subtotal = customSubtotal !== undefined ? customSubtotal : getSubtotal();
   const shipping =
     customShippingCost !== undefined ? customShippingCost : getShipping();
   const tax = customTax !== undefined ? customTax : getTax();
-  const total = getTotal();
-  const itemCount = getTotalItems();
+  const total = customTotal !== undefined ? customTotal : getTotal();
+  const itemCount =
+    customItemCount !== undefined ? customItemCount : getTotalItems();
 
   if (items.length === 0) {
     return (
@@ -204,10 +211,6 @@ export function OrderSummary({
                     ? "Free shipping on orders over 1,000,000 VND"
                     : "Free shipping applied"}
                 </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4" />
-                <span>Thanh toán an toàn</span>
               </div>
             </div>
           </div>
