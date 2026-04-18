@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,14 +58,10 @@ export function useCheckoutPage() {
   const {
     user,
     isSignedIn: isAuthenticated,
-    isLoaded: authLoading,
+    isLoaded: isAuthLoaded,
   } = useUser();
-  const {
-    getSelectedItems,
-    getSelectedSubtotal,
-    getSelectedTax,
-    removeItem,
-  } = useCartStore();
+  const { loadCart, getSelectedItems, getSelectedSubtotal, getSelectedTax } =
+    useCartStore();
   const items = getSelectedItems();
 
   const {
@@ -111,18 +107,17 @@ export function useCheckoutPage() {
     }
   }, [defaultAddress, selectedAddress]);
 
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (authLoading && !isAuthenticated) {
-      router.push("/auth/sign-in?redirect_url=/checkout");
+  // Redirect before paint so checkout UI does not flash (and avoid waiting on addresses).
+  useLayoutEffect(() => {
+    if (!isAuthLoaded) return;
+    if (!isAuthenticated) {
+      router.replace("/auth/sign-in?redirect_url=/checkout");
+      return;
     }
-  }, [isAuthenticated, authLoading, router]);
-
-  useEffect(() => {
-    if (!authLoading && isAuthenticated && items.length === 0) {
-      router.push("/cart");
+    if (items.length === 0) {
+      router.replace("/cart");
     }
-  }, [authLoading, isAuthenticated, items, router]);
+  }, [isAuthLoaded, isAuthenticated, items, router]);
 
   // Filter shipping methods based on order conditions
   const getAvailableShippingMethods = () => {
@@ -147,7 +142,7 @@ export function useCheckoutPage() {
   const calculateShippingCost = () => {
     const subtotal = getSelectedSubtotal();
     const selectedMethod = SHIPPING_METHODS.find(
-      (method) => method.id === watchedShippingMethod
+      (method) => method.id === watchedShippingMethod,
     );
 
     if (!selectedMethod) return 0;
@@ -241,7 +236,9 @@ export function useCheckoutPage() {
 
       // Send order confirmation email
       try {
-        const { sendOrderConfirmationEmail } = await import("@/lib/email/helpers");
+        const { sendOrderConfirmationEmail } = await import(
+          "@/lib/email/helpers"
+        );
         await sendOrderConfirmationEmail(createdOrder);
       } catch (emailError) {
         console.error("Failed to send order confirmation email:", emailError);
@@ -258,8 +255,7 @@ export function useCheckoutPage() {
       }
 
       toast.success("Đặt hàng thành công!");
-      await Promise.all(items.map((item) => removeItem(item.product.id)));
-
+      await loadCart({ force: true });
       // Redirect to success page with order ID
       router.push(`/checkout/success?order_id=${createdOrder.id.toString()}`);
     } catch (error) {
@@ -316,10 +312,14 @@ export function useCheckoutPage() {
       total,
     },
 
-    // Loading states
+    // Loading states — only block on addresses when checkout can actually proceed
     loading: {
-      auth: !authLoading,
-      addresses: addressesLoading,
+      auth: !isAuthLoaded,
+      addresses:
+        isAuthLoaded &&
+        isAuthenticated &&
+        items.length > 0 &&
+        addressesLoading,
       submitting: isSubmitting,
     },
 
@@ -327,6 +327,7 @@ export function useCheckoutPage() {
     auth: {
       user,
       isAuthenticated,
+      isLoaded: isAuthLoaded,
     },
 
     // Constants

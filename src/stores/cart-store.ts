@@ -18,21 +18,22 @@ const DEFAULT_CALCULATION_OPTIONS = {
 
 const sanitizeSelectedItemIds = (
   selectedItemIds: Record<number, boolean>,
-  items: CartItem[]
+  items: CartItem[],
 ) => {
   const validItemIds = new Set(items.map((item) => item.id));
 
   return Object.fromEntries(
     Object.entries(selectedItemIds).filter(
-      ([itemId, selected]) => selected && validItemIds.has(Number(itemId))
-    )
+      ([itemId, selected]) => selected && validItemIds.has(Number(itemId)),
+    ),
   );
 };
 
 const calculateSubtotalForItems = (items: CartItem[]) => {
   return items.reduce(
-    (total, item) => total + (item.product.discountPrice || item.price) * item.quantity,
-    0
+    (total, item) =>
+      total + (item.product.discountPrice || item.price) * item.quantity,
+    0,
   );
 };
 
@@ -56,7 +57,10 @@ export const useCartStore = create<CartStore>()(
 
           set((state) => ({
             items: cart.items,
-            selectedItemIds: sanitizeSelectedItemIds(state.selectedItemIds, cart.items),
+            selectedItemIds: sanitizeSelectedItemIds(
+              state.selectedItemIds,
+              cart.items,
+            ),
             lastUpdated: Date.now(),
             isLoading: false,
           }));
@@ -79,353 +83,379 @@ export const useCartStore = create<CartStore>()(
       };
 
       return {
-      // Initial state
-      items: [],
-      selectedItemIds: {},
-      isOpen: false,
-      isLoading: false,
-      error: null,
-      lastUpdated: Date.now(),
-      // Individual item loading states
-      itemLoadingStates: {} as Record<number, boolean>,
+        // Initial state
+        items: [],
+        selectedItemIds: {},
+        isOpen: false,
+        isLoading: false,
+        error: null,
+        lastUpdated: Date.now(),
+        // Individual item loading states
+        itemLoadingStates: {} as Record<number, boolean>,
 
-      // Item management actions
-      addItem: async (product: Product, quantity: number = 1) => {
-        // Set individual product loading state
-        set((state) => ({
-          itemLoadingStates: { ...state.itemLoadingStates, [product.id]: true },
-          error: null,
-        }));
+        // Item management actions
+        addItem: async (product: Product, quantity: number = 1) => {
+          // Set individual product loading state
+          set((state) => ({
+            itemLoadingStates: {
+              ...state.itemLoadingStates,
+              [product.id]: true,
+            },
+            error: null,
+          }));
 
-        const addToCartRequest: AddToCartRequest = {
-          productId: product.id,
-          quantity,
-        };
+          const addToCartRequest: AddToCartRequest = {
+            productId: product.id,
+            quantity,
+          };
 
-        const addToCartPromise =
-          unifiedCartService.createCart(addToCartRequest);
+          const addToCartPromise =
+            unifiedCartService.createCart(addToCartRequest);
 
-        toast.promise(addToCartPromise, {
-          success: (updatedCart) => {
+          toast.promise(addToCartPromise, {
+            success: (updatedCart) => {
+              set((state) => ({
+                items: updatedCart.items,
+                selectedItemIds: sanitizeSelectedItemIds(
+                  state.selectedItemIds,
+                  updatedCart.items,
+                ),
+                lastUpdated: Date.now(),
+                itemLoadingStates: {
+                  ...state.itemLoadingStates,
+                  [product.id]: false,
+                },
+              }));
+              return `${product.name} đã được thêm vào giỏ hàng của bạn`;
+            },
+            error: (error) => {
+              const errorMessage =
+                error instanceof Error
+                  ? error.message
+                  : "Thêm sản phẩm vào giỏ hàng thất bại";
+
+              set((state) => ({
+                error: errorMessage,
+                itemLoadingStates: {
+                  ...state.itemLoadingStates,
+                  [product.id]: false,
+                },
+              }));
+              return errorMessage;
+            },
+          });
+        },
+
+        removeItem: async (itemId: number) => {
+          set((state) => ({
+            itemLoadingStates: { ...state.itemLoadingStates, [itemId]: true },
+            error: null,
+          }));
+
+          try {
+            const updatedCart = await unifiedCartService.removeCartItem(itemId);
             set((state) => ({
               items: updatedCart.items,
               selectedItemIds: sanitizeSelectedItemIds(
                 state.selectedItemIds,
-                updatedCart.items
+                updatedCart.items,
               ),
               lastUpdated: Date.now(),
               itemLoadingStates: {
                 ...state.itemLoadingStates,
-                [product.id]: false,
+                [itemId]: false,
               },
             }));
-            return `${product.name} đã được thêm vào giỏ hàng của bạn`;
-          },
-          error: (error) => {
+          } catch (error) {
             const errorMessage =
               error instanceof Error
                 ? error.message
-                : "Thêm sản phẩm vào giỏ hàng thất bại";
+                : "Xóa sản phẩm khỏi giỏ hàng thất bại";
 
             set((state) => ({
               error: errorMessage,
               itemLoadingStates: {
                 ...state.itemLoadingStates,
-                [product.id]: false,
+                [itemId]: false,
               },
             }));
-            return errorMessage;
-          },
-        });
-      },
+          }
+        },
 
-      removeItem: async (itemId: number) => {
-        set((state) => ({
-          itemLoadingStates: { ...state.itemLoadingStates, [itemId]: true },
-          error: null,
-        }));
-
-        try {
-          const updatedCart = await unifiedCartService.removeCartItem(itemId);
+        updateQuantity: async (itemId: number, quantity: number) => {
           set((state) => ({
-            items: updatedCart.items,
-            selectedItemIds: sanitizeSelectedItemIds(
-              state.selectedItemIds,
-              updatedCart.items
-            ),
-            lastUpdated: Date.now(),
-            itemLoadingStates: { ...state.itemLoadingStates, [itemId]: false },
+            itemLoadingStates: { ...state.itemLoadingStates, [itemId]: true },
+            error: null,
           }));
-        } catch (error) {
-          const errorMessage =
-            error instanceof Error
-              ? error.message
-              : "Xóa sản phẩm khỏi giỏ hàng thất bại";
 
-          set((state) => ({
-            error: errorMessage,
-            itemLoadingStates: { ...state.itemLoadingStates, [itemId]: false },
-          }));
-        }
-      },
+          if (quantity <= 0) {
+            await get().removeItem(itemId);
+            return;
+          }
 
-      updateQuantity: async (itemId: number, quantity: number) => {
-        set((state) => ({
-          itemLoadingStates: { ...state.itemLoadingStates, [itemId]: true },
-          error: null,
-        }));
+          try {
+            const updateRequest: UpdateCartItemRequest = {
+              quantity,
+            };
 
-        if (quantity <= 0) {
-          await get().removeItem(itemId);
-          return;
-        }
-
-        try {
-          const updateRequest: UpdateCartItemRequest = {
-            quantity,
-          };
-
-          const updatedCart = await unifiedCartService.updateProduct(
-            itemId,
-            updateRequest
-          );
-          set((state) => ({
-            items: updatedCart.items,
-            selectedItemIds: sanitizeSelectedItemIds(
-              state.selectedItemIds,
-              updatedCart.items
-            ),
-            lastUpdated: Date.now(),
-            itemLoadingStates: { ...state.itemLoadingStates, [itemId]: false },
-          }));
-        } catch (error) {
-          const errorMessage =
-            error instanceof Error
-              ? error.message
-              : "Cập nhật số lượng thất bại";
-
-          set((state) => ({
-            error: errorMessage,
-            itemLoadingStates: { ...state.itemLoadingStates, [itemId]: false },
-          }));
-        }
-      },
-
-      clearCart: async () => {
-        set({ isLoading: true, error: null });
-
-        const clearCartPromise = unifiedCartService.clearCart();
-
-        toast.promise(clearCartPromise, {
-          loading: "Đang xóa giỏ hàng...",
-          success: (updatedCart) => {
-            set({
+            const updatedCart = await unifiedCartService.updateProduct(
+              itemId,
+              updateRequest,
+            );
+            set((state) => ({
               items: updatedCart.items,
-              selectedItemIds: {},
+              selectedItemIds: sanitizeSelectedItemIds(
+                state.selectedItemIds,
+                updatedCart.items,
+              ),
               lastUpdated: Date.now(),
-              isLoading: false,
-            });
-            return "Tất cả sản phẩm đã được xóa khỏi giỏ hàng";
-          },
-          error: (error) => {
+              itemLoadingStates: {
+                ...state.itemLoadingStates,
+                [itemId]: false,
+              },
+            }));
+          } catch (error) {
             const errorMessage =
-              error instanceof Error ? error.message : "Xóa giỏ hàng thất bại";
+              error instanceof Error
+                ? error.message
+                : "Cập nhật số lượng thất bại";
 
-            set({
+            set((state) => ({
               error: errorMessage,
-              isLoading: false,
-            });
-            return errorMessage;
-          },
-        });
-      },
-
-      resetCart: () => {
-        set({
-          items: [],
-          selectedItemIds: {},
-          lastUpdated: Date.now(),
-          error: null,
-        });
-      },
-
-      // Cart state management
-      toggleCart: () => {
-        set((state: any) => ({ isOpen: !state.isOpen }));
-      },
-
-      openCart: () => {
-        set({ isOpen: true });
-      },
-
-      closeCart: () => {
-        set({ isOpen: false });
-      },
-
-      setLoading: (loading: boolean) => {
-        set({ isLoading: loading });
-      },
-
-      setError: (error: string | null) => {
-        set({ error });
-      },
-
-      setItemLoading: (itemId: number, loading: boolean) => {
-        set((state) => ({
-          itemLoadingStates: { ...state.itemLoadingStates, [itemId]: loading },
-        }));
-      },
-
-      isItemLoading: (itemId: number) => {
-        const state = get();
-        return state.itemLoadingStates[itemId] || false;
-      },
-
-      toggleItemSelected: (itemId: number) => {
-        set((state) => {
-          const isSelected = !!state.selectedItemIds[itemId];
-          if (isSelected) {
-            const { [itemId]: _, ...rest } = state.selectedItemIds;
-            return { selectedItemIds: rest };
+              itemLoadingStates: {
+                ...state.itemLoadingStates,
+                [itemId]: false,
+              },
+            }));
           }
+        },
 
-          return {
-            selectedItemIds: {
-              ...state.selectedItemIds,
-              [itemId]: true,
+        clearCart: async () => {
+          set({ isLoading: true, error: null });
+
+          const clearCartPromise = unifiedCartService.clearCart();
+
+          toast.promise(clearCartPromise, {
+            loading: "Đang xóa giỏ hàng...",
+            success: (updatedCart) => {
+              set({
+                items: updatedCart.items,
+                selectedItemIds: {},
+                lastUpdated: Date.now(),
+                isLoading: false,
+              });
+              return "Tất cả sản phẩm đã được xóa khỏi giỏ hàng";
             },
-          };
-        });
-      },
+            error: (error) => {
+              const errorMessage =
+                error instanceof Error
+                  ? error.message
+                  : "Xóa giỏ hàng thất bại";
 
-      setItemSelected: (itemId: number, selected: boolean) => {
-        set((state) => {
-          if (!selected) {
-            const { [itemId]: _, ...rest } = state.selectedItemIds;
-            return { selectedItemIds: rest };
-          }
-
-          return {
-            selectedItemIds: {
-              ...state.selectedItemIds,
-              [itemId]: true,
+              set({
+                error: errorMessage,
+                isLoading: false,
+              });
+              return errorMessage;
             },
-          };
-        });
-      },
+          });
+        },
 
-      selectAllItems: () => {
-        set((state) => ({
-          selectedItemIds: Object.fromEntries(
-            state.items.map((item) => [item.id, true])
-          ),
-        }));
-      },
+        resetCart: () => {
+          set({
+            items: [],
+            selectedItemIds: {},
+            lastUpdated: Date.now(),
+            error: null,
+          });
+        },
 
-      clearSelection: () => {
-        set({ selectedItemIds: {} });
-      },
+        // Cart state management
+        toggleCart: () => {
+          set((state: any) => ({ isOpen: !state.isOpen }));
+        },
 
-      getSelectedItems: () => {
-        const state = get();
-        return state.items.filter((item) => !!state.selectedItemIds[item.id]);
-      },
+        openCart: () => {
+          set({ isOpen: true });
+        },
 
-      getSelectedSubtotal: () => {
-        return calculateSubtotalForItems(get().getSelectedItems());
-      },
+        closeCart: () => {
+          set({ isOpen: false });
+        },
 
-      getSelectedTotalItems: () => {
-        return get()
-          .getSelectedItems()
-          .reduce((total, item) => total + item.quantity, 0);
-      },
+        setLoading: (loading: boolean) => {
+          set({ isLoading: loading });
+        },
 
-      getSelectedShipping: () => {
-        const subtotal = get().getSelectedSubtotal();
-        return subtotal >= DEFAULT_CALCULATION_OPTIONS.freeShippingThreshold
-          ? 0
-          : DEFAULT_CALCULATION_OPTIONS.shippingCost;
-      },
+        setError: (error: string | null) => {
+          set({ error });
+        },
 
-      getSelectedTax: () => {
-        const subtotal = get().getSelectedSubtotal();
-        return subtotal * DEFAULT_CALCULATION_OPTIONS.taxRate;
-      },
+        setItemLoading: (itemId: number, loading: boolean) => {
+          set((state) => ({
+            itemLoadingStates: {
+              ...state.itemLoadingStates,
+              [itemId]: loading,
+            },
+          }));
+        },
 
-      getSelectedTotal: () => {
-        const subtotal = get().getSelectedSubtotal();
-        const shipping = get().getSelectedShipping();
-        const tax = get().getSelectedTax();
-        return subtotal + shipping + tax;
-      },
+        isItemLoading: (itemId: number) => {
+          const state = get();
+          return state.itemLoadingStates[itemId] || false;
+        },
 
-      // Utility functions
-      getItemQuantity: (productId: number) => {
-        const state = get();
-        const item = state.items.find((item) => item.product.id === productId);
-        return item?.quantity || 0;
-      },
+        toggleItemSelected: (itemId: number) => {
+          set((state) => {
+            const isSelected = !!state.selectedItemIds[itemId];
+            if (isSelected) {
+              const { [itemId]: _, ...rest } = state.selectedItemIds;
+              return { selectedItemIds: rest };
+            }
 
-      getTotalItems: () => {
-        const state = get();
-        return state?.items?.reduce((total, item) => total + item.quantity, 0) || 0;
-      },
+            return {
+              selectedItemIds: {
+                ...state.selectedItemIds,
+                [itemId]: true,
+              },
+            };
+          });
+        },
 
-      getTotalPrice: () => {
-        return calculateSubtotalForItems(get().items);
-      },
+        setItemSelected: (itemId: number, selected: boolean) => {
+          set((state) => {
+            if (!selected) {
+              const { [itemId]: _, ...rest } = state.selectedItemIds;
+              return { selectedItemIds: rest };
+            }
 
-      getSubtotal: () => {
-        return get().getTotalPrice();
-      },
+            return {
+              selectedItemIds: {
+                ...state.selectedItemIds,
+                [itemId]: true,
+              },
+            };
+          });
+        },
 
-      getShipping: () => {
-        const state = get();
-        const subtotal = state.getSubtotal();
-        return subtotal >= DEFAULT_CALCULATION_OPTIONS.freeShippingThreshold
-          ? 0
-          : DEFAULT_CALCULATION_OPTIONS.shippingCost;
-      },
+        selectAllItems: () => {
+          set((state) => ({
+            selectedItemIds: Object.fromEntries(
+              state.items.map((item) => [item.id, true]),
+            ),
+          }));
+        },
 
-      getTax: () => {
-        const state = get();
-        const subtotal = state.getSubtotal();
-        return subtotal * DEFAULT_CALCULATION_OPTIONS.taxRate;
-      },
+        clearSelection: () => {
+          set({ selectedItemIds: {} });
+        },
 
-      getTotal: () => {
-        const state = get();
-        const subtotal = state.getSubtotal();
-        const shipping = state.getShipping();
-        const tax = state.getTax();
-        return subtotal + shipping + tax;
-      },
+        getSelectedItems: () => {
+          const state = get();
+          return state.items.filter((item) => !!state.selectedItemIds[item.id]);
+        },
 
-      isItemInCart: (productId: number) => {
-        const state = get();
-        return state?.items?.some((item) => item.product.id === productId) || false;
-      },
+        getSelectedSubtotal: () => {
+          return calculateSubtotalForItems(get().getSelectedItems());
+        },
 
-      // Persistence methods
-      loadCart: async (options?: { force?: boolean }) => {
-        if (!options?.force) {
-          if (loadCartDebounceTimer) {
-            clearTimeout(loadCartDebounceTimer);
+        getSelectedTotalItems: () => {
+          return get()
+            .getSelectedItems()
+            .reduce((total, item) => total + item.quantity, 0);
+        },
+
+        getSelectedShipping: () => {
+          const subtotal = get().getSelectedSubtotal();
+          return subtotal >= DEFAULT_CALCULATION_OPTIONS.freeShippingThreshold
+            ? 0
+            : DEFAULT_CALCULATION_OPTIONS.shippingCost;
+        },
+
+        getSelectedTax: () => {
+          const subtotal = get().getSelectedSubtotal();
+          return subtotal * DEFAULT_CALCULATION_OPTIONS.taxRate;
+        },
+
+        getSelectedTotal: () => {
+          const subtotal = get().getSelectedSubtotal();
+          const shipping = get().getSelectedShipping();
+          const tax = get().getSelectedTax();
+          return subtotal + shipping + tax;
+        },
+
+        // Utility functions
+        getItemQuantity: (productId: number) => {
+          const state = get();
+          const item = state.items.find(
+            (item) => item.product.id === productId,
+          );
+          return item?.quantity || 0;
+        },
+
+        getTotalItems: () => {
+          const state = get();
+          return (
+            state?.items?.reduce((total, item) => total + item.quantity, 0) || 0
+          );
+        },
+
+        getTotalPrice: () => {
+          return calculateSubtotalForItems(get().items);
+        },
+
+        getSubtotal: () => {
+          return get().getTotalPrice();
+        },
+
+        getShipping: () => {
+          const state = get();
+          const subtotal = state.getSubtotal();
+          return subtotal >= DEFAULT_CALCULATION_OPTIONS.freeShippingThreshold
+            ? 0
+            : DEFAULT_CALCULATION_OPTIONS.shippingCost;
+        },
+
+        getTax: () => {
+          const state = get();
+          const subtotal = state.getSubtotal();
+          return subtotal * DEFAULT_CALCULATION_OPTIONS.taxRate;
+        },
+
+        getTotal: () => {
+          const state = get();
+          const subtotal = state.getSubtotal();
+          const shipping = state.getShipping();
+          const tax = state.getTax();
+          return subtotal + shipping + tax;
+        },
+
+        isItemInCart: (productId: number) => {
+          const state = get();
+          return (
+            state?.items?.some((item) => item.product.id === productId) || false
+          );
+        },
+
+        // Persistence methods
+        loadCart: async (options?: { force?: boolean }) => {
+          if (!options?.force) {
+            if (loadCartDebounceTimer) {
+              clearTimeout(loadCartDebounceTimer);
+            }
+            loadCartDebounceTimer = setTimeout(() => {
+              void runLoadCart();
+            }, 300);
+
+            return;
           }
-          loadCartDebounceTimer = setTimeout(() => {
-            void runLoadCart();
-          }, 300);
 
-          return;
-        }
+          await runLoadCart();
+        },
 
-        await runLoadCart();
-      },
-
-      saveCart: () => {
-        set({ lastUpdated: Date.now() });
-      },
+        saveCart: () => {
+          set({ lastUpdated: Date.now() });
+        },
       };
     },
     {
@@ -440,8 +470,8 @@ export const useCartStore = create<CartStore>()(
           state.setLoading(false);
         }
       },
-    }
-  )
+    },
+  ),
 );
 
 // Selector hooks for better performance

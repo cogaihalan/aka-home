@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -10,7 +11,6 @@ import { cn, formatPrice } from "@/lib/utils";
 import {
   useCartStore,
   useCartItems,
-  useCartTotal,
   useCartItemCount,
 } from "@/stores/cart-store";
 import { CartItem } from "./cart-item";
@@ -20,10 +20,21 @@ interface MiniCartProps {
 }
 
 export function MiniCart({ className }: MiniCartProps) {
+  const router = useRouter();
   const { isOpen, closeCart } = useCartStore();
   const items = useCartItems();
-  const total = useCartTotal();
+  const selectedItemIds = useCartStore((s) => s.selectedItemIds);
+  const setItemSelected = useCartStore((s) => s.setItemSelected);
+  const selectAllItems = useCartStore((s) => s.selectAllItems);
+  const clearSelection = useCartStore((s) => s.clearSelection);
+  const getSelectedTotal = useCartStore((s) => s.getSelectedTotal);
   const itemCount = useCartItemCount();
+
+  const selectedCount = useMemo(
+    () => items.filter((item) => !!selectedItemIds[item.id]).length,
+    [items, selectedItemIds],
+  );
+  const selectedTotal = getSelectedTotal();
   const [isVisible, setIsVisible] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -79,7 +90,7 @@ export function MiniCart({ className }: MiniCartProps) {
         isOpen
           ? "opacity-100 scale-100 translate-y-0"
           : "opacity-0 scale-95 -translate-y-2 pointer-events-none",
-        className
+        className,
       )}
     >
       {/* Header */}
@@ -119,19 +130,47 @@ export function MiniCart({ className }: MiniCartProps) {
         </div>
       ) : (
         <>
+          <div className="px-3 pt-2 pb-1 border-b border-border/60">
+            <p className="text-xs text-muted-foreground mb-2">
+              Đã chọn {selectedCount}/{items.length} sản phẩm để thanh toán
+            </p>
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-7 text-xs flex-1"
+                onClick={() => selectAllItems()}
+              >
+                Chọn tất cả
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                disabled={selectedCount === 0}
+                className="h-7 text-xs flex-1"
+                onClick={() => clearSelection()}
+              >
+                Bỏ chọn
+              </Button>
+            </div>
+          </div>
+
           {/* Cart Items */}
           <div className="max-h-64 overflow-auto">
             <ScrollArea className="h-full">
               <div className="p-3 space-y-1">
-                {items.map((item, index) => (
-                  <div
-                    key={item.id}
-                    className="animate-in slide-in-from-left-2 fade-in-0"
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
+                {items.map((item) => (
+                  <div key={item.id}>
                     <CartItem
                       item={item}
                       variant="minimal"
+                      selectable={true}
+                      selected={!!selectedItemIds[item.id]}
+                      onSelectedChange={(checked) =>
+                        setItemSelected(item.id, checked)
+                      }
                       showRemoveButton={true}
                       showQuantityControls={false}
                       className="hover:bg-muted/50 rounded-md px-2 py-1 -mx-2 -my-1 transition-all duration-200"
@@ -147,17 +186,26 @@ export function MiniCart({ className }: MiniCartProps) {
           {/* Summary */}
           <div className="p-4 space-y-4">
             <div className="flex justify-between items-center">
-              <span className="font-medium">Tổng</span>
-              <span className="font-bold text-lg">{formatPrice(total)}</span>
+              <span className="font-medium">Tổng (đã chọn)</span>
+              <span className="font-bold text-lg">
+                {formatPrice(selectedTotal)}
+              </span>
             </div>
 
             {/* Action Buttons */}
             <div className="space-y-2">
-              <Button asChild className="w-full" size="lg" onClick={closeCart}>
-                <Link href="/checkout">
-                  Thanh toán
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
+              <Button
+                className="w-full"
+                size="lg"
+                disabled={selectedCount === 0}
+                onClick={() => {
+                  if (selectedCount === 0) return;
+                  closeCart();
+                  router.push("/checkout");
+                }}
+              >
+                Thanh toán
+                <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
               <Button
                 asChild

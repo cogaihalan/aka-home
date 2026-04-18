@@ -12,38 +12,26 @@ import { OrderSummary } from "@/components/order/order-summary";
 import { useCheckoutPage } from "@/hooks/use-checkout-page";
 import { Loader2, MapPin, CreditCard } from "lucide-react";
 import { Address } from "@/types";
+import CheckoutLoading from "./checkout-loading";
 
 export default function CheckoutPage() {
-  const {
-    form,
-    addresses,
-    modals,
-    handlers,
-    cart,
-    loading,
-    auth,
-    constants
-  } = useCheckoutPage();
+  const { form, addresses, modals, handlers, cart, loading, auth, constants } =
+    useCheckoutPage();
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, []);
 
-  // Loading states
-  if (loading.auth || loading.addresses) {
-    return (
-      <div className="max-w-4xl mx-auto space-y-6">
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin" />
-          <span className="ml-2">Đang tải thanh toán...</span>
-        </div>
-      </div>
-    );
+  if (loading.auth) {
+    return <CheckoutLoading text="Đang tải thanh toán..." />;
   }
 
-  // Not authenticated
-  if (!auth.isAuthenticated || cart.items.length === 0) {
-    return null; // Will redirect
+  if (auth.isLoaded && (!auth.isAuthenticated || cart.items.length === 0)) {
+    return <CheckoutLoading text="Đang chuyển hướng..." />;
+  }
+
+  if (loading.addresses) {
+    return <CheckoutLoading text="Đang tải..." />;
   }
 
   return (
@@ -235,7 +223,7 @@ export default function CheckoutPage() {
               customTotal={cart.total}
               customItemCount={cart.items.reduce(
                 (count, item) => count + item.quantity,
-                0
+                0,
               )}
               showItems={true}
               items={cart.items}

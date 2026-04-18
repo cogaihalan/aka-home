@@ -77,6 +77,14 @@ export function CartItem({
   if (variant === "minimal") {
     return (
       <div className={cn("flex items-start gap-3 py-3 group", className)}>
+        {selectable && (
+          <div className="pt-0.5 shrink-0">
+            <Checkbox
+              checked={selected}
+              onCheckedChange={handleSelectionChange}
+            />
+          </div>
+        )}
         <div className="w-10 h-10 bg-muted rounded-md overflow-hidden flex-shrink-0">
           <Image
             src={imageUrl}

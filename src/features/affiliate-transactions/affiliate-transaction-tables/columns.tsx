@@ -24,7 +24,7 @@ export const columns: ColumnDef<AffiliateTransaction>[] = [
     },
     size: 16,
     maxSize: 16,
-  },
+  }, 
   {
     id: "amount",
     accessorKey: "amount",
