@@ -27,14 +27,14 @@ export function MiniCart({ className }: MiniCartProps) {
   const setItemSelected = useCartStore((s) => s.setItemSelected);
   const selectAllItems = useCartStore((s) => s.selectAllItems);
   const clearSelection = useCartStore((s) => s.clearSelection);
-  const getSelectedTotal = useCartStore((s) => s.getSelectedTotal);
+  const getSelectedSubtotal = useCartStore((s) => s.getSelectedSubtotal);
   const itemCount = useCartItemCount();
 
   const selectedCount = useMemo(
     () => items.filter((item) => !!selectedItemIds[item.id]).length,
     [items, selectedItemIds],
   );
-  const selectedTotal = getSelectedTotal();
+  const selectedSubtotal = getSelectedSubtotal();
   const [isVisible, setIsVisible] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -188,7 +188,7 @@ export function MiniCart({ className }: MiniCartProps) {
             <div className="flex justify-between items-center">
               <span className="font-medium">Tổng (đã chọn)</span>
               <span className="font-bold text-lg">
-                {formatPrice(selectedTotal)}
+                {formatPrice(selectedSubtotal)}
               </span>
             </div>
 

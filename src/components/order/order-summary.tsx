@@ -56,7 +56,8 @@ export function OrderSummary({
 
   // Use custom values if provided, otherwise use cart values
   const items = customItems || cartItems;
-  const subtotal = customSubtotal !== undefined ? customSubtotal : getSubtotal();
+  const subtotal =
+    customSubtotal !== undefined ? customSubtotal : getSubtotal();
   const shipping =
     customShippingCost !== undefined ? customShippingCost : getShipping();
   const tax = customTax !== undefined ? customTax : getTax();

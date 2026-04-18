@@ -7,6 +7,7 @@ import { unifiedCartService } from "@/lib/api/services/unified/cart";
 import { CartStore, CartItem, CartValidationResult } from "@/types/cart";
 import { Product } from "@/types";
 import { AddToCartRequest, UpdateCartItemRequest } from "@/lib/api/types";
+import { MOCK_CART_RESPONSE } from "@/constants/data";
 
 // Default cart calculation options for Vietnamese market
 const DEFAULT_CALCULATION_OPTIONS = {
@@ -51,7 +52,8 @@ export const useCartStore = create<CartStore>()(
         set({ isLoading: true, error: null });
 
         try {
-          const cart = await unifiedCartService.getCart();
+          // const cart = await unifiedCartService.getCart();
+          const cart = MOCK_CART_RESPONSE;
 
           if (id !== loadCartRequestId) return;
 
