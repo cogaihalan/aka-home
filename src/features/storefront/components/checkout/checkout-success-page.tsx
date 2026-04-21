@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { useCartStore } from "@/stores/cart-store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +9,6 @@ import { Price } from "@/components/ui/price";
 import { CheckCircle, Package, Mail, Phone } from "lucide-react";
 import Link from "next/link";
 import { Order } from "@/types";
-import { useEffect, useRef } from "react";
 
 declare global {
   interface Window {
@@ -22,7 +23,8 @@ interface OrderDataProps {
 export default function CheckoutSuccessPage(props: OrderDataProps) {
   const { order } = props;
   const trackedOrders = useRef<Set<string>>(new Set());
-
+  const { loadCart } = useCartStore();
+  
   useEffect(() => {
     if (!order || typeof window === "undefined" || !window.fbq) {
       return;
@@ -49,6 +51,10 @@ export default function CheckoutSuccessPage(props: OrderDataProps) {
       order_id: order.code,
     });
   }, [order]);
+
+  useEffect(() => {
+    void loadCart({ force: true });
+  }, [loadCart]);
 
   return (
     <div className="max-w-4xl mx-auto py-8 lg:py-16 space-y-6">

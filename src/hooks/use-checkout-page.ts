@@ -60,7 +60,7 @@ export function useCheckoutPage() {
     isSignedIn: isAuthenticated,
     isLoaded: isAuthLoaded,
   } = useUser();
-  const { loadCart, getSelectedItems, getSelectedSubtotal, getSelectedTax } =
+  const { getSelectedItems, getSelectedSubtotal, getSelectedTax } =
     useCartStore();
   const items = getSelectedItems();
 
@@ -255,7 +255,6 @@ export function useCheckoutPage() {
       }
 
       toast.success("Đặt hàng thành công!");
-      await loadCart({ force: true });
       // Redirect to success page with order ID
       router.push(`/checkout/success?order_id=${createdOrder.id.toString()}`);
     } catch (error) {
