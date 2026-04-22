@@ -18,6 +18,8 @@ export interface OrderUser {
   id: number;
   username: string;
   clerkId: string;
+  fullName: string;
+  email: string;
 }
 
 // Order item interface

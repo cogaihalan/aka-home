@@ -26,7 +26,7 @@ export async function getCustomerEmail(order: Order): Promise<string | null> {
  * Helper function to get customer name from order
  */
 export function getCustomerName(order: Order): string {
-  return order.recipientName || order.user?.username || "Khách hàng";
+  return order.recipientName || order.user?.username || order.user?.fullName || "Khách hàng";
 }
 
 /**
@@ -34,18 +34,11 @@ export function getCustomerName(order: Order): string {
  */
 export async function sendOrderConfirmationEmail(order: Order): Promise<void> {
   try {
-    const customerEmail = await getCustomerEmail(order);
-    if (!customerEmail) {
-      console.warn(`Cannot send order confirmation email: No email found for order #${order.code}`);
-      return;
-    }
-
     const customerName = getCustomerName(order);
-    
     await emailClient.sendOrderConfirmation({
       order,
       customerName,
-      customerEmail,
+      customerEmail: order.user.email,
     });
   } catch (error) {
     console.error("Error sending order confirmation email:", error);
