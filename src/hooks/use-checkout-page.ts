@@ -16,28 +16,11 @@ import { unifiedPaymentService } from "@/lib/api/services/unified/payment";
 // Form validation schema
 const checkoutSchema = z.object({
   sameAsShipping: z.boolean().optional(),
-  shippingMethod: z.string().min(1, "Vui lòng chọn phương thức vận chuyển"),
   paymentMethod: z.string().min(1, "Vui lòng chọn phương thức thanh toán"),
   orderNote: z.string().optional(),
 });
 
 export type CheckoutFormValues = z.infer<typeof checkoutSchema>;
-
-// Shipping methods
-export const SHIPPING_METHODS = [
-  {
-    id: "free",
-    name: "Miễn phí vận chuyển",
-    description: "Đơn hàng từ 1,000,000 VND",
-    cost: 0,
-  },
-  {
-    id: "standard",
-    name: "Giao hàng tiêu chuẩn",
-    description: "Giao hàng tại Hà Nội - 30,000 VND",
-    cost: 30000,
-  },
-];
 
 // Payment methods - updated to match new API format
 export const PAYMENT_METHODS = [
@@ -88,13 +71,11 @@ export function useCheckoutPage() {
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
       sameAsShipping: true,
-      shippingMethod: "",
       paymentMethod: "",
       orderNote: "",
     },
   });
 
-  const watchedShippingMethod = watch("shippingMethod");
   const watchedPaymentMethod = watch("paymentMethod");
 
   // Get default addresses
@@ -119,55 +100,10 @@ export function useCheckoutPage() {
     }
   }, [isAuthLoaded, isAuthenticated, items, router]);
 
-  // Filter shipping methods based on order conditions
-  const getAvailableShippingMethods = () => {
-    const subtotal = getSelectedSubtotal();
-
-    return SHIPPING_METHODS.filter((method) => {
-      // Free shipping is only available for orders over 1,000,000 VND
-      if (method.id === "free") {
-        return subtotal >= 1000000;
-      }
-
-      // Standard shipping is always available
-      if (method.id === "standard") {
-        return true;
-      }
-
-      return false;
-    });
-  };
-
-  // Calculate shipping cost based on method and order total
-  const calculateShippingCost = () => {
-    const subtotal = getSelectedSubtotal();
-    const selectedMethod = SHIPPING_METHODS.find(
-      (method) => method.id === watchedShippingMethod,
-    );
-
-    if (!selectedMethod) return 0;
-
-    // Free shipping for orders over 1,000,000 VND
-    if (selectedMethod.id === "free" && subtotal >= 1000000) {
-      return 0;
-    }
-
-    return selectedMethod.cost;
-  };
-
   // Calculate values
   const subtotal = getSelectedSubtotal();
-  const shippingCost = calculateShippingCost();
   const tax = getSelectedTax();
-  const total = subtotal + shippingCost + tax;
-
-  // Auto-select the first available shipping method
-  useEffect(() => {
-    const availableMethods = getAvailableShippingMethods();
-    if (availableMethods.length > 0 && !watchedShippingMethod) {
-      setValue("shippingMethod", availableMethods[0].id);
-    }
-  }, [subtotal, watchedShippingMethod, setValue]);
+  const total = subtotal + tax;
 
   // Handle address form submissions
   const handleAddressSubmit = async (data: any) => {
@@ -277,7 +213,6 @@ export function useCheckoutPage() {
       watch,
       setValue,
       errors,
-      watchedShippingMethod,
       watchedPaymentMethod,
     },
 
@@ -306,7 +241,7 @@ export function useCheckoutPage() {
     cart: {
       items,
       subtotal,
-      shippingCost,
+      shippingCost: 0, // 0 VND
       tax,
       total,
     },
@@ -315,10 +250,7 @@ export function useCheckoutPage() {
     loading: {
       auth: !isAuthLoaded,
       addresses:
-        isAuthLoaded &&
-        isAuthenticated &&
-        items.length > 0 &&
-        addressesLoading,
+        isAuthLoaded && isAuthenticated && items.length > 0 && addressesLoading,
       submitting: isSubmitting,
     },
 
@@ -331,11 +263,7 @@ export function useCheckoutPage() {
 
     // Constants
     constants: {
-      SHIPPING_METHODS,
       PAYMENT_METHODS,
     },
-
-    // Available shipping methods
-    availableShippingMethods: getAvailableShippingMethods(),
   };
 }

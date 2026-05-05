@@ -237,11 +237,7 @@ export default function CheckoutPage() {
                 type="submit"
                 className="w-full"
                 size="lg"
-                disabled={
-                  loading.submitting ||
-                  !form.watchedShippingMethod ||
-                  !form.watchedPaymentMethod
-                }
+                disabled={loading.submitting || !form.watchedPaymentMethod}
               >
                 {loading.submitting ? (
                   <>

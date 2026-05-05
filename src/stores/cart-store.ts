@@ -366,10 +366,7 @@ export const useCartStore = create<CartStore>()(
         },
 
         getSelectedShipping: () => {
-          const subtotal = get().getSelectedSubtotal();
-          return subtotal >= DEFAULT_CALCULATION_OPTIONS.freeShippingThreshold
-            ? 0
-            : DEFAULT_CALCULATION_OPTIONS.shippingCost;
+          return 0;
         },
 
         getSelectedTax: () => {
@@ -409,11 +406,7 @@ export const useCartStore = create<CartStore>()(
         },
 
         getShipping: () => {
-          const state = get();
-          const subtotal = state.getSubtotal();
-          return subtotal >= DEFAULT_CALCULATION_OPTIONS.freeShippingThreshold
-            ? 0
-            : DEFAULT_CALCULATION_OPTIONS.shippingCost;
+          return 0;
         },
 
         getTax: () => {
