@@ -179,9 +179,12 @@ export default function CheckoutPage() {
                               {method.name}
                             </Label>
                           </div>
-                          <p className="text-sm text-muted-foreground">
+                          <Label
+                            htmlFor={method.id}
+                            className="text-sm text-muted-foreground"
+                          >
                             {method.description}
-                          </p>
+                          </Label>
                         </div>
                       </div>
                     );

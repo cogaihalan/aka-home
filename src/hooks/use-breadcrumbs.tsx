@@ -46,6 +46,11 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
     { title: "Thanh toán", link: "/checkout" },
     { title: "Thanh toán thành công", link: "/checkout/success" },
   ],
+  "/products": [{ title: "Sản phẩm", link: "/products" }],
+  "/products/:id": [
+    { title: "Sản phẩm", link: "/products" },
+    { title: "Chi tiết sản phẩm", link: "/products/:id" },
+  ],
   "/categories": [{ title: "Danh mục", link: "/categories" }],
   "/account": [{ title: "Tài khoản", link: "/account" }],
   "/account/profile": [

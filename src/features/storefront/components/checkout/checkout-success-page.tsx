@@ -24,7 +24,7 @@ export default function CheckoutSuccessPage(props: OrderDataProps) {
   const { order } = props;
   const trackedOrders = useRef<Set<string>>(new Set());
   const { loadCart } = useCartStore();
-  
+
   useEffect(() => {
     if (!order || typeof window === "undefined" || !window.fbq) {
       return;
@@ -128,18 +128,12 @@ export default function CheckoutSuccessPage(props: OrderDataProps) {
             <div className="space-y-3">
               <StepItem
                 step={1}
-                title="Xác nhận đơn hàng"
-                description="Chúng tôi sẽ gửi email xác nhận trong vài phút tới"
+                title="Xử lý đơn hàng"
+                description="Đơn hàng sẽ được chuẩn bị và đóng gói"
                 color="blue"
               />
               <StepItem
                 step={2}
-                title="Xử lý đơn hàng"
-                description="Đơn hàng sẽ được chuẩn bị và đóng gói"
-                color="orange"
-              />
-              <StepItem
-                step={3}
                 title="Giao hàng"
                 description="Dự kiến giao hàng trong 3-5 ngày làm việc"
                 color="green"
@@ -243,9 +237,13 @@ function ContactItem({ icon, title, value, type }: ContactItemProps) {
       <div>
         <p className="font-medium">{title}</p>
         {type === "email" ? (
-          <a href={`mailto:${value}`} className="text-sm text-muted-foreground">{value}</a>
+          <a href={`mailto:${value}`} className="text-sm text-muted-foreground">
+            {value}
+          </a>
         ) : type === "phone" ? (
-          <a href={`tel:${value}`} className="text-sm text-muted-foreground">{value}</a>
+          <a href={`tel:${value}`} className="text-sm text-muted-foreground">
+            {value}
+          </a>
         ) : (
           <p className="text-sm text-muted-foreground">{value}</p>
         )}

@@ -6,6 +6,5 @@ if (!process.env.RESEND_API_KEY) {
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
+export const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "noreply@akahome.vn";
 export const FROM_NAME = process.env.RESEND_FROM_NAME || "AKA_Home";
