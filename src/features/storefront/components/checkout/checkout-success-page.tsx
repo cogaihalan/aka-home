@@ -128,9 +128,15 @@ export default function CheckoutSuccessPage(props: OrderDataProps) {
             <div className="space-y-3">
               <StepItem
                 step={1}
+                title="Xác nhận đơn hàng"
+                description="Chúng tôi sẽ gửi email xác nhận trong vài phút tới"
+                color="blue"
+              />
+              <StepItem
+                step={1}
                 title="Xử lý đơn hàng"
                 description="Đơn hàng sẽ được chuẩn bị và đóng gói"
-                color="blue"
+                color="orange"
               />
               <StepItem
                 step={2}
