@@ -168,7 +168,7 @@ export const MOCK_CART_RESPONSE: Cart = {
                   }
               ]
           },
-          "quantity": 1,
+          "quantity": 2,
           "price": 90000.00
       },
       {

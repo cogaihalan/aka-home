@@ -89,7 +89,7 @@ export const ProductTabs = memo(function ProductTabs({
                   <span className="text-sm">
                     Thời gian giao hàng dự kiến:{" "}
                     {product.shippingInfo?.estimatedDelivery ||
-                      "3-5 business days"}
+                      "3-5 ngày"}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">

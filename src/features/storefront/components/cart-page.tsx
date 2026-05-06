@@ -201,23 +201,6 @@ export default function CartPage() {
           />
         </div>
       </div>
-
-      {/* Additional Info */}
-      <div className="bg-muted/50 rounded-lg p-6">
-        <h3 className="font-semibold mb-2">Cần Giúp Đỡ?</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          Nếu bạn có bất kỳ câu hỏi nào về đơn hàng của bạn hoặc cần sự trợ
-          giúp, nhóm dịch vụ khách hàng của chúng tôi sẽ giúp bạn.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/">Liên hệ hỗ trợ</Link>
-          </Button>
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/">Trung tâm hỗ trợ</Link>
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }

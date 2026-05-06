@@ -208,7 +208,7 @@ export function CartItem({
               <Checkbox checked={selected} onCheckedChange={handleSelectionChange} />
             </div>
           )}
-          <div className="w-20 h-20 bg-muted rounded-md overflow-hidden flex-shrink-0">
+          <div className="w-12 h-12 md:w-20 md:h-20 bg-muted rounded-md overflow-hidden flex-shrink-0">
             <Image
               src={imageUrl}
               alt={item.product.name}
@@ -224,7 +224,7 @@ export function CartItem({
             <div className="flex items-center gap-2">
               <Price
                 price={item.price}
-                size="lg"
+                size="base"
                 weight="semibold"
                 showDiscount={false}
               />
