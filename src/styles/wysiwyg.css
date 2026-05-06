@@ -49,6 +49,8 @@
 
   & li {
     @apply mb-2;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   & iframe {

@@ -513,7 +513,7 @@ export function ProductCard({
             </div>
           </div>
 
-          <Link href={generateProductUrl(product.name, product.id)}>
+          <Link className="block" href={generateProductUrl(product.name, product.id)}>
             <h3 className="font-medium text-sm md:text-base line-clamp-2 group-hover:text-fg-primary transition-colors cursor-pointer">
               {product.name}
             </h3>

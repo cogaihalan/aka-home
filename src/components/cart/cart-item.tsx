@@ -38,6 +38,19 @@ export function CartItem({
     onSelectedChange?.(checked === true);
   };
 
+  const handleRowSelectionToggle = (event: React.MouseEvent<HTMLElement>) => {
+    if (!selectable || !onSelectedChange) return;
+
+    const target = event.target as HTMLElement;
+    const isInteractiveElement = target.closest(
+      "button, a, input, textarea, select, [role='button'], [role='checkbox'], [data-no-row-toggle='true']",
+    );
+
+    if (isInteractiveElement) return;
+
+    onSelectedChange(!selected);
+  };
+
   const { updateQuantity, removeItem } = useCartStore();
   const isItemLoading = useCartItemLoading(item.id);
 
@@ -76,7 +89,14 @@ export function CartItem({
 
   if (variant === "minimal") {
     return (
-      <div className={cn("flex items-start gap-3 py-3 group", className)}>
+      <div
+        className={cn(
+          "flex items-start gap-3 py-3 group",
+          selectable && "cursor-pointer",
+          className,
+        )}
+        onClick={handleRowSelectionToggle}
+      >
         {selectable && (
           <div className="pt-0.5 shrink-0">
             <Checkbox
@@ -179,7 +199,10 @@ export function CartItem({
   return (
     <Card className={cn("overflow-hidden", className)} disableBlockPadding>
       <CardContent className="p-4">
-        <div className="flex gap-4">
+        <div
+          className={cn("flex gap-4", selectable && "cursor-pointer")}
+          onClick={handleRowSelectionToggle}
+        >
           {selectable && (
             <div className="pt-1">
               <Checkbox checked={selected} onCheckedChange={handleSelectionChange} />

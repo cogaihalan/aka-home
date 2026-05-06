@@ -21,7 +21,7 @@ import HeroBanner from "@/components/ui/hero-banner";
 
 export default function AffiliatePage({ defaultCommissionRate }: { defaultCommissionRate: number }) {
   return (
-    <div className="space-y-12 pb-8">
+    <div className="space-y-8 pb-8 md:space-y-12">
       {/* Hero Section */}
       <HeroBanner
         imageUrl="/assets/banner-ctv.jpg"
@@ -30,10 +30,13 @@ export default function AffiliatePage({ defaultCommissionRate }: { defaultCommis
         horizontalPos="left"
         overlayOpacity={0}
       >
-        <Button size="lg" className="ml-6" asChild>
+        <Button size="lg" className="max-lg:hidden ml-6" asChild>
           <Link href="/account/affiliate">Tham gia ngay</Link>
         </Button>
       </HeroBanner>
+      <Button size="lg" className="max-lg:flex hidden w-fit mx-auto" asChild>
+        <Link href="/account/affiliate">Tham gia ngay</Link>
+      </Button>
 
       {/* Features Section */}
       <section className="space-y-6">

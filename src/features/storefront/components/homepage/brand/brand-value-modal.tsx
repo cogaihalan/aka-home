@@ -25,13 +25,13 @@ export default function BrandValueModal({
       onClose={onClose}
     >
       <div className="space-y-4 max-h-[80vh] overflow-y-auto">
-        <div className="flex  gap-4">
-          <div className="relative w-1/2 aspect-square overflow-hidden rounded-lg">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="relative w-full md:w-1/2 aspect-square overflow-hidden rounded-lg">
             <Image
               src={item.image}
               alt={item.title}
               fill
-              className="object-cover w-full h-full"
+              className="object-contain w-full h-full"
             />
           </div>
           <div className="text-sm wysiwyg text-muted-foreground leading-relaxed flex-1">

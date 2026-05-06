@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Truck, Shield, RotateCcw, CheckCircle } from "lucide-react";
+import { Truck, Shield, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ProductReviews } from "@/features/storefront/components/product-reviews/product-reviews";
@@ -55,7 +55,7 @@ export const ProductTabs = memo(function ProductTabs({
             <CardHeader>
               <CardTitle>Mô tả sản phẩm</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 px-4">
               <div
                 className="wysiwyg"
                 dangerouslySetInnerHTML={{ __html: product.description }}
@@ -81,8 +81,7 @@ export const ProductTabs = memo(function ProductTabs({
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
                   <span className="text-sm">
-                    Miễn phí vận chuyển trên đơn hàng trên $
-                    {product.shippingInfo?.freeShippingThreshold || 50}
+                    Miễn phí vận chuyển trên mọi đơn hàng
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -95,7 +94,7 @@ export const ProductTabs = memo(function ProductTabs({
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Vận chuyển nhanh có sẵn</span>
+                  <span className="text-sm">Vận chuyển nhanh</span>
                 </div>
               </CardContent>
             </Card>
@@ -109,15 +108,9 @@ export const ProductTabs = memo(function ProductTabs({
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <RotateCcw className="h-4 w-4 text-blue-500" />
-                  <span className="text-sm">
-                    {product.shippingInfo?.returnPolicy || "30 ngày trả hàng"}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-blue-500" />
                   <span className="text-sm">
-                    {product.warranty || "2 năm bảo hành nhà sản xuất"}
+                    {product.warranty || "5 năm bảo hành nhà sản xuất"}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
