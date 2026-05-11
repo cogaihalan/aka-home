@@ -57,7 +57,7 @@ export const ProductTabs = memo(function ProductTabs({
             </CardHeader>
             <CardContent className="space-y-4 px-4">
               <div
-                className="wysiwyg"
+                className="wysiwyg wysiwyg-product-content"
                 dangerouslySetInnerHTML={{ __html: product.description }}
               />
             </CardContent>

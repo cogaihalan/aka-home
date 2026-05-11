@@ -49,8 +49,6 @@
 
   & li {
     @apply mb-2;
-    word-break: break-word;
-    overflow-wrap: anywhere;
   }
 
   & iframe {
@@ -78,5 +76,14 @@
     & + h6 {
       @apply mt-8;
     }
+  }
+}
+
+.wysiwyg-product-content {
+  @apply overflow-auto;
+  
+  & p,
+  & li {
+   @apply whitespace-nowrap;
   }
 }

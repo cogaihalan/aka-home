@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import AffiliateAccountPage from "@/features/storefront/components/account/affiliate/affiliate-account-page";
 import { storefrontServerAffiliateApprovalService, storefrontServerAffiliateService } from "@/lib/api/services/storefront";
 import { AffiliateAccount } from "@/types";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +13,12 @@ export const metadata: Metadata = {
 };
 
 export default async function AffiliateAccountPageRoute() {
+  const { userId } = await auth();
+  
+  if (!userId) {
+    redirect("/auth/sign-in");
+  }
+
   let account: AffiliateAccount | null = null;
   const approvalResponse =
     await storefrontServerAffiliateApprovalService.getAffiliateApprovals({
