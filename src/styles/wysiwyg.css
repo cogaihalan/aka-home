@@ -78,12 +78,3 @@
     }
   }
 }
-
-.wysiwyg-product-content {
-  @apply overflow-auto;
-  
-  & p,
-  & li {
-   @apply whitespace-nowrap;
-  }
-}

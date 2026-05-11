@@ -14,6 +14,7 @@ import { Truck, Shield, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ProductReviews } from "@/features/storefront/components/product-reviews/product-reviews";
+import { normalizeHtml } from "@/lib/format";
 
 interface ProductTabsProps {
   product: {
@@ -57,8 +58,8 @@ export const ProductTabs = memo(function ProductTabs({
             </CardHeader>
             <CardContent className="space-y-4 px-4">
               <div
-                className="wysiwyg wysiwyg-product-content"
-                dangerouslySetInnerHTML={{ __html: product.description }}
+                className="wysiwyg"
+                dangerouslySetInnerHTML={{ __html: normalizeHtml(product.description) }}
               />
             </CardContent>
           </Card>

@@ -47,3 +47,11 @@ export function formatDuration(seconds: number): string {
     return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   }
 }
+
+export function normalizeHtml(content: string) {
+  return content
+    .replace(/\\u003C/g, "<")
+    .replace(/\\u003E/g, ">")
+    .replace(/&nbsp;|\\u00A0/g, " ")
+    .trim();
+}
