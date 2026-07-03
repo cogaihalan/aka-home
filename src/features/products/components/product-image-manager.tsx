@@ -76,7 +76,7 @@ export function ProductImageManager({
         const updateData: ProductImageUpdateRequest = {
           id: productId,
           files: selectedImages,
-          removedImageIds,
+          removedImageIds: [...removedImageIds].join(','),
           primaryImageId,
         };
         await unifiedProductService.updateProductImages(updateData);
@@ -94,7 +94,7 @@ export function ProductImageManager({
         const deleteData: ProductImageDeleteRequest = {
           id: productId,
           files: [],
-          removedImageIds,
+          removedImageIds: [...removedImageIds].join(','),
         };
         await unifiedProductService.deleteProductImages(deleteData);
         toast.success("Xóa ảnh sản phẩm thành công");
@@ -107,7 +107,7 @@ export function ProductImageManager({
         const updateData: ProductImageUpdateRequest = {
           id: productId,
           files: [],
-          removedImageIds: [],
+          removedImageIds: '',
           primaryImageId,
         };
         await unifiedProductService.updateProductImages(updateData);

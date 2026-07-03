@@ -193,14 +193,14 @@ export interface ProductImageUploadRequest {
 export interface ProductImageUpdateRequest {
   id: number;
   files: File[];
-  removedImageIds: number[];
+  removedImageIds: string;
   primaryImageId?: number | null;
 }
 
 export interface ProductImageDeleteRequest {
   id: number;
   files: File[];
-  removedImageIds: number[];
+  removedImageIds: string;
 }
 
 export interface CreateProductReviewRequest {

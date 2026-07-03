@@ -8,16 +8,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Product } from "@/types/product";
-import { Edit, MoreVertical, Trash2, Image } from "lucide-react";
+import { Edit, MoreVertical, Image } from "lucide-react";
 import { useState } from "react";
 import { ProductDialog } from "../product-dialog";
 import { ProductImageManager } from "../product-image-manager";
+import { useRouter } from "next/navigation";
 
 interface CellActionProps {
   data: Product;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
+  const router = useRouter();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [imageManagerOpen, setImageManagerOpen] = useState(false);
 
@@ -29,7 +31,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         product={data}
         onSuccess={() => {
           // Refresh the page or refetch data
-          window.location.reload();
+          router.refresh();
         }}
       />
 
@@ -40,7 +42,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         existingImages={data.images || []}
         onSuccess={() => {
           // Refresh the page or refetch data
-          window.location.reload();
+          router.refresh();
         }}
       />
 
