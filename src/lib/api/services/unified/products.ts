@@ -116,9 +116,7 @@ export class UnifiedProductService {
   async updateProductImages(data: ProductImageUpdateRequest): Promise<Product> {
     const formData = new FormData();
     formData.append("id", data.id.toString());
-    data.removedImageIds.forEach((id) => {
-      formData.append("removedImageIds", id.toString());
-    });
+    formData.append("removedImageIds", data.removedImageIds);
     if (data.primaryImageId !== undefined) {
       formData.append("primaryImageId", data.primaryImageId?.toString() || "");
     }
@@ -136,7 +134,7 @@ export class UnifiedProductService {
   async deleteProductImages(data: ProductImageDeleteRequest): Promise<Product> {
     const formData = new FormData();
     formData.append("id", data.id.toString());
-    formData.append("removedImageIds", JSON.stringify(data.removedImageIds));
+    formData.append("removedImageIds", data.removedImageIds);
     data.files.forEach((file) => {
       formData.append(`files`, file);
     });
